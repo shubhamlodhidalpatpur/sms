@@ -14,4 +14,6 @@ use App\Http\Controllers\ApplicationController;
 |
 */
 
+
+Route::view('/', 'landing');
 Route::get('/{any}', [ApplicationController::class, 'index'])->where('any', '.*');
