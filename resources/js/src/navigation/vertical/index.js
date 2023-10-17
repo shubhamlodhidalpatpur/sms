@@ -37,8 +37,24 @@ import chartsAndMaps from './charts-and-maps'
 import uiElements from './ui-elements'
 import formAndTable from './forms-and-table'
 import custom from './custom'
+import sms from './sms'
 
 // Array of sections
-export default [...dashboard, ...appsAndPages, ...uiElements, ...formAndTable, ...chartsAndMaps, ...others]
+export default [
+    {
+        title: 'Template',
+        icon: 'HomeIcon',
+        children: [
+            ...dashboard, ...appsAndPages, ...uiElements, ...formAndTable, ...chartsAndMaps, ...others, ...custom
+        ]
+    },
+    {
+        title: 'Template',
+        icon: 'HomeIcon',
+        children: [
+            ...sms
+        ]
+    }
+]
 
 // export default [...custom]
