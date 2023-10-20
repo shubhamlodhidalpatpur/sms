@@ -9,4 +9,22 @@ export default [
             action: "do",
         },
     },
+    {
+        title: 'BU',
+        route: 'BU',
+        icon: 'MenuIcon',
+        meta: {
+            resource: 'Auth',
+            action: "do",
+        },
+    },
+    {
+        title: 'Branch',
+        route: 'Branch',
+        icon: 'MenuIcon',
+        meta: {
+            resource: 'Auth',
+            action: "do",
+        },
+    },
 ]
