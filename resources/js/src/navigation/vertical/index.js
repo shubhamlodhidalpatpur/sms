@@ -49,7 +49,7 @@ export default [
         ]
     },
     {
-        title: 'Template',
+        title: 'SMS',
         icon: 'HomeIcon',
         children: [
             ...sms

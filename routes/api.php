@@ -5,6 +5,8 @@ use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\BUController;
+use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\TeamController;
 
 
 /*
@@ -39,6 +41,23 @@ Route::post('/branchUpdate/{id}', [BranchController::class, 'update']);
 Route::delete('/branch/{id}', [BranchController::class, 'destroy']);
 Route::get('/fetchbranchData/{id}', [BranchController::class,'fetchTeamData']);
 Route::get('/getBUData', [BranchController::class, 'getBUData']);
+
+
+Route::post('/adddepartment', [DepartmentController::class, 'store']);
+Route::get('/fetchdepartment', [DepartmentController::class, 'index']);
+Route::get('/departmentedit/{id}', [DepartmentController::class, 'edit']);
+Route::post('/departmentUpdate/{id}', [DepartmentController::class, 'update']);
+Route::delete('/department/{id}', [DepartmentController::class, 'destroy']);
+Route::get('/fetchdepartmentData/{id}', [DepartmentController::class,'fetchTeamData']);
+Route::get('/getBranch', [DepartmentController::class, 'getBranch']);
+
+Route::post('/addteam', [TeamController::class, 'store']);
+Route::get('/fetchteam', [TeamController::class, 'index']);
+Route::get('/teamedit/{id}', [TeamController::class, 'edit']);
+Route::post('/teamUpdate/{id}', [TeamController::class, 'update']);
+Route::delete('/team/{id}', [TeamController::class, 'destroy']);
+Route::get('/fetchteamData/{id}', [TeamController::class,'fetchTeamData']);
+Route::get('/getDepartment', [TeamController::class, 'getDepartment']);
 
 
 Route::post('/login', [LoginController::class, 'store']);

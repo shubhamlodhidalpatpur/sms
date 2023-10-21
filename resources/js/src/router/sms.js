@@ -16,5 +16,15 @@ export default [
       name: 'branch',
       component: () => import('@/views/sms/branch/Branch.vue'),
     },
+    {
+      path: '/department',
+      name: 'department',
+      component: () => import('@/views/sms/department/Department.vue'),
+    },
+    {
+      path: '/team',
+      name: 'team',
+      component: () => import('@/views/sms/team/Team.vue'),
+    },
 ]
   

@@ -51,7 +51,7 @@ class LoginController extends Controller
                 $accessToken = $user->createToken('authToken')->plainTextToken;
                 $user->accessToken = $accessToken;
                 $user->role = 'admin';
-                $user->ability = [];
+                $user->ability = [['action'=>'manage','subject'=>'all']];
                 $response = ['status' => true,  'is_login' => true, 'userData' => $user, 'accessToken' => $accessToken, 'expiration' => config('sanctum.expiration'), 'token_type' => 'Bearer', 'message' => 'Logged in successfully !']; //phpcs:ignore
                 return response($response, 200);
             } else {
