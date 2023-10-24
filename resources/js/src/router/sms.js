@@ -26,5 +26,10 @@ export default [
       name: 'team',
       component: () => import('@/views/sms/team/Team.vue'),
     },
+    {
+      path: '/role',
+      name: 'role',
+      component: () => import('@/views/sms/role/Role.vue'),
+    },
 ]
   

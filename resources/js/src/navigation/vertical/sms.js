@@ -45,4 +45,14 @@ export default [
             action: "do",
         },
     },
+    {
+        title: 'Role',
+        route: 'role',
+        icon: 'MenuIcon',
+        meta: {
+            resource: 'Auth',
+            action: "do",
+        },
+    },
+
 ]

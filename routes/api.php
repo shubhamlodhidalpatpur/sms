@@ -7,6 +7,8 @@ use App\Http\Controllers\BranchController;
 use App\Http\Controllers\BUController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\TeamController;
+use App\Http\Controllers\RoleController;
+
 
 
 /*
@@ -59,5 +61,13 @@ Route::delete('/team/{id}', [TeamController::class, 'destroy']);
 Route::get('/fetchteamData/{id}', [TeamController::class,'fetchTeamData']);
 Route::get('/getDepartment', [TeamController::class, 'getDepartment']);
 
+Route::get('/teamoption/{id}', [RoleController::class, 'teamoption']);
+Route::get('/fecthRole', [RoleController::class, 'index']);
+Route::post('/roleadd', [RoleController::class, 'store']);
+Route::get('/roleEdit/{id}', [RoleController::class, 'edit']);
+Route::post('/RoleUpdate/{id}', [RoleController::class, 'update']);
+Route::delete('/role/{id}', [RoleController::class, 'destroy']);
+Route::get('/SuparAdmin', [RoleController::class, 'suparAdmin']);
+Route::get('/getRoleFromdepartmentId/{id}', [RoleController::class, 'getRoleFromdepartmentId']);
 
 Route::post('/login', [LoginController::class, 'store']);
