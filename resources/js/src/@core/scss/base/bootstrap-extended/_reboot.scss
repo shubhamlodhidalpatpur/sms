@@ -1,3 +1,9 @@
+@mixin hover() {
+  &:hover {
+    @content;
+  }
+}
+
 a {
   &:focus {
     outline: none;
