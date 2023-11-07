@@ -130,7 +130,7 @@
 import {
   BFormInput, BLink, BImg, BAvatar,
 } from 'bootstrap-vue'
-import { ref, watch } from '@vue/composition-api'
+import { ref, watch } from 'vue'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import useAutoSuggest from '@core/components/app-auto-suggest/useAutoSuggest'
 import { title } from '@core/utils/filter'
@@ -266,8 +266,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@core/scss/base/bootstrap-extended/include';
-@import '~@core/scss/base/components/variables-dark';
+@import '@core/scss/base/bootstrap-extended/include';
+@import '@core/scss/base/components/variables-dark';
 
 ul
 {
