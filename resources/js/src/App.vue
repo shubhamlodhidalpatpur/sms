@@ -13,8 +13,8 @@ import ScrollToTop from "@core/components/scroll-to-top/ScrollToTop.vue";
 
 // This will be populated in `beforeCreate` hook
 import { $themeColors, $themeBreakpoints, $themeConfig } from "@themeConfig";
-import { provideToast } from "vue-toastification/composition";
-import { watch } from "@vue/composition-api";
+import { provideToast } from "vue-toastification";
+import { watch } from "vue";
 import useAppConfig from "@core/app-config/useAppConfig";
 
 import { useWindowSize, useCssVar } from "@vueuse/core";
@@ -39,6 +39,7 @@ export default {
   // Currently, router.currentRoute is not reactive and doesn't trigger any change
   computed: {
     layout() {
+      console.log("this.$routethis.$route", this.$route)
       if (this.$route.meta.layout === "full") return "layout-full";
       return `layout-${this.contentLayoutType}`;
     },
