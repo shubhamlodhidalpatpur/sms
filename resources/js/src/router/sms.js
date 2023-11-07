@@ -1,6 +1,13 @@
 export default [
-
-    // add routes here (below is given for help)
+    {
+      path: '/',
+      name: 'Home',
+      component: () => import('@/views/Dashboard.vue'),
+      meta: {
+        layout: 'full',
+        resource: 'Auth',
+      }
+    },
     {
       path: '/home',
       name: 'Home',
@@ -30,6 +37,36 @@ export default [
       path: '/role',
       name: 'role',
       component: () => import('@/views/sms/role/Role.vue'),
+    },
+    {
+      path: '/login',
+      name: 'auth-login',
+      component: () => import('@/views/authentication/Login.vue'),
+      meta: {
+        layout: 'full',
+        resource: 'Auth',
+        redirectIfLoggedIn: true,
+      },
+    },
+    {
+      path: '/forgot-password',
+      name: 'auth-forgot-password',
+      component: () => import('@/views/Dashboard.vue'),
+      meta: {
+        layout: 'full',
+        resource: 'Auth',
+        redirectIfLoggedIn: true,
+      },
+    },
+    {
+      path: '/register',
+      name: 'auth-register',
+      component: () => import('@/views/Dashboard.vue'),
+      meta: {
+        layout: 'full',
+        resource: 'Auth',
+        redirectIfLoggedIn: true,
+      },
     },
 ]
   
