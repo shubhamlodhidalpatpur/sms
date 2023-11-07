@@ -1,4 +1,4 @@
-import { computed, watch } from '@vue/composition-api'
+import { computed, watch, ref } from 'vue'
 import store from '@/store'
 
 export default function usAppConfig() {
@@ -59,15 +59,18 @@ export default function usAppConfig() {
   // layoutType
   // ------------------------------------------------
 
+  const watchLayoutType = ref(store.state.appConfig.layout.type)
   const layoutType = computed({
     get: () => store.state.appConfig.layout.type,
     set: val => {
+      watchLayoutType.value = val;
       store.commit('appConfig/UPDATE_LAYOUT_TYPE', val)
     },
   })
 
   // Reset skin if skin is semi-dark and move to horizontal layout
-  watch(layoutType, val => {
+  watch(watchLayoutType, val => {
+    console.log("layoutTypelayoutTypelayoutType", layoutType)
     if (val === 'horizontal' && skin.value === 'semi-dark') skin.value = 'light'
   })
 

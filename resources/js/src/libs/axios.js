@@ -4,11 +4,12 @@ import Vue from 'vue'
 import axios from 'axios'
 
 const axiosIns = axios.create({
+  baseURL: window.location.origin + '/api/',
   // You can add your headers here
   // ================================
-  baseURL: 'http://sms.com/api/',
-  timeout: 1000,
-  headers: {'X-Custom-Header': 'foobar'}
+  // baseURL: 'https://some-domain.com/api/',
+  // timeout: 1000,
+  // headers: {'X-Custom-Header': 'foobar'}
 })
 
 Vue.prototype.$http = axiosIns
