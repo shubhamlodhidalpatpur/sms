@@ -15,6 +15,26 @@ $app = new Illuminate\Foundation\Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
 );
 
+
+
+$domain = null;
+if(!isset($_SERVER['SERVER_NAME'])){
+    foreach($_SERVER['argv'] as $index => $arg){
+        if(str_contains($arg, '.com') || str_contains($arg, '.in')){
+            $domain = $arg;
+            unset($argv[$index]);
+            unset($_SERVER['argv'][$index]);
+        }
+    }
+}
+else{
+    $domain = $_SERVER['SERVER_NAME'];
+}
+
+$app->loadEnvironmentFrom('env/'.str_replace('.','_', $domain) . '.env');
+
+
+
 /*
 |--------------------------------------------------------------------------
 | Bind Important Interfaces
