@@ -276,8 +276,8 @@ import {
 import vSelect from "vue-select";
 import Ripple from "vue-ripple-directive";
 import axios from "@axios";
-import { ref,computed,watch, } from "@vue/composition-api";
-import { useToast } from "vue-toastification/composition";
+import { ref,computed,watch, } from "@vue/compat";
+import { useToast } from "vue-toastification";
 import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
 
 export default {

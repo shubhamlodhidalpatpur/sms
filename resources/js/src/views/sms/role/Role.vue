@@ -258,9 +258,9 @@ import { ValidationProvider, ValidationObserver } from "vee-validate";
 
 import Ripple from 'vue-ripple-directive'
 import axios from "@axios";
-import { ref, computed, watch } from "@vue/composition-api";
+import { ref, computed, watch } from "vue";
 import flatPickr from "vue-flatpickr-component";
-import { useToast } from "vue-toastification/composition";
+import { useToast } from "vue-toastification";
 import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
 
 export default {

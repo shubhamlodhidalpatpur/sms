@@ -218,9 +218,9 @@ import {
 } from 'bootstrap-vue'
 import vSelect from 'vue-select'
 import Ripple from 'vue-ripple-directive'
-import { ref, watch, computed } from "@vue/composition-api";
+import { ref, watch, computed } from "@vue/compat";
 import axios from "@axios";
-import { useToast } from "vue-toastification/composition";
+import { useToast } from "vue-toastification";
 import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
 
 export default {
