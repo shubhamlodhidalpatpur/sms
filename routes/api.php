@@ -8,6 +8,7 @@ use App\Http\Controllers\BUController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\AttendanceController;
 
 
 
@@ -71,3 +72,4 @@ Route::get('/SuparAdmin', [RoleController::class, 'suparAdmin']);
 Route::get('/getRoleFromdepartmentId/{id}', [RoleController::class, 'getRoleFromdepartmentId']);
 
 Route::post('/login', [LoginController::class, 'store']);
+Route::resource('Attendances', AttendanceController::class);

@@ -31,5 +31,10 @@ export default [
       name: 'role',
       component: () => import('@/views/sms/role/Role.vue'),
     },
+    {
+      path: '/Attendance',
+      name: 'Attendance',
+      component: () => import('@/views/sms/Attendance/Attendance.vue'),
+    },
 ]
   
