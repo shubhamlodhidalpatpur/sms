@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 use App\Models\Attendance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 class AttendanceController extends Controller
 {
     /**
@@ -14,6 +15,7 @@ class AttendanceController extends Controller
      */
     public function index()
     {
+        // dd(Auth::guard('api')->user());
         $Attendance=Attendance::leftJoin('org_entities', 'org_entities.id', 'attendances.user_id')->select('attendances.*', 'org_entities.name as user_name', DB::raw('count(*) OVER() AS total_row_count'))->get();
         return response(['status' => 'success','data'=>$Attendance,'message'=> 'no data found','code' => 200], 200);
 
@@ -79,9 +81,68 @@ class AttendanceController extends Controller
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
-     */
+     */ 
     public function destroy($id)
     {
         //
     }
+    public function checkinAttendance()
+    {   
+
+        try {
+            $currentDate= Carbon::now()->toDateString();;
+            $CheckinAttandence = Attendance::whereDate('attendance_date',$currentDate)->where('user_id',1)->first();
+            if($CheckinAttandence){
+                $attendance = Attendance::find($CheckinAttandence->id);
+                $attendance->checkin_time=Carbon::now();
+                $attendance->user_id=1;
+                $attendance->attendance_date=Carbon::now();
+                $attendance->save();
+            }else{
+                $attendance = new Attendance;
+                $attendance->checkin_time=Carbon::now();
+                $attendance->attendance_date=Carbon::now();
+                $attendance->user_id=1;
+                $attendance->save();
+    
+            }
+        } catch (\Exception $e) {
+            return response(['status' => false, 'message' => 'Something went wrong! Please Try Again Later.'], 500);
+        }
+        return response(['status' => true, 'message' => 'Check in SuccessFully'], 200);
+    }
+    public function checkOutAttendance()
+    {   
+
+        try {
+            $currentDate= Carbon::now()->toDateString();;
+            $CheckoutAttandence = Attendance::whereDate('attendance_date',$currentDate)->where('user_id',1)->first();
+            if($CheckoutAttandence){
+                $attendance = Attendance::find($CheckoutAttandence->id);
+                $attendance->checkout_time=Carbon::now();
+                $attendance->user_id=1;
+                $attendance->attendance_date=Carbon::now();
+                $attendance->save();
+            }else{
+                $attendance = new Attendance;
+                $attendance->checkout_time=Carbon::now();
+                $attendance->attendance_date=Carbon::now();
+                $attendance->user_id=1;
+                $attendance->save();
+    
+            }
+        } catch (\Exception $e) {
+            return response(['status' => false, 'message' => 'Something went wrong! Please Try Again Later.'], 500);
+        }
+        return response(['status' => true, 'message' => 'Check Out SuccessFully'], 200);
+    }
+    public function checkTodayAttendance()
+    {
+        $currentDate= Carbon::now()->toDateString();;
+        $Attandence = Attendance::whereDate('attendance_date',$currentDate)->where('user_id',1)->first();
+        return response(['status' => true, 'data'=>$Attandence, 'message' => 'Check Out SuccessFully'], 200);
+
+    }
+    
+    
 }

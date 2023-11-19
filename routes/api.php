@@ -28,7 +28,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     
 });
 Route::resource('/branches', BranchController::class);
-
 Route::get('/BU', [BUController::class, 'index']);
 Route::post('/addBU', [BUController::class, 'store']);
 Route::get('/fetchBU', [BUController::class, 'index']);
@@ -71,5 +70,8 @@ Route::delete('/role/{id}', [RoleController::class, 'destroy']);
 Route::get('/SuparAdmin', [RoleController::class, 'suparAdmin']);
 Route::get('/getRoleFromdepartmentId/{id}', [RoleController::class, 'getRoleFromdepartmentId']);
 
-Route::post('/login', [LoginController::class, 'store']);
+Route::post('/login', [LoginController::class, 'store']);  
 Route::resource('Attendances', AttendanceController::class);
+Route::post('/CheckinAttendance', [AttendanceController::class, 'checkinAttendance']);
+Route::post('/CheckOutAttendance', [AttendanceController::class, 'checkOutAttendance']);
+Route::get('/CHeckTodayAttendance', [AttendanceController::class, 'checkTodayAttendance']);

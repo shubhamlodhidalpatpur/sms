@@ -14,6 +14,8 @@
               variant="primary"
               class="mb-0 ml-md-1 basicButton"
               v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+              :disabled="CheckInButton"
+              @click="checkin()"
             >
               Check In
             </b-button>
@@ -21,7 +23,8 @@
                 v-ripple.400="'rgba(255, 255, 255, 0.15)'"
                 variant="primary"
                 class="mb-0 ml-1 basicButton"
-                @click="openModel()"
+               :disabled="CheckOutButton"
+               @click="checkout()"
               >
                 Check Out
               </b-button>
@@ -69,7 +72,7 @@
             </template>
 
             <template #cell(action)="data">
-              <div class="icon_flx">
+              <!-- <div class="icon_flx">
                 <b-link @click="editBU(data.item.id)" title="Edit"  >
                   <feather-icon
                     class="custom-class"
@@ -92,7 +95,7 @@
                     size="1.5x"
                   />
                 </b-link>
-              </div>
+              </div> -->
             </template>
            </b-table>
            
@@ -258,6 +261,9 @@ export default {
       option: [""],
       fields: [{key: "name", sortable: true},{key: "check_in", sortable: true},{key: "check_out", sortable: true}, "action"],
       EditId: 0,
+      CheckInButton:false,
+      CheckOutButton:false,
+
     };
   },
 
@@ -278,53 +284,54 @@ export default {
          this.errors=[];
      
     },
-    openModel() {
-      console.log("hello");
-      this.EditId = 0;
-      this.showBUModal=true
-      },
-    editBU(id) {
-      this.EditId = id;
-      this.showBUModal=true
-    },
-    deleteBU(){
-      axios.delete(`BU/${this.DeleteId}`).then((response) => {
+    checkin() {
+        axios.post(`CheckinAttendance`).then((response) => {
+        this.CheckInButton=true; 
+        this.CheckOutButton=false;   
         this.refetchData()
-
         this.$toast({
           component: ToastificationContent,
           position: 'top-right',
           props: {
-            title: 'BU Deleted Successfully',
-            icon: 'TrashIcon',
-            variant: 'danger',
-          // text: `You have successfully logged in as ${userData.role}. Now you can start to explore!`,
+            title: 'Checkin Successfully',
+            icon: 'CheckIcon',
+            variant: 'success',
           },
         })
       });
-      
+     
     },
-    BUShowon() {
-      if (this.EditId != 0) {
-        axios.get(`BU/edit/${this.EditId}`).then((response) => {
-          console.log("TEST", response.data.data.title);
-          this.BUData.name = response.data.data.title;
-          this.BUData.id = response.data.data.id;
-        });
-      } else {
-        this.BUData.name = "";
-        this.BUData.id = null;
-        // this.BUData.hod = "";
-        
-      }
+    checkout() {
+        axios.post(`CheckOutAttendance`).then((response) => {
+        this.CheckOutButton=true;  
+        this.CheckInButton=false; 
+        this.refetchData()
+        this.$toast({
+          component: ToastificationContent,
+          position: 'top-right',
+          props: {
+            title: 'Check Out Successfully',
+            icon: 'CheckIcon',
+            variant: 'success',
+          },
+        })
+      });
+     
     },
-   
   },
 
   mounted() {
-    // axios.get("userData").then((response) => {
-    //   this.UserData = response.data;
-    // });
+    axios.get("CHeckTodayAttendance").then((response) => {
+        this.CheckOutButton=true;
+        if(response.data.data.checkin_time){
+          this.CheckInButton=true;
+          this.CheckOutButton=false;
+        }
+        if(response.data.data.checkout_time){
+          this.CheckOutButton=true;
+          this.CheckInButton=false;
+        }
+    });
   },
   setup(props, { emit }) {
 
