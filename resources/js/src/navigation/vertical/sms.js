@@ -70,5 +70,15 @@ export default [
             action: "do",
         },
     },
+    {
+        title: 'Check Attendance',
+        route: 'Check-Attendance',
+        icon: 'MenuIcon',
+        meta: {
+            resource: 'Auth',
+            action: "do",
+        },
+    },
+
    
 ]

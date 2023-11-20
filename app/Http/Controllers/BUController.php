@@ -65,6 +65,7 @@ class BUController extends Controller
         
             $OrganizationEntity = new OrganizationEntity();
             $OrganizationEntity->name = $request->name;
+            $OrganizationEntity->reporting_head = 0;
             $OrganizationEntity->parent_id = $organization != null? $organization->id : 0;
             $OrganizationEntity->org_entity_type_id = OrgStructure::where('slug', 'bu')->first()->id;
             $OrganizationEntity->status = 'A';

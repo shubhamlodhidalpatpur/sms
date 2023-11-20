@@ -17,6 +17,7 @@ class CreateOrganizationEntitiesTable extends Migration
             $table->biginteger('id')->autoIncrement();
             $table->string('name');
             $table->integer('parent_id');
+            $table->integer('reporting_head');
             $table->integer('org_entity_type_id');
             $table->enum('status', ['A','I'])->default('A');
             $table->timestamps();

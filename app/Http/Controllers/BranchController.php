@@ -98,6 +98,7 @@ class BranchController extends Controller
             $OrganizationEntity = new OrganizationEntity();
             $OrganizationEntity->name =  $request->branch_name;
             $OrganizationEntity->parent_id =$request->BU;
+            $OrganizationEntity->reporting_head = 0;
             $OrganizationEntity->org_entity_type_id =!is_null($entity_type)? $entity_type->id : 0;
             $OrganizationEntity->status = 'A';
             $OrganizationEntity->save();
@@ -162,6 +163,7 @@ class BranchController extends Controller
             $OrganizationEntity = OrganizationEntity::find($id);
             $OrganizationEntity->name = $request->branch_name;
             $OrganizationEntity->parent_id = !is_null($request->BU)? $request->BU : 0;
+            $OrganizationEntity->reporting_head = 0;
             $OrganizationEntity->status = 'A';
             $OrganizationEntity->updated_at = now();
             $OrganizationEntity->save();

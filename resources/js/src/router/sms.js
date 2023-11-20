@@ -36,5 +36,10 @@ export default [
       name: 'Attendance',
       component: () => import('@/views/sms/Attendance/Attendance.vue'),
     },
+    {
+      path: '/Check-Attendance',
+      name: 'Check-Attendance',
+      component: () => import('@/views/sms/Attendance/CheckAttendance.vue'),
+    },
 ]
   

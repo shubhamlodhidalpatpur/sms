@@ -143,6 +143,32 @@ class AttendanceController extends Controller
         return response(['status' => true, 'data'=>$Attandence, 'message' => 'Check Out SuccessFully'], 200);
 
     }
+    public function CheckAttendances()
+    {
+        // dd(Auth::guard('api')->user());
+        $Attendance=Attendance::leftJoin('org_entities as org', 'org.id', 'attendances.user_id')
+        ->leftJoin('org_entities as parent', 'parent.id', 'org.reporting_head')
+        ->select('attendances.*', 'org.name as user_name', DB::raw('count(*) OVER() AS total_row_count'))
+        ->where('parent.id',1)->get();
+        return response(['status' => 'success','data'=>$Attendance,'message'=> 'no data found','code' => 200], 200);
+
+    }
+    public function changeStatus($id, $status)
+    {
+        $attendance = Attendance::find($id);
+        if ($status == 'approved') {
+            $attendance->status = 'approved';
+        } else {
+            $attendance->status = 'rejected';
+        }
+        $attendance->save();
+        return response([
+                'data'=> $attendance,
+                'message' => 'Status Change succesfully',
+                'status' => true
+        ], 200);
+    }
+    
     
     
 }

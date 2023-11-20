@@ -75,3 +75,6 @@ Route::resource('Attendances', AttendanceController::class);
 Route::post('/CheckinAttendance', [AttendanceController::class, 'checkinAttendance']);
 Route::post('/CheckOutAttendance', [AttendanceController::class, 'checkOutAttendance']);
 Route::get('/CHeckTodayAttendance', [AttendanceController::class, 'checkTodayAttendance']);
+Route::get('/CheckAttendances', [AttendanceController::class, 'CheckAttendances']);
+Route::post('changeStatus/{status}/{id}', [AttendanceController::class,'changeStatus']);
+

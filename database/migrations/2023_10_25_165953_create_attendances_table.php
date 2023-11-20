@@ -19,6 +19,7 @@ class CreateAttendancesTable extends Migration
             $table->dateTime('checkout_time')->nullable(true);
             $table->integer('user_id')->nullable(true);
             $table->dateTime('attendance_date')->nullable(true);
+            $table->enum('status', ['open','inprogress','approved','rejected'])->default('open');
             $table->timestamps();
         });
     }
