@@ -85,6 +85,7 @@ class TeamController extends Controller
             $OrganizationEntity = new OrganizationEntity();
             $OrganizationEntity->name =  $request->team_name;
             $OrganizationEntity->parent_id =$request->department;
+            $OrganizationEntity->reporting_head = 0;
             $OrganizationEntity->org_entity_type_id =!is_null($entity_type)? $entity_type->id : 0;
             $OrganizationEntity->status = 'A';
             $OrganizationEntity->save();
@@ -135,6 +136,7 @@ class TeamController extends Controller
             DB::beginTransaction();
             $OrganizationEntity = OrganizationEntity::find($id);
             $OrganizationEntity->name = $request->team_name;
+            $OrganizationEntity->reporting_head = 0;
             $OrganizationEntity->parent_id = !is_null($request->department)? $request->department : 0;
             $OrganizationEntity->status = 'A';
             $OrganizationEntity->updated_at = now();

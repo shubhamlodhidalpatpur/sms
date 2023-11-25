@@ -10,8 +10,60 @@ export default [
         },
     },
     {
-        title: 'BU',
-        route: 'BU',
+        title: 'Org Structure',
+        icon: 'HomeIcon',
+        children: [
+            {
+                title: 'BU',
+                route: 'BU',
+                icon: 'MenuIcon',
+                meta: {
+                    resource: 'Auth',
+                    action: "do",
+                },
+            },
+            {
+                title: 'Branch',
+                route: 'branch',
+                icon: 'MenuIcon',
+                meta: {
+                    resource: 'Auth',
+                    action: "do",
+                },
+            },
+            {
+                title: 'Department',
+                route: 'department',
+                icon: 'MenuIcon',
+                meta: {
+                    resource: 'Auth',
+                    action: "do",
+                },
+            },
+            {
+                title: 'Team',
+                route: 'team',
+                icon: 'MenuIcon',
+                meta: {
+                    resource: 'Auth',
+                    action: "do",
+                },
+            },
+            {
+                title: 'Role',
+                route: 'role',
+                icon: 'MenuIcon',
+                meta: {
+                    resource: 'Auth',
+                    action: "do",
+                },
+            },
+        
+        ]
+    },
+    {
+        title: 'Attendance',
+        route: 'Attendance',
         icon: 'MenuIcon',
         meta: {
             resource: 'Auth',
@@ -19,35 +71,8 @@ export default [
         },
     },
     {
-        title: 'Branch',
-        route: 'branch',
-        icon: 'MenuIcon',
-        meta: {
-            resource: 'Auth',
-            action: "do",
-        },
-    },
-    {
-        title: 'Department',
-        route: 'department',
-        icon: 'MenuIcon',
-        meta: {
-            resource: 'Auth',
-            action: "do",
-        },
-    },
-    {
-        title: 'Team',
-        route: 'team',
-        icon: 'MenuIcon',
-        meta: {
-            resource: 'Auth',
-            action: "do",
-        },
-    },
-    {
-        title: 'Role',
-        route: 'role',
+        title: 'Check Attendance',
+        route: 'Check-Attendance',
         icon: 'MenuIcon',
         meta: {
             resource: 'Auth',
@@ -64,4 +89,5 @@ export default [
         },
     },
 
+   
 ]

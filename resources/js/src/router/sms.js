@@ -46,5 +46,15 @@ export default [
       name: 'employee-edit',
       component: () => import('@/views/sms/employee/EmployeeAddEdit.vue'),
     },
+    {  
+      path: '/Attendance',
+      name: 'Attendance',
+      component: () => import('@/views/sms/Attendance/Attendance.vue'),
+    },
+    {
+      path: '/Check-Attendance',
+      name: 'Check-Attendance',
+      component: () => import('@/views/sms/Attendance/CheckAttendance.vue'),
+    },
 ]
   
