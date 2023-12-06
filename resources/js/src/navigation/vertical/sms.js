@@ -91,6 +91,8 @@ export default [
     {
         title: 'Check Swap',
         route: 'check-swap',
+        title: 'Employee',
+        route: 'employee',
         icon: 'MenuIcon',
         meta: {
             resource: 'Auth',

@@ -32,6 +32,21 @@ export default [
       component: () => import('@/views/sms/role/Role.vue'),
     },
     {
+      path: '/employee',
+      name: 'employee',
+      component: () => import('@/views/sms/employee/Employee.vue'),
+    },
+    {
+      path: '/employee/add',
+      name: 'employee-add',
+      component: () => import('@/views/sms/employee/EmployeeAddEdit.vue'),
+    },
+    {
+      path: '/employee/edit',
+      name: 'employee-edit',
+      component: () => import('@/views/sms/employee/EmployeeAddEdit.vue'),
+    },
+    {  
       path: '/Attendance',
       name: 'Attendance',
       component: () => import('@/views/sms/Attendance/Attendance.vue'),
