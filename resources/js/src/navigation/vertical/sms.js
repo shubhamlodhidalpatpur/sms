@@ -79,6 +79,24 @@ export default [
             action: "do",
         },
     },
+    {
+        title: 'Swap',
+        route: 'swap',
+        icon: 'MenuIcon',
+        meta: {
+            resource: 'Auth',
+            action: "do",
+        },
+    },
+    {
+        title: 'Check Swap',
+        route: 'check-swap',
+        icon: 'MenuIcon',
+        meta: {
+            resource: 'Auth',
+            action: "do",
+        },
+    },
 
    
 ]

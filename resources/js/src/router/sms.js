@@ -41,5 +41,20 @@ export default [
       name: 'Check-Attendance',
       component: () => import('@/views/sms/Attendance/CheckAttendance.vue'),
     },
+    {
+      path: '/Swap',
+      name: 'swap',
+      component: () => import('@/views/sms/Swap/SwapList.vue'),
+    },
+    {
+      path: '/Apply-Swap',
+      name: 'apply-swap',
+      component: () => import('@/views/sms/Swap/ApplySwap.vue'),
+    },
+    {
+      path: '/Check-Swap',
+      name: 'check-swap',
+      component: () => import('@/views/sms/Swap/ChckSwapList.vue'),
+    },
 ]
   

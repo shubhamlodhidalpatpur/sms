@@ -9,8 +9,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AttendanceController;
-
-
+use App\Http\Controllers\SwapRequestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -77,4 +76,6 @@ Route::post('/CheckOutAttendance', [AttendanceController::class, 'checkOutAttend
 Route::get('/CHeckTodayAttendance', [AttendanceController::class, 'checkTodayAttendance']);
 Route::get('/CheckAttendances', [AttendanceController::class, 'CheckAttendances']);
 Route::post('changeStatus/{status}/{id}', [AttendanceController::class,'changeStatus']);
-
+Route::resource('swapRequest', SwapRequestController::class);
+Route::get('/CheckswapRequest', [SwapRequestController::class, 'CheckswapRequest']);
+Route::post('changeSwapRequestStatus/{status}/{id}', [SwapRequestController::class,'changeSwapRequestStatus']);
