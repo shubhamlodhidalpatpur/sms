@@ -21,7 +21,7 @@
                 </b-button>
                   <b-button v-if="$can('do', 'add_employee')"
                     variant="primary"
-                    :to="{ name: 'admin-add-employees' }"
+                    :to="{ name: 'employee-add' }"
                     class="d-inline-block mr-1"
                   >
                     <span  class="text-nowrap">Add Employee</span>

@@ -9,6 +9,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\SwapRequestController;
 
 /*
@@ -79,3 +80,4 @@ Route::post('changeStatus/{status}/{id}', [AttendanceController::class,'changeSt
 Route::resource('swapRequest', SwapRequestController::class);
 Route::get('/CheckswapRequest', [SwapRequestController::class, 'CheckswapRequest']);
 Route::post('changeSwapRequestStatus/{status}/{id}', [SwapRequestController::class,'changeSwapRequestStatus']);
+Route::resource('holidays', HolidayController::class);

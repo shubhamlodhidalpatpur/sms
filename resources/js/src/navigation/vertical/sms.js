@@ -91,8 +91,24 @@ export default [
     {
         title: 'Check Swap',
         route: 'check-swap',
-        title: 'Employee',
-        route: 'employee',
+        icon: 'MenuIcon',
+        meta: {
+            resource: 'Auth',
+            action: "do",
+        },
+    },
+    {
+    title: 'Employee',
+    route: 'employee',
+    icon: 'MenuIcon',
+    meta: {
+        resource: 'Auth',
+        action: "do",
+    },
+},
+    {
+        title: 'Holiday',
+        route: 'holiday',
         icon: 'MenuIcon',
         meta: {
             resource: 'Auth',

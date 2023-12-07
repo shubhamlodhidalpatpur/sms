@@ -71,5 +71,10 @@ export default [
       name: 'check-swap',
       component: () => import('@/views/sms/Swap/ChckSwapList.vue'),
     },
+    {
+      path: '/Holiday',
+      name: 'holiday',
+      component: () => import('@/views/sms/Holiday/Holiday.vue'),
+    },
 ]
   
