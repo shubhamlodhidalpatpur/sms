@@ -116,5 +116,13 @@ export default [
         },
     },
 
-   
+    {
+        title: 'Leave Type',
+        route: 'leave-type',
+        icon: 'MenuIcon',
+        meta: {
+            resource: 'Auth',
+            action: "do",
+        },
+    },
 ]

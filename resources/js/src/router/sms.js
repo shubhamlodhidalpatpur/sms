@@ -76,5 +76,20 @@ export default [
       name: 'holiday',
       component: () => import('@/views/sms/Holiday/Holiday.vue'),
     },
+    {
+      path: '/leave-type',
+      name: 'leave-type',
+      component: () => import('@/views/sms/LeaveType/LeaveType.vue'),
+    },
+    {
+      path: '/add-leave-type',
+      name: 'add-leave-type',
+      component: () => import('@/views/sms/LeaveType/AddEditLeaveType.vue'),
+    },
+    {
+      path: '/leave-type/edit/:id',
+      name: 'edit-leave-type',
+      component: () => import('@/views/sms/LeaveType/AddEditLeaveType.vue'),
+    },    
 ]
   
