@@ -143,6 +143,7 @@ class LeaveTypeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $LeaveType=LeaveType::where('id', $id)->delete();
+        return response(['status'=>'success', 'message'=>'Leave Type Deleted successfully'], 200);
     }
 }

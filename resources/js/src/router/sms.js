@@ -85,11 +85,22 @@ export default [
       path: '/add-leave-type',
       name: 'add-leave-type',
       component: () => import('@/views/sms/LeaveType/AddEditLeaveType.vue'),
+      meta: {
+        navActiveLink: 'leave-type',
+      },
     },
     {
       path: '/leave-type/edit/:id',
       name: 'edit-leave-type',
       component: () => import('@/views/sms/LeaveType/AddEditLeaveType.vue'),
-    },    
+      meta: {
+        navActiveLink: 'leave-type',
+      },
+    }, 
+    {
+      path: '/register-step',
+      name: 'register-step',
+      component: () => import('@/views/sms/RegisterStep/RegisterSteps.vue'),
+    },   
 ]
   

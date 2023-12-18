@@ -97,7 +97,7 @@
                 <feather-icon class="custom-class" icon="EyeIcon" size="1.5x" />
               </b-link>
               <b-link
-                @click="deleteUser(data.item.id)"
+                @click="showDeleteConfirmation(); DeleteId = data.item.id"
                 title="Delete"
               >
                 <feather-icon
@@ -165,7 +165,9 @@
         </b-card>
       </b-col>
     </b-row>
-  
+      <b-modal v-model="showModal" title="Delete Confirmation" @ok="deleteleaveType">
+      Are you sure you want to delete this Leave Type?
+    </b-modal>
   </div>
 </template>
 
@@ -238,7 +240,26 @@ export default {
   },
 
   methods: {
-  
+     showDeleteConfirmation() {
+      this.showModal = true;
+    },
+     deleteleaveType() {
+      axios.delete(`LeaveTypes/${this.DeleteId}`).then((response) => {
+        this.refetchData()
+
+        this.$toast({
+          component: ToastificationContent,
+          position: 'top-right',
+          props: {
+            title: 'Leave Type Deleted Successfully',
+            icon: 'TrashIcon',
+            variant: 'danger',
+            // text: `You have successfully logged in as ${userData.role}. Now you can start to explore!`,
+          },
+        })
+      });
+
+    },
     
       
   },

@@ -62,7 +62,6 @@
                 <label class="form-label required">Allotment</label>
                 <validation-provider
                   #default="{ errors }"
-                  rules="required"
                   name="allotment"
                 >
                   <b-form-input
