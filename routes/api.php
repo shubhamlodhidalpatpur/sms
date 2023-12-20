@@ -11,6 +11,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\LeaveTypeController;
+use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\SwapRequestController;
 
 /*
@@ -83,3 +84,9 @@ Route::get('/CheckswapRequest', [SwapRequestController::class, 'CheckswapRequest
 Route::post('changeSwapRequestStatus/{status}/{id}', [SwapRequestController::class,'changeSwapRequestStatus']);
 Route::resource('holidays', HolidayController::class);
 Route::resource('LeaveTypes',LeaveTypeController::class);
+
+Route::post('submitRegistrationForm', [OrganizationController::class ,'submitRegistrationForm']);
+Route::get('country', [OrganizationController::class, 'getCountry']);
+Route::get('/getStateFromCountryId/{id}', [OrganizationController::class, 'getStateFromCountryId']);
+Route::get('/getCityFromStateId/{id}', [OrganizationController::class, 'getCityFromStateId']);
+Route::get('industryType', [OrganizationController::class, 'industryType']);

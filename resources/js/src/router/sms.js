@@ -65,6 +65,9 @@ export default [
       path: '/Apply-Swap',
       name: 'apply-swap',
       component: () => import('@/views/sms/Swap/ApplySwap.vue'),
+      meta: {
+        navActiveLink: 'swap',
+      },
     },
     {
       path: '/Check-Swap',

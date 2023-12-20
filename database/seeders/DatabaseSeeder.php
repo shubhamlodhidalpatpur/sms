@@ -16,6 +16,11 @@ class DatabaseSeeder extends Seeder
         $this->call([
             OrgStructureSeeder::class,
             AdminSeeder::class,
+            CountrySeeder::class,
+            StateSeeder::class,
+            CitySeeder::class,
+            IndustryTypeSeeder::class,
+            WorkingSeeder::class,
       ]); 
     }
 }

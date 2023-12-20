@@ -578,6 +578,28 @@
       </tab-content>
 
 
+  <tab-content title="BU" @change="activeTab = 'BUForm'" :before-change="validationForm">
+        <validation-observer ref="BUForm" tag="form">
+            <div class="text-danger" v-if="hasErrors('BlankBU')">
+              {{ getErrors("BlankBU") }}
+            </div>
+        <bu @removeBlankDepartmentError="RemoveError('BlankBU')" />
+
+        </validation-observer>
+  </tab-content>
+
+   <tab-content title="Branch" @change="activeTab = 'BranchForm'" :before-change="validationForm">
+        <validation-observer ref="BranchForm" tag="form">
+            <div class="text-danger" v-if="hasErrors('BlankBranch')">
+              {{ getErrors("BlankBranch") }}
+            </div>
+        <branch @removeBlankDepartmentError="RemoveError('BlankBranch')" />
+
+        </validation-observer>
+  </tab-content>
+
+
+
       <!-- department -->
 
      <tab-content title="Departments" @change="activeTab = 'departmentForm'" :before-change="validationForm">
@@ -683,13 +705,15 @@ import flatPickr from "vue-flatpickr-component";
 import Ripple from "vue-ripple-directive";
 import moment from "moment";
 import department from "../department/Department.vue"
+import branch from "../branch/Branch.vue"
+import bu from "../BU/BU.vue"
 import team from "../team/Team.vue"
 import role from "../role/Role.vue"
 export default {
   components: {
     role,
     team,
-    department,
+    department,bu,branch,
     ValidationProvider,
     ValidationObserver,
     FormWizard,
@@ -753,6 +777,15 @@ export default {
 
 
         },
+        BUForm: {
+          formType: 'BUForm',
+          BU: null,
+        },
+        BranchForm: {
+          formType: 'BranchForm',
+          Branch: null,
+        },
+
         departmentForm: {
           formType: 'departmentForm',
           departments: null,
@@ -813,6 +846,8 @@ export default {
       tabRefs: [
         'overviewForm',
         'systemForm',
+        'BUForm',
+        'BranchForm',
         'departmentForm',
         'teamForm',
         'roleForm',
@@ -890,7 +925,7 @@ export default {
 
     formSubmitted() {
       // axios.get('setupCompleted').then(() => {
-        this.$router.replace('/dashboard').then(() => {
+        this.$router.replace('/home').then(() => {
           this.$toast({
             component: ToastificationContent,
             position: 'top-right',

@@ -125,4 +125,13 @@ export default [
             action: "do",
         },
     },
+    {
+        title: 'Register Step',
+        route: 'register-step',
+        icon: 'MenuIcon',
+        meta: {
+            resource: 'Auth',
+            action: "do",
+        },
+    },
 ]
