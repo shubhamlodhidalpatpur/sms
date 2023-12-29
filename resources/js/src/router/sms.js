@@ -42,7 +42,7 @@ export default [
       component: () => import('@/views/sms/employee/EmployeeAddEdit.vue'),
     },
     {
-      path: '/employee/edit',
+      path: '/employee/edit/:id',
       name: 'employee-edit',
       component: () => import('@/views/sms/employee/EmployeeAddEdit.vue'),
     },

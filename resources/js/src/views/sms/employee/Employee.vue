@@ -21,7 +21,7 @@
                 </b-button>
                   <b-button v-if="$can('do', 'add_employee')"
                     variant="primary"
-                    :to="{ name: 'admin-add-employees' }"
+                    :to="{ name: 'employee-add' }"
                     class="d-inline-block mr-1"
                   >
                     <span  class="text-nowrap">Add Employee</span>
@@ -65,50 +65,50 @@
             </b-collapse>
           </div>
 
-
           <b-table
             ref="refEmployeesListTable"
             class="position-relative tableFixHead"
             :items="EmployeesListTableData"
             responsive
             stacked="sm"
-            :fields="EmployeesTableColumn"
             primary-key="id"
+            :fields="EmployeesTableColumn"
             show-empty
             empty-text="No matching records found"
             :per-page="perPage"
             :current-page="currentPage"
           >
-             <template #cell(sr_no)="data">
-              <div class="text-nowrap">
-                {{ data.index + 1 }}
-              </div>
-            </template>
-
+          <template #cell(sr_no)="data">
+            <div class="text-nowrap">
+              {{ data.index + 1 }}
+            </div>
+          </template>
+          
+          <!-- 
             <template v-for="(field, index) in EmployeesTableColumn" v-slot:[`cell(${field.label})`]="{ item }" >
               <div class="text-nowrap" :key="index">
                 <span class="align-text-top text-capitalize">{{ item[field.label] }}</span>
               </div>
             </template>
+          -->
 
             <template #cell(action)="data">
-              <b-link v-if="$can('do', 'update_employee')"
+              <b-link 
                 title="Employees Edit"
                 :to="{
-                  name: 'admin-edit-employee',
-                  params: { id: encodeBase64(data.item.id) },
+                  name: 'employee-edit',
+                  params: { id: encodeBase64(data.item.user_id) },
                 }"
                 ><edit-icon size="1.5x" class="custom-class"></edit-icon>
               </b-link>
               <b-link
-                :to="{ name: 'admin-view-employee', params: { id: encodeBase64(data.item.id) } }"
+                :to="{ name: 'admin-view-employee', params: { id: encodeBase64(data.item.user_id) } }"
                 title="View"
                 >
-                <!-- v-if="$can('do', 'view_users')" -->
                 <feather-icon class="custom-class" icon="EyeIcon" size="1.5x" />
               </b-link>
               <b-link
-                @click="deleteUser(data.item.id)"
+                @click="deleteUser(data.item.user_id)"
                 title="Delete"
                 v-if="$can('do', 'delete_employee')"
               >
@@ -118,7 +118,7 @@
                   size="1.5x"
                 />
               </b-link>
-            </template>
+            </template> 
           </b-table>
 
           <div class="mx-2 mb-2">
@@ -230,14 +230,14 @@ export default {
   },
   data() {
     return {
-      EmployeesTableColumn: [
-        { key: "sr_no" },
-        { key: "name", sortable: true },
-        { key: "profile", sortable: true },
-        // { key: "department", sortable: true },
-        { key: "employee_role", sortable: true },
-        { key: "action" },
-      ],
+      // EmployeesTableColumn: [
+      //   { key: "sr_no" },
+      //   { key: "name", sortable: true },
+      //   { key: "profile", sortable: true },
+      //   // { key: "department", sortable: true },
+      //   { key: "employee_role", sortable: true },
+      //   { key: "action" },
+      // ],
       index: 0,
       perPage: 10,
       currentPage: 1,
@@ -271,7 +271,7 @@ export default {
     };
 
     const fetchEmployeesList = (ctx, callback) => {
-      axios.get("employees", {
+      axios.get("users", {
           params: {
             profile: encodeBase64(SearchFilter.value.profile),
             name: encodeBase64(SearchFilter.value.name),
@@ -279,9 +279,11 @@ export default {
             perPage: perPage.value,
           },
         }).then((response) => {
-          totalrows.value = response.data.responseData.employees.total;
-          EmployeesListTableData.value = response.data.responseData.employees.data;
-          totalEmployees.value = fetchEmployeesList[0] != null ? fetchEmployeesList[0].total_row_count : 0;
+          EmployeesListTableData.value = response.data.table_data
+          EmployeesTableColumn.value = response.data.table_column
+          // totalrows.value = response.data.responseData.employees.total;
+          // EmployeesListTableData.value = response.data.responseData.employees.data;
+          // totalEmployees.value = fetchEmployeesList[0] != null ? fetchEmployeesList[0].total_row_count : 0;
         // callback(EmployeesListTableData.value);
       });
     };
@@ -290,6 +292,7 @@ export default {
     const perPageOptions = [5, 10, 15];
     const refEmployeesListTable = ref(null);
     const EmployeesListTableData = ref([]);
+    const EmployeesTableColumn = ref([]);
     const userData =  JSON.parse(localStorage.getItem('userData'));
     const FilterData = {
       profile: (userData.isSuperAdmin)? null : (userData.organization_id? userData.organization_id : userData.id),
@@ -344,7 +347,8 @@ export default {
       encodeBase64,
       decodeBase64,
       totalrows,
-      perPageOptions
+      perPageOptions,
+      EmployeesTableColumn
     };
   },
 };

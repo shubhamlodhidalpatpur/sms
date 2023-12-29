@@ -11,7 +11,7 @@
       </b-col>
     </b-row>
 
-    <b-card v-if="userData.isSuperAdmin">
+    <b-card>
       <div class="">
         <b-row>
           <b-col md="3">
@@ -20,14 +20,14 @@
                 <v-select
                   v-if="$route.name != 'admin-view-employee'"
                   :class="{'select-readonly' : $route.name == 'admin-view-employee' }"
-                  @input="updateProfileOptions($event);RemoveError('country');"
+                  @input="updateEmployeeForm($event)"
                   input-id="profile_type"
-                  v-model.number="employeeData.profile_type"
+                  v-model.number="employeeData.role_id"
                   :reduce="(val) => val.id"
                   value="id"
                   label="name"
                   :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                  :options="JSON.parse(JSON.stringify(profileTypeOptions))"
+                  :options="JSON.parse(JSON.stringify(RoleOptions))"
                   :clearable="true"
                   :state="errors.length > 0 ? false : null"
                   placeholder="Please Select Profile Type"
@@ -40,7 +40,8 @@
               </validation-provider>
 
           </b-col>
-          <b-col md="3">
+
+          <!-- <b-col md="3">
             <label class="form-label required d-block">Profile</label>
               <validation-provider #default="{ errors }" name="Profile">
                 <v-select
@@ -64,7 +65,7 @@
                   {{ getErrors("profile") }}
                 </div>
               </validation-provider>
-          </b-col>
+          </b-col> -->
           <!-- <b-col md="3">
             <label class="form-label required d-block">Profile</label>
               <validation-provider #default="{ errors }" name="Profile">
@@ -91,825 +92,99 @@
       </div>
     </b-card>
 
-    
 
-
-      <validation-observer #default="{ handleSubmit }" ref="accountRules" tag="form" @submit.prevent="handleSubmit(onSubmit)" @reset.prevent="resetForm">
         <b-form
           class="row myform"
           @submit.prevent="handleSubmit(onSubmit)"
           @reset.prevent="resetForm"
+          v-if="Fields.length > 0"
         >
-        <b-col md="12">
-          <b-row>
-            <b-col md="3" class="mt-2">
-              <label class="form-label required d-block">Name</label>
-                <validation-provider #default="{ errors }" name="Name">
-                  <b-form-input
-                    v-if="$route.name != 'admin-view-employee'"
-                    id="name"
-                    v-model="employeeData.name"
-                    :state="errors.length > 0 ? false : null"
-                    placeholder="Enter Name"
-                    autocomplete="off"
-                    @input="RemoveError('name')"
-                  />
-                  <span v-if="$route.name == 'admin-view-employee'">{{ employeeData.name }}</span>
-                  <small class="text-danger">{{ errors[0] }}</small>
-                  <div class="text-danger" v-if="hasErrors('name')">
-                    {{ getErrors("name") }}
-                  </div>
-                </validation-provider>
-            </b-col>
-
-           
-
-            <b-col md="3" class="mt-2">
-              <label class="form-label required d-block">Email</label>
-                <validation-provider #default="{ errors }" name="Email">
-                  <b-form-input
-                    v-if="$route.name != 'admin-view-employee'"
-                    id="email"
-                    v-model="employeeData.email"
-                    :state="errors.length > 0 ? false : null"
-                    placeholder="abc@test.com"
-                    autocomplete="off"
-                    @input="RemoveError('email')"
-                  />
-                  <span v-if="$route.name == 'admin-view-employee'">{{ employeeData.email }}</span>
-                  <small class="text-danger">{{ errors[0] }}</small>
-                  <div class="text-danger" v-if="hasErrors('email')">
-                    {{ getErrors("email") }}
-                  </div>
-                </validation-provider>
-            </b-col>
-            <b-col md="3" class="mt-2">
-              <label class="form-label required d-block">Mobile</label>
-                <validation-provider #default="{ errors }" name="Mobile">
-                  <b-form-input
-                    v-if="$route.name != 'admin-view-employee'"
-                    id="mobile"
-                    v-model="employeeData.mobile"
-                    :state="errors.length > 0 ? false : null"
-                    placeholder="+91 91000 0000"
-                    autocomplete="off"
-                    @input="RemoveError('mobile')"
-                  />
-                  <span v-if="$route.name == 'admin-view-employee'">{{ employeeData.mobile }}</span>
-                  <small class="text-danger">{{ errors[0] }}</small>
-                  <div class="text-danger" v-if="hasErrors('mobile')">
-                    {{ getErrors("mobile") }}
-                  </div>
-                </validation-provider>
-            </b-col>
-         
-            <!-- <b-col md="3">
-              <label class="form-label required d-block">Department </label> <feather-icon  @click="openModal()" class="custom-class"  icon="PlusIcon" size="1.5x" />
-                <validation-provider #default="{ errors }" name="department">
-                  <v-select
-                    v-if="$route.name != 'admin-view-employee'"
-                    :class="{'select-readonly' : $route.name == 'admin-view-employee' }"
-                    @input="RemoveError('department'); updateDesignationOptions($event); updateRoleOptions($event);  employeeData.role = null;"
-                    input-id="department"
-                    v-model.number="employeeData.department"
-                    :reduce="(val) => val.id"
-                    value="id"
-                    label="name"
-                    :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                    :options="JSON.parse(JSON.stringify(DepartmentOptions))"
-                    :clearable="true"
-                    :state="errors.length > 0 ? false : null"
-                    placeholder="Please Select Department"
-                  />
-                  <small class="text-danger">{{ errors[0] }}</small>
-                  <div class="text-danger" v-if="hasErrors('department')">
-                    {{ getErrors("department") }}
-                  </div>
-                </validation-provider>
-            </b-col>
-            <b-col md="3" class="mt-2">
-              <label class="form-label required d-block">Role</label><feather-icon  @click="openRoleModal()" class="custom-class"  icon="PlusIcon" size="1.5x" />
-                <validation-provider #default="{ errors }" name="role">
-                  <v-select
-                    v-if="$route.name != 'admin-view-employee'"
-                    :class="{'select-readonly' : $route.name == 'admin-view-employee' }"
-                    input-id="role"
-                    v-model="employeeData.role"
-                    @input="RemoveError('role')"
-                    :options="RoleOptions"
-                    label="title"
-                    value="id"
-                    :state="errors.length > 0 ? false : null"
-                    placeholder="Select Role"
-                    :reduce="(val) => val.id"
-                  />
-                  <small class="text-danger">{{ errors[0] }}</small>
-                  <div class="text-danger" v-if="hasErrors('role')">
-                    {{ getErrors("role") }}
-                  </div>
-                </validation-provider>
-            </b-col> -->
-           
-            <b-col md="3" class="mt-2">
-              <label class="form-label required d-block">Age</label>
-                <validation-provider #default="{ errors }" name="Age">
-                  <b-form-input
-                    v-if="$route.name != 'admin-view-employee'"
-                    id="age"
-                    v-model="employeeData.age"
-                    :state="errors.length > 0 ? false : null"
-                    placeholder="Enter age(In digits)"
-                    autocomplete="off"
-                    @input="RemoveError('age')"
-                  />
-                  <span v-if="$route.name == 'admin-view-employee'">{{ employeeData.age }}</span>
-                  <small class="text-danger">{{ errors[0] }}</small>
-                  <div class="text-danger" v-if="hasErrors('age')">
-                    {{ getErrors("age") }}
-                  </div>
-                </validation-provider>
-            </b-col>
-            <b-col md="3" class="mt-2">
-              <label class="form-label required d-block">Gender</label>
-                <validation-provider name="product_type" #default="{ errors }">
-                  <v-select
-                    v-if="$route.name != 'admin-view-employee'"
-                    :class="[{'select-readonly' : $route.name == 'admin-view-employee' }]"
-                    input-id="gender"
-                    v-model="employeeData.gender"
-                    @input="RemoveError('gender')"
-                    :options="GenderOption"
-                    label="text"
-                    value="value"
-                    :state="errors.length > 0 ? false : null"
-                    placeholder="Select type"
-                    :reduce="(val) => val.value"
-                  />
-                  <span v-if="$route.name == 'admin-view-employee'">{{ employeeData.gender}}</span>
-                  <small class="text-danger">{{ errors[0] }}</small>
-                  <div class="text-danger" v-if="hasErrors('gender')">
-                    {{ getErrors("gender") }}
-                  </div>
-                </validation-provider>
-            </b-col>
-            <b-col md="3" class="mt-2">
-              <label class="form-label required d-block">Date of Birth</label>
-                <validation-provider name="dob" #default="{ errors }">
-                  <flat-pickr
-                  v-if="$route.name != 'admin-view-employee'"
-                  v-model="employeeData.dob"
-                  :state="errors.length > 0 ? false : null"
-                  class="form-control"
-                   @input="RemoveError('dob')"
-                   :config="{ maxDate:new Date().setFullYear(new Date().getFullYear()-18) }"                 
-                  placeholder="Select Date Of Birth" />
-                 <span v-if="$route.name == 'admin-view-employee'">{{ employeeData.dob }}</span>
-                  <small class="text-danger">{{ errors[0] }}</small>
-                  <div class="text-danger" v-if="hasErrors('dob')">
-                    {{ getErrors("dob") }}
-                  </div>
-                </validation-provider>
-            </b-col>
-          </b-row>
-        </b-col>
-
-
-
-
-        
-        
-        
-        
-        <b-col md="12">
-          <b-row>
-            <b-col md="12">
-                <h4 class="hededitpge mt-3">
-                  <div class="titleIcon">
-                    <feather-icon icon="MapPinIcon" size="18" />
-                    Address :
-                  </div>
-                </h4>
-                <hr />
-              </b-col>
-                <b-col md="12">
-                  <label class="form-label required d-block">Address</label>
-                  <validation-provider #default="{ errors }" name="Address">
+      <b-card >
+          <b-col md="12">
+            <b-row>
+              <b-col md="3" class="mt-2" v-for="field in Fields" :key="field.id">
+                <label class="form-label required d-block">{{field.title}}</label>
+                  <validation-provider #default="{ errors }" :name="field.title">
+                    
+                    <div v-if="field.field_type_slug == 'string' && $route.name != 'admin-view-employee'">
                     <b-form-input
-                      v-if="$route.name != 'admin-view-employee'"
-                    id="address"
-                    v-model="employeeData.address"
-                    :state="errors.length > 0 ? false : null"
-                    placeholder="Enter Address"
+                      v-model="field.value"
+                      :state="errors.length > 0 ? false : null"
+                      placeholder="Enter Name"
                       autocomplete="off"
-                      @input="RemoveError('address')"
-                      />
-                      <span v-if="$route.name == 'admin-view-employee'">{{ employeeData.address }}</span>
-                      <small class="text-danger">{{ errors[0] }}</small>
-                      <div class="text-danger" v-if="hasErrors('address')">
-                        {{ getErrors("address") }}
-                      </div>
-                    </validation-provider>
-                  </b-col>
-                  <b-col md="3" class="mt-2">
-                  <label class="form-label required d-block">Country</label>
-                    <validation-provider #default="{ errors }" name="Country">
-                      <v-select
-                        v-if="$route.name != 'admin-view-employee'"
-                        :class="{'select-readonly' : $route.name == 'admin-view-employee' }"
-                        @input="onChange('country', $event);RemoveError('country');"
-                        input-id="country"
-                        v-model.number="employeeData.country"
-                        :reduce="(val) => val.id"
-                        value="id"
-                        label="country_name"
-                        :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                        :options="JSON.parse(JSON.stringify(countryOptions))"
-                        :clearable="true"
-                        :state="errors.length > 0 ? false : null"
-                        placeholder="Please Select Country"
-                      />
-                      <span v-if="$route.name == 'admin-view-employee'">{{ employeeData.country_name }}</span>
-                      <small class="text-danger">{{ errors[0] }}</small>
-                      <div class="text-danger" v-if="hasErrors('country')">
-                        {{ getErrors("country") }}
-                      </div>
-                    </validation-provider>
-                </b-col>
-                <b-col md="3" class="mt-2">
-                  <label class="form-label required d-block">State</label>
-                    <validation-provider #default="{ errors }" name="state">
-                      <v-select
-                        v-if="$route.name != 'admin-view-employee'"
-                        :class="{'select-readonly' : $route.name == 'admin-view-employee' }"
-                        @input="
-                          onChange('state', $event);
-                          RemoveError('state');
-                        "
-                        input-id="state"
-                        v-model="employeeData.state"
-                        label="name"
-                        value="id"
-                        :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                        :options="JSON.parse(JSON.stringify(StateOptions))"
-                        :clearable="true"
-                        :state="errors.length > 0 ? false : null"
-                        :reduce="(val) => val.id"
-                        placeholder="Select State"
-                      />
-                      <span v-if="$route.name == 'admin-view-employee'">{{ employeeData.state_name }}</span>
-                      <small class="text-danger">{{ errors[0] }}</small>
-                      <div class="text-danger" v-if="hasErrors('state')">
-                        {{ getErrors("state") }}
-                      </div>
-                    </validation-provider>
-                </b-col>
-                <b-col md="3" class="mt-2">
-                  <label class="form-label required d-block">City</label>
-                    <validation-provider #default="{ errors }" name="city">
-                      <v-select
-                        v-if="$route.name != 'admin-view-employee'"
-                        :class="{'select-readonly' : $route.name == 'admin-view-employee' }"
-                        v-model="employeeData.city"
-                        :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                        :options="JSON.parse(JSON.stringify(CityOptions))"
-                        label="name"
-                        value="id"
-                        :reduce="(val) => val.id"
-                        :clearable="true"
-                        input-id="city"
-                        placeholder="Select City"
-                        @input="RemoveError('city')"
-                      />
-                      <span v-if="$route.name == 'admin-view-employee'">{{ employeeData.city_name }}</span>
-                      <small class="text-danger">{{ errors[0] }}</small>
-                      <div class="text-danger" v-if="hasErrors('city')">
-                        {{ getErrors("city") }}
-                      </div>
-                    </validation-provider>
-                </b-col>
-                <b-col md="3" class="mt-2">
-                  <label class="form-label required d-block">Pin Code</label>
-                    <validation-provider #default="{ errors }" name="pin">
-                      <b-form-input
-                        v-if="$route.name != 'admin-view-employee'"
-                        id="pincode"
-                        v-model="employeeData.pincode"
-                        :state="errors.length > 0 ? false : null"
-                        placeholder="Enter Pin Code"
-                        autocomplete="off"
-                        @input="RemoveError('pincode')"
-                        type="number"
-                      />
-                      <span v-if="$route.name == 'admin-view-employee'">{{ employeeData.pincode }}</span>
-                      <small class="text-danger">{{ errors[0] }}</small>
-                      <div class="text-danger" v-if="hasErrors('pincode')">
-                        {{ getErrors("pincode") }}
-                      </div>
-                    </validation-provider>
-                </b-col>
-              </b-row>
-            </b-col>
-
-        <b-col md="12">
-          <b-row>
-            <b-col md="12">
-              <h4 class="hededitpge mt-3">
-                <div class="titleIcon">
-                  <feather-icon icon="MapPinIcon" size="18" />
-                  Other Details :
-                </div>
-              </h4>
-              <hr />
-            </b-col>
-            
-            <b-col md="3">
-              <label class="form-label required d-block">Employee Access</label>
-              <validation-provider #default="{ errors }" name="Employee Access">
-                <v-select
-                  v-if="$route.name != 'admin-view-employee'"
-                  :class="{'select-readonly' : $route.name == 'admin-view-employee' }"
-                  @input="EmployeeAccess_slug=employeeData.EmployeeAccess.slug; onChange('accessLeval', $event);RemoveError('EmployeeAccess')"
-                  v-model="employeeData.EmployeeAccess"
-                  :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                  :options="EmployeeAccessOptions"
-                  label="label"
-                  value="value"
-                  :state="errors.length > 0 ? false : null"
-                  :clearable="true"
-                  input-id="status"
-                  placeholder="Select Employee Access"
-                />
-                <span v-if="$route.name == 'admin-view-employee'">{{ employeeData.EmployeeAccess }}</span>
-                <small class="text-danger">{{ errors[0] }}</small>
-                <div class="text-danger" v-if="hasErrors('EmployeeAccess')">
-                  {{ getErrors("EmployeeAccess") }}
-                </div>
-              </validation-provider>
-            </b-col>
-            <b-col md="3" v-if="EmployeeAccess_slug=='branch' || EmployeeAccess_slug=='department' || EmployeeAccess_slug=='team' || EmployeeAccess_slug=='individual'">
-              <label class="form-label required d-block">Branch</label>
-              <validation-provider #default="{ errors }" name="Branch">
-                <v-select
-                  v-if="$route.name != 'admin-view-employee'"
-                  :class="{'select-readonly' : $route.name == 'admin-view-employee' }"
-                  input-id="branch"
-                  v-model="employeeData.branch"
-                  @input="onChange('branch', $event);RemoveError('branch'); updateDepartmentOptions($event)"
-                  :reduce="(val) => val.id"
-                  label="name"
-                  :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                  :options="JSON.parse(JSON.stringify(BranchOptions))"
-                  :clearable="true"
-                  placeholder="Select Branch"
-                />
-                <span v-if="$route.name == 'admin-view-employee'">{{ employeeData.branch }}</span>
-                <small class="text-danger">{{ errors[0] }}</small>
-                <div class="text-danger" v-if="hasErrors('branch')">
-                  {{ getErrors("branch") }}
-                </div>
-              </validation-provider>
-            </b-col>
-            <b-col md="3" v-if="EmployeeAccess_slug=='department' || EmployeeAccess_slug=='team' || EmployeeAccess_slug=='individual'">
-              <label class="form-label required d-block" >Department</label>
-              <feather-icon class="custom-class"
-              @click="openModal()" icon="PlusIcon" size="1.5x" />
-              <validation-provider #default="{ errors }" name="Department">
-                <v-select
-                  v-if="$route.name != 'admin-view-employee'"
-                  :class="{'select-readonly' : $route.name == 'admin-view-employee' }"
-                  @input="onChange('department', $event);RemoveError('department_id')"
-                  v-model="employeeData.department"
-                  :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                  :options="DepartmentOptions"
-                  :reduce="(val) => val.id"
-                  label="name"
-                  :state="errors.length > 0 ? false : null"
-                  :clearable="true"
-                  input-id="status"
-                   placeholder="Select Department"
-                />
-                <span v-if="$route.name == 'admin-view-employee'">{{ employeeData.department }}</span>
-                <small class="text-danger">{{ errors[0] }}</small>
-                <div class="text-danger" v-if="hasErrors('department')">
-                  {{ getErrors("department") }}
-                </div>
-              </validation-provider>
-            </b-col>
-            <b-col md="3" v-if="EmployeeAccess_slug=='team'|| EmployeeAccess_slug=='individual'">
-              <label class="form-label required d-block">Team</label>
-              <feather-icon class="custom-class"
-              @click="OpenTeamModel()" icon="PlusIcon" size="1.5x" />
-              <validation-provider #default="{ errors }" name="Team">
-                <v-select
-                  :class="{'select-readonly' : $route.name == 'admin-view-employee' }"
-                  @input="onChange('team', $event);RemoveError('team_id')"
-                  multiple
-                  v-model="employeeData.team"
-                  :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                  :options="TeamOptions"
-                  label="title"
-                  value="id"
-                  :reduce="(val) => val.id"
-                  :state="errors.length > 0 ? false : null"
-                  :clearable="true"
-                    placeholder="Select Team"
-                />
-                <span v-if="$route.name == 'admin-view-employee'">
-                  <li v-for="(team, index) in employeeData.teams" :key="index">{{ team.name }}</li>
-                </span>
-                <small class="text-danger">{{ errors[0] }}</small>
-                <div class="text-danger" v-if="hasErrors('team')">
-                  {{ getErrors("team") }}
-                </div>
-              </validation-provider>
-            </b-col>
-            <b-col md="3" >
-              <label class="form-label required d-block">Employee Role</label>
-              <feather-icon class="custom-class"
-              @click="openRoleModal()" icon="PlusIcon" size="1.5x" />
-              <validation-provider #default="{ errors }" name="Employee Role">
-                <v-select
-                  v-if="$route.name != 'admin-view-employee'"
-                  :class="{'select-readonly' : $route.name == 'admin-view-employee' }"
-                  v-model="employeeData.role"
-                   @input="onChange('Role', $event);RemoveError('role')"
-                  :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                  :options="RoleOptions"
-                  label="title"
-                  :reduce="(val) => val.id"
-                  :state="errors.length > 0 ? false : null"
-                  :clearable="true"
-                  input-id="status"
-                    placeholder="Select Employee Role"
-                />
-                <span v-if="$route.name == 'admin-view-employee'">{{ employeeData.employee_role }}</span>
-                <small class="text-danger">{{ errors[0] }}</small>
-                <div class="text-danger" v-if="hasErrors('role')">
-                  {{ getErrors("role") }}
-                </div>
-              </validation-provider>
-            </b-col>
-            <b-col md="3" >
-              <label class="form-label required d-block">Reporting To Role</label>
-              <validation-provider #default="{ errors }" name="Reporting To Role">
-                <v-select
-                  v-if="$route.name != 'admin-view-employee'"
-                  :class="{'select-readonly' : $route.name == 'admin-view-employee' }"
-                  @input="onChange('reportingRole', $event);RemoveError('reporting_role')"
-                  v-model="employeeData.reporting_role"
-                  :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                  :options="ReportingRoleOptions"
-                  :reduce="(val) => val.id"
-                  label="title"
-                  :state="errors.length > 0 ? false : null"
-                  :clearable="true"
-                  input-id="status"
-                  placeholder="Select Reporting To Role"
-                  style="{'overflow' : 'hidden' }"
-                />
-                <span v-if="$route.name == 'admin-view-employee'">{{ employeeData.reporting_role }}</span>
-                <small class="text-danger">{{ errors[0] }}</small>
-                <div class="text-danger" v-if="hasErrors('reporting_role')">
-                  {{ getErrors("reporting_role") }}
-                </div>
-              </validation-provider>
-            </b-col>
-            <b-col md="3" >
-              <label class="form-label required d-block">Reporting To</label>
-              <validation-provider #default="{ errors }" name="Reporting To">
-                <v-select
-                  v-if="$route.name != 'admin-view-employee'"
-                  :class="{'select-readonly' : $route.name == 'admin-view-employee' }"
-                  v-model="employeeData.reporting_to"
-                  @input="RemoveError('reporting_to')"
-                  :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                  :options="ReprotingOptions"
-                  :reduce="(val) => val.id"
-                  :state="errors.length > 0 ? false : null"
-                  :clearable="true"
-                  input-id="status"
-                   placeholder="Select Reporting"
-                />
-                <span v-if="$route.name == 'admin-view-employee'">{{ employeeData.reporting_to }}</span>
-                <small class="text-danger">{{ errors[0] }}</small>
-                <div class="text-danger" v-if="hasErrors('reporting_to')">
-                  {{ getErrors("reporting_to") }}
-                </div>
-              </validation-provider>
-            </b-col>
-          </b-row>
-        </b-col>
-           
- 
-            
-   
-            
-            <!-- Form Actions -->
-            <div class="d-BLOCK mt-2 mb-2 col-12" v-if="$route.name != 'admin-view-employee'">
-                   <b-col sm="12" md="12" xl="12" class="mb-1 myform1 pl-0 smallFont" >  
-              (Note: <label class="form-label requireds smallFont"> mark are mandatory field and must be completed</label>)
-               </b-col>
-              <b-button
-                v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-                variant="primary"
-                class="formBtn mb-1"
-                type="submit"
-              >
-                {{ employeeData.id != null ? "Update" : "Add " }}
-              </b-button>
-              <b-button
-                v-ripple.400="'rgba(186, 191, 199, 0.15)'"
-                type="button"
-                variant="outline-secondary"
-                class="formBtn mb-1 ml-md-1"
-              >
-                Cancel
-              </b-button>
-            </div>
-          </b-form>
-
-
-
-            
-
-            <b-row class="mt-1">
-              <b-col sm="12" class="text-right">
-                <b-overlay :show="show" rounded="sm" class="loadShow">
-                  <template #overlay>
-                    <div class="showtxtload">
-                      <p id="cancel-label">Wait</p>
-                      <div class="lds-dual-ring"></div>
+                      @input="RemoveError('name')"
+                    />
                     </div>
-                  </template>
-                  
+                    <div v-if="field.field_type_slug == 'integer'">
+                    <b-form-input
+                      type="number"
+                      v-model="field.value"
+                      :state="errors.length > 0 ? false : null"
+                      placeholder="Enter Name"
+                      autocomplete="off"
+                      @input="RemoveError('name')"
+                    />
+                    </div>
+                    <div v-if="field.field_type_slug == 'float'">
+                    <b-form-input
+                      type="number"
+                      step=".01"
+                      v-model="field.value"
+                      :state="errors.length > 0 ? false : null"
+                      placeholder="Enter Name"
+                      autocomplete="off"
+                      @input="RemoveError('name')"
+                    />
+                    </div>
+                    <div v-if="field.field_type_slug == 'date'">
+                    <b-form-datepicker
+                      v-model="field.value"
+                      class="mb-1"
+                    />
+                    </div>
+                    <div v-if="field.field_type_slug == 'enum'">
+                    <v-select
+                      :options="field.field_value.split(',')"
+                      v-model="field.value"
+                      class="mb-1"
+                    />
+                    </div>
+                    <div v-if="field.field_type_slug == 'file'">
+                    <b-form-file
+                      v-model="field.value"
+                      class="mb-1"
+                    />
+                    </div>
+                    <div v-if="field.field_type_slug == 'boolean'">
+                      <b-form-checkbox
+                        checked="true"
+                        class="custom-control-success"
+                        name="check-button"
+                        switch
+                        v-model="field.value"
+                      />
+                    </div>
+                    <div v-if="field.field_type_slug == 'datetime'">
+                      <flat-pickr
+                        v-model="field.value"
+                        class="form-control"
+                        :config="{ enableTime: true,dateFormat: 'Y-m-d H:i'}"
+                      />
+                    </div>
 
-              <!-- <b-button
-                  v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                  :disabled="show"
-                  variant="primary"
-                  @click="formSubmitted"
-                  class="btn d-inline-block mr-1 btn-primary"
-                >
-                  <span>SUBMIT</span>
-                </b-button> -->
-            </b-overlay>
+                    
+                    <!-- <span v-if="$route.name == 'admin-view-employee'">{{ employeeData.name }}</span>
+                    <small class="text-danger">{{ errors[0] }}</small>
+                    <div class="text-danger" v-if="hasErrors('name')">
+                      {{ getErrors("name") }}
+                    </div> -->
+                  </validation-provider>
+              </b-col>
+            </b-row>
+            <b-button @click="submit">Submit</b-button>
           </b-col>
-        </b-row>
-      </validation-observer>
-    <!-- Department Modal -->
-    <b-modal
-      v-model="showDepartmentModal"
-      ref="DepartmentModal"
-      id="add-department-modal"
-      :title="EditId ? 'Update Department' : 'Add Department'"
-      @show="DepartmentShowon()"
-      @hidden="resetModal"
-      @ok="handleOk"
-      centered
-      cancel-variant="outline-secondary"
-    >
-      <b-form ref="form" @submit.stop.prevent="handleSubmit" class="myform">
-          <b-form-group  v-if="userData.isSuperAdmin">
-            <label class="form-label required" label-for="profile_type">Profile Type</label>
-            <v-select
-              v-model="DepartmentData.profile_type"
-              input-id="SearchFilter.profile_type"
-              :reduce="(val) => val.id"
-              @input="updateProfileOptions($event); formValidator('profile_type', 'Profile Type');"
-              label="name"
-              :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              :options="JSON.parse(JSON.stringify(profileTypeOptions))"
-              :clearable="true"
-              placeholder="Select Profile Type"
-            /> 
-
-            <small class="text-danger">{{ errors[0] }}</small>
-            <div class="text-danger" v-if="hasErrors('profile_type')">
-              {{ getErrors("profile_type") }}
-            </div>
-          </b-form-group>
-          <b-form-group  v-if="userData.isSuperAdmin">
-            <label class="form-label required" label-for="name">Organization</label>
-            <v-select
-              input-id="profile"
-              v-model="DepartmentData.organization_id"
-              @input="updateBranchOptions($event),formValidator('organization_id', 'Organization');"
-              :reduce="(val) => val.id"
-              label="name"
-              :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              :options="JSON.parse(JSON.stringify(profileOptions))"
-              :clearable="true"
-              placeholder="Select Profile"
-            />
-            <small class="text-danger">{{ errors[0] }}</small>
-            <div class="text-danger" v-if="hasErrors('organization_id')">
-              {{ getErrors("organization_id") }}
-            </div>
-          </b-form-group>
-          <b-form-group  v-if="userData.role_slug != 'hospital'">
-            <label class="form-label required" label-for="name">Branch</label>
-            <v-select
-              input-id="branch"
-              v-model="DepartmentData.branch"
-              @input="formValidator('branch', 'Branch');"
-              :reduce="(val) => val.id"
-              label="name"
-              :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              :options="JSON.parse(JSON.stringify(BranchOptions))"
-              :clearable="true"
-              placeholder="Select Branch"
-            />
-            <small class="text-danger">{{ errors[0] }}</small>
-            <div class="text-danger" v-if="hasErrors('branch')">
-              {{ getErrors("branch") }}
-            </div>
-          </b-form-group>
-
-          <b-form-group >
-            <label class="form-label required" label-for="name">Department Name</label>
-            <b-form-input
-              id="name"
-              @input="formValidator('name', 'Department Name');"
-              v-model="DepartmentData.name"
-              placeholder="Enter Department Title"
-              rules="required"
-            />
-            <small class="text-danger">{{ errors[0] }}</small>
-            <div class="text-danger" v-if="hasErrors('name')">
-              {{ getErrors("name") }}
-            </div>
-          </b-form-group>
-        </b-form>
-    </b-modal>
-
-    <b-modal
-      :visible="showTeamModel"
-      ref="TeamModal"
-      title="Add Team"
-      ok-title="Add"
-      @ok="TeamhandleOk"
-      @show="TeamOnshown"
-      @hidden="resetModal"
-      centered
-      cancel-variant="outline-secondary"
-    >
-
-      <b-form-group class="myform" label-for="Department">
-        <label class="form-label required">Department</label>
-        <v-select
-          v-model="TeamData.Department"
-          @input="RemoveError('Department')"
-          :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-          :options="TeamDepartmentData"
-          :reduce="(val) => val.id"
-          :clearable="true"
-          label="name"
-          input-id="status"
-          placeholder="Select Department"
-        />
-        <small class="text-danger">{{ errors[0] }}</small>
-        <div class="text-danger" v-if="hasErrors('Department')">
-          {{ getErrors("Department") }}
-        </div>
-      </b-form-group>
-
-      <b-form @submit.stop.prevent="submitTeam">
-        <b-form-group class="myform" label-for="Team Name">
-          <label class="form-label required">Team Name</label>
-          <b-form-input
-            id="Team Name"
-            @input="RemoveError('team_name')"
-            v-model="TeamData.team_name"
-            placeholder="Team Name"
-          />
-          <small class="text-danger">{{ errors[0] }}</small>
-          <div class="text-danger" v-if="hasErrors('team_name')">
-            {{ getErrors("team_name") }}
-          </div>
-        </b-form-group>
-      </b-form>
-    </b-modal>
-    <!-- Modal Ends -->
-    <b-modal
-      v-model="showRoleModal"
-      ref="RoleModal"
-      id="modal-select2"
-      :title="EditId ? 'Update Role' : 'Add Role'"
-      @hidden="resetRoleModal"
-      @show="RoleOnShowon()"
-      @ok="RolehandleOk"
-      centered
-      cancel-variant="outline-secondary"
-    >
-      <b-form ref="form" @submit.stop.prevent="RolehandleSubmit" class="myform">
-        <b-form>
-          <b-form-group v-if="userData.isSuperAdmin" >
-            <label class="form-label required" label-for="profile_master">Profile Type</label>
-            <v-select
-              v-model="RoleData.profile_master"
-              input-id="profile_master"
-              :reduce="(val) => val.id"
-              @input="updateProfileOptions"
-              label="name"
-              :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              :options="JSON.parse(JSON.stringify(profileTypeOptions))"
-              :clearable="true"
-              placeholder="Select Profile Type"
-            />
-          </b-form-group>
-          <b-form-group v-if="userData.isSuperAdmin" >
-            <label class="form-label required" label-for="name">Profile</label>
-            <v-select
-              input-id="profile"
-              v-model="RoleData.profile"
-              @input="updateBranchOptions($event),RemoveError('profile')"
-              :reduce="(val) => val.id"
-              label="name"
-              :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              :options="JSON.parse(JSON.stringify(profileOptions))"
-              :clearable="true"
-              placeholder="Select Profile"
-            />
-            <small class="text-danger">{{ errors[0] }}</small>
-            <div class="text-danger" v-if="hasErrors('profile')">
-              {{ getErrors("profile") }}
-            </div>
-          </b-form-group>
-
-          <b-form-group  v-if="userData.isSuperAdmin">
-            <label class="form-label required" label-for="name">Branch</label>
-            <v-select
-              input-id="branch"
-              v-model="RoleData.branch"
-              @input="updateDepartmentOptions($event), RemoveError('branch')"
-              :reduce="(val) => val.id"
-              label="name"
-              :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              :options="JSON.parse(JSON.stringify(branchOptions))"
-              :clearable="true"
-              placeholder="Select Branch"
-            />
-            <small class="text-danger">{{ errors[0] }}</small>
-            <div class="text-danger" v-if="hasErrors('branch')">
-              {{ getErrors("branch") }}
-            </div>
-          </b-form-group>
-
-          <b-form-group >
-            <label class="form-label required" label-for="name">Department</label>
-            <v-select
-              input-id="department"
-              v-model="RoleData.department"
-              @input="updateRoleOptions"
-              :reduce="(val) => val.id"
-              label="name"
-              :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              :options="JSON.parse(JSON.stringify(departmentOptions))"
-              :clearable="true"
-              placeholder="Select Department"
-            />
-            <small class="text-danger">{{ errors[0] }}</small>
-            <div class="text-danger" v-if="hasErrors('department')">
-              {{ getErrors("department") }}
-            </div>
-          </b-form-group>
-          <b-form-group >
-            <label class="form-label required" label-for="parent_role">Parent Role</label>
-            <v-select
-              input-id="parent_role"
-              v-model="RoleData.parent_role"
-              @input="RemoveError('parent_role')"
-              :reduce="(val) => val.id"
-              label="title"
-              :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              :options="JSON.parse(JSON.stringify(parentRoleOptions)).filter(el =>  el.id != RoleData.id)"
-              :clearable="true"
-              placeholder="Select Parent Role"
-            />
-            <small class="text-danger">{{ errors[0] }}</small>
-            <div class="text-danger" v-if="hasErrors('parent_role')">
-              {{ getErrors("parent_role") }}
-            </div>
-          </b-form-group>
-
-          <b-form-group >
-            <label class="form-label required" label-for="title">Role Name</label>
-            <b-form-input
-              id="title"
-              @input="RemoveError('title')"
-              v-model="RoleData.title"
-              placeholder="Enter Role Title"
-              rules="required"
-            />
-            <small class="text-danger">{{ errors[0] }}</small>
-            <div class="text-danger" v-if="hasErrors('title')">
-              {{ getErrors("title") }}
-            </div>
-          </b-form-group>
-        </b-form>
-      </b-form>
-    </b-modal>
-    <!-- Modal Ends -->
+        </b-card>
+    </b-form>
   </div>
 </template>
 
@@ -945,6 +220,9 @@ import {
   BDropdownItem,
   BPagination,
   BFormRadioGroup,BCard,VBToggle,
+  BFormDatepicker,
+  BFormFile,
+  BFormCheckbox
 } from "bootstrap-vue";
 import formValidation from "@core/comp-functions/forms/form-validation";
 import store from "@/store";
@@ -979,6 +257,9 @@ export default {
     BPagination,
     quillEditor,
     BFormRadioGroup,VBToggle,
+    BFormDatepicker,
+    BFormFile,
+    BFormCheckbox
   },
   directives: {
       Ripple,
@@ -1591,100 +872,100 @@ console.log("employeeData----------", employeeData.value)
 
     if(route.value.params.id ){
       
-      if(route.value.name == "admin-edit-employee"){
-        axios.get(`employees/${route.value.params.id}/edit`).then((response) => {
-          const emp = response.data.responseData.employee;
+      if(route.value.name == "employee-edit"){
+        axios.get(`users/${route.value.params.id}/edit`).then((response) => {
+          // const emp = response.data.responseData.employee;
 
 
-          axios.get(`getStateFromCountryId/${emp.country_id}`).then((response) => {
-            StateOptions.value = JSON.parse(JSON.stringify(response.data.data));
-          });
-          axios.get(`getCityFromStateId/${emp.state_id}`).then((response) => {
-            CityOptions.value = JSON.parse(JSON.stringify(response.data.data));
-          });
-          // updateProfileOptions(emp.profile_type)
-          updateDepartmentOptions(emp.branch)
-          // updateDesignationOptions(emp.department)
-          // updateRoleOptions(emp.department)
+        //   axios.get(`getStateFromCountryId/${emp.country_id}`).then((response) => {
+        //     StateOptions.value = JSON.parse(JSON.stringify(response.data.data));
+        //   });
+        //   axios.get(`getCityFromStateId/${emp.state_id}`).then((response) => {
+        //     CityOptions.value = JSON.parse(JSON.stringify(response.data.data));
+        //   });
+        //   // updateProfileOptions(emp.profile_type)
+        //   updateDepartmentOptions(emp.branch)
+        //   // updateDesignationOptions(emp.department)
+        //   // updateRoleOptions(emp.department)
           
-          employeeData.value = {
-            id: emp.id,
-            address: emp.address,
-            age: emp.age,
-            dob: emp.dob,
-            reporting_to: emp.reporting_to,
-            reporting_role: emp.reporting_role,
-            branch: emp.branch,
-            EmployeeAccess: emp.EmployeeAccess,
-            city: emp.city_id,
-            country: emp.country_id,
-            designation: emp.designation_id,
-            department: emp.department,
-            team: emp.teams,
-            email: emp.email,
-            name: emp.name,
-            gender: emp.gender,
-            mobile: emp.mobile,
-            pincode: emp.pincode,
-            profile_type: emp.profile_type,
-            profile: emp.profile_id,
-            role: emp.role_id,
-            state: emp.state_id,
-          };
-          EmployeeAccess_slug.value = emp.EmployeeAccess.slug
-          console.log("employeeData", employeeData)
-          updateProfileOptions(emp.profile_type)
-          updateBranchOptions(emp.profile_id)
-          if(emp.branch != null){
-            onChange('branch', emp.branch)
-            updateDepartmentOptions(emp.branch)
-          }
-          if(emp.department != null){
-            onChange('department', emp.department)
-          }
-          // employeeData.value.branch = emp.branch;
-          // employeeData.value.department = emp.department;
-          // // if(employeeData.value.team != null){
-          //   //   onChange('team', {slug: 'team'})
-          //   //   employeeData.value.department: emp.department;
-          //   // }
-          if(emp.role_id != null){
-            onChange('Role', emp.role_id)
-          }
-          //   employeeData.value.role = emp.role_id;
-          if(emp.reporting_role != null){
-            onChange('reportingRole', emp.reporting_role)
-          }
+        //   employeeData.value = {
+        //     id: emp.id,
+        //     address: emp.address,
+        //     age: emp.age,
+        //     dob: emp.dob,
+        //     reporting_to: emp.reporting_to,
+        //     reporting_role: emp.reporting_role,
+        //     branch: emp.branch,
+        //     EmployeeAccess: emp.EmployeeAccess,
+        //     city: emp.city_id,
+        //     country: emp.country_id,
+        //     designation: emp.designation_id,
+        //     department: emp.department,
+        //     team: emp.teams,
+        //     email: emp.email,
+        //     name: emp.name,
+        //     gender: emp.gender,
+        //     mobile: emp.mobile,
+        //     pincode: emp.pincode,
+        //     profile_type: emp.profile_type,
+        //     profile: emp.profile_id,
+        //     role: emp.role_id,
+        //     state: emp.state_id,
+        //   };
+        //   EmployeeAccess_slug.value = emp.EmployeeAccess.slug
+        //   console.log("employeeData", employeeData)
+        //   updateProfileOptions(emp.profile_type)
+        //   updateBranchOptions(emp.profile_id)
+        //   if(emp.branch != null){
+        //     onChange('branch', emp.branch)
+        //     updateDepartmentOptions(emp.branch)
+        //   }
+        //   if(emp.department != null){
+        //     onChange('department', emp.department)
+        //   }
+        //   // employeeData.value.branch = emp.branch;
+        //   // employeeData.value.department = emp.department;
+        //   // // if(employeeData.value.team != null){
+        //   //   //   onChange('team', {slug: 'team'})
+        //   //   //   employeeData.value.department: emp.department;
+        //   //   // }
+        //   if(emp.role_id != null){
+        //     onChange('Role', emp.role_id)
+        //   }
+        //   //   employeeData.value.role = emp.role_id;
+        //   if(emp.reporting_role != null){
+        //     onChange('reportingRole', emp.reporting_role)
+        //   }
 
-          employeeData.value.role = emp.role_id;
-          employeeData.value.reporting_to = emp.reporting_to;
-          employeeData.value.reporting_role = emp.reporting_role;
-          employeeData.value.branch = emp.branch;
-          employeeData.value.department = emp.department;
+        //   employeeData.value.role = emp.role_id;
+        //   employeeData.value.reporting_to = emp.reporting_to;
+        //   employeeData.value.reporting_role = emp.reporting_role;
+        //   employeeData.value.branch = emp.branch;
+        //   employeeData.value.department = emp.department;
 
 
 
-          // if(EmployeeAccess_slug.value=='organization'){
-          //       RoleOptions.value=[];
-          //       ReportingRoleOptions.value=[];
-          //       RoleOptions.value=[];
-          //       RoleOptions.value.push({id: 1, name: "Super Admin", slug: "super-admin"})
-          //       ReportingRoleOptions.value.push({value: 1, label: "Super Admin", slug: "super-admin"})
-          //       RoleOptions.value.push({id: 1, label: "Super Admin", slug: "super-admin"})
-          //     }else{
-          //       axios.get(`/getEmployeeFromdepartmentId/${employeeData.value.department}`).then((response) => {
-          //           RoleOptions.value = JSON.parse(JSON.stringify(response.data.data));
-          //           axios.get(`/getTeamFromdepartmentId/${employeeData.value.department}`).then((response) => {
-          //             TeamOptions.value = JSON.parse(JSON.stringify(response.data.data)); 
-          //           });
-          //       });
-          //       axios.get(`/getReportingtoFromRoleId/${employeeData.value.reporting_role}`).then((response) => {
-          //         ReprotingOptions.value = response.data.data;
-          //       });
-          //       axios.get(`getReportingRoleFromdepartmentId/${employeeData.value.department}`).then(response => {
-          //         ReportingRoleOptions.value = response.data.data
-          //       });
-          //     }
+        //   // if(EmployeeAccess_slug.value=='organization'){
+        //   //       RoleOptions.value=[];
+        //   //       ReportingRoleOptions.value=[];
+        //   //       RoleOptions.value=[];
+        //   //       RoleOptions.value.push({id: 1, name: "Super Admin", slug: "super-admin"})
+        //   //       ReportingRoleOptions.value.push({value: 1, label: "Super Admin", slug: "super-admin"})
+        //   //       RoleOptions.value.push({id: 1, label: "Super Admin", slug: "super-admin"})
+        //   //     }else{
+        //   //       axios.get(`/getEmployeeFromdepartmentId/${employeeData.value.department}`).then((response) => {
+        //   //           RoleOptions.value = JSON.parse(JSON.stringify(response.data.data));
+        //   //           axios.get(`/getTeamFromdepartmentId/${employeeData.value.department}`).then((response) => {
+        //   //             TeamOptions.value = JSON.parse(JSON.stringify(response.data.data)); 
+        //   //           });
+        //   //       });
+        //   //       axios.get(`/getReportingtoFromRoleId/${employeeData.value.reporting_role}`).then((response) => {
+        //   //         ReprotingOptions.value = response.data.data;
+        //   //       });
+        //   //       axios.get(`getReportingRoleFromdepartmentId/${employeeData.value.department}`).then(response => {
+        //   //         ReportingRoleOptions.value = response.data.data
+        //   //       });
+        //   //     }
           
           });
         }
@@ -1898,6 +1179,36 @@ console.log("employeeData----------", employeeData.value)
 
 
 
+    const Fields = ref([])
+    const updateEmployeeForm = (role_id) => {
+      axios.get(`getFieldsByRole/${role_id}`).then(response =>  {
+        Fields.value = response.data.data;
+      });
+    }
+
+    // const roleOptions = ref([]);
+
+    // ...Searchdata.value,
+    axios.get('fetchRole').then(response => {
+        RoleOptions.value = response.data
+      })
+        .catch(() => {
+          toast({
+            component: ToastificationContent,
+            props: {
+              title: 'Error fetching Role list',
+              icon: 'AlertTriangleIcon',
+              variant: 'danger',
+            },
+          })
+        })
+
+        const submit = () => {
+          axios.post('submitUserForm', Fields.value).then(response => {
+            console.log(response.data);
+          })
+        }
+
     return {
       // Sidebar
       errors,
@@ -1919,7 +1230,6 @@ console.log("employeeData----------", employeeData.value)
       DepartmentOptions,
       countryOptions,
       StateOptions,
-      RoleOptions,
       updateRoleOptions,
       userData,
       showDepartmentModal,DepartmentData,handleSubmit,
@@ -1932,7 +1242,11 @@ console.log("employeeData----------", employeeData.value)
       updateBranchOptions,
       encodeBase64,
       decodeBase64,
-      onChange,showTeamModel,TeamData,teamFilterData,submitTeam,branchOptions,departmentOptions
+      onChange,showTeamModel,TeamData,teamFilterData,submitTeam,branchOptions,departmentOptions,
+      Fields,
+      updateEmployeeForm,
+      submit
+      // roleOptions
     };
   },
 };

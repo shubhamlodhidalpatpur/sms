@@ -58,6 +58,15 @@ export default [
                     action: "do",
                 },
             },
+            {
+                title: 'Employee',
+                route: 'employee',
+                icon: 'MenuIcon',
+                meta: {
+                    resource: 'Auth',
+                    action: "do",
+                },
+            },
         
         ]
     },

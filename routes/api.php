@@ -9,6 +9,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\UserController;
 
 
 
@@ -79,5 +80,6 @@ Route::get('/CheckAttendances', [AttendanceController::class, 'CheckAttendances'
 Route::post('changeStatus/{status}/{id}', [AttendanceController::class,'changeStatus']);
 Route::get('getFieldsByRole/{role_id?}', [RoleController::class,'getFieldsByRole']);
 Route::get('getFieldTypes', [RoleController::class, 'getFieldTypes']);
-
+Route::post('submitUserForm', [UserController::class, 'submitUserForm']);
+Route::resource('users', UserController::class);
 
