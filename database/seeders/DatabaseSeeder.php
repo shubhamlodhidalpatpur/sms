@@ -16,6 +16,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             OrgStructureSeeder::class,
             AdminSeeder::class,
+            FieldTypeSeeder::class,
+            FieldSeeder::class,
       ]); 
     }
 }

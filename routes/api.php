@@ -62,7 +62,7 @@ Route::get('/fetchteamData/{id}', [TeamController::class,'fetchTeamData']);
 Route::get('/getDepartment', [TeamController::class, 'getDepartment']);
 
 Route::get('/teamoption/{id}', [RoleController::class, 'teamoption']);
-Route::get('/fecthRole', [RoleController::class, 'index']);
+Route::get('/fetchRole', [RoleController::class, 'index']);
 Route::post('/roleadd', [RoleController::class, 'store']);
 Route::get('/roleEdit/{id}', [RoleController::class, 'edit']);
 Route::post('/RoleUpdate/{id}', [RoleController::class, 'update']);
@@ -77,4 +77,7 @@ Route::post('/CheckOutAttendance', [AttendanceController::class, 'checkOutAttend
 Route::get('/CHeckTodayAttendance', [AttendanceController::class, 'checkTodayAttendance']);
 Route::get('/CheckAttendances', [AttendanceController::class, 'CheckAttendances']);
 Route::post('changeStatus/{status}/{id}', [AttendanceController::class,'changeStatus']);
+Route::get('getFieldsByRole/{role_id?}', [RoleController::class,'getFieldsByRole']);
+Route::get('getFieldTypes', [RoleController::class, 'getFieldTypes']);
+
 

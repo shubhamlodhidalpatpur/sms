@@ -83,7 +83,7 @@
 
           </div>
 
-          <b-table ref="refProjectListTable" responsive :items="fecthRole" :fields="fields"
+          <b-table ref="refProjectListTable" responsive :items="fetchRole" :fields="fields"
             :sort-by.sync="sortBy"
             :sort-desc.sync="isSortDirDesc"
             class="mb-2 staticTable">
@@ -175,12 +175,11 @@
       Are you sure you want to delete this role?
     </b-modal>
 
-    <b-modal :visible="showRoleModel" :title="RoleEdit ? 'Update Role' : 'Add Role'"
+    <b-modal size="lg" :visible="showRoleModel" :title="RoleEdit ? 'Update Role' : 'Add Role'"
       :ok-title="RoleEdit ? 'Update' : 'Add'" @ok="handleOk" @hidden="resetModal" @show="Onshown" centered
       cancel-variant="outline-secondary">
 
       <b-form ref="form" @submit.stop.prevent="submitRole"  class="myform">
-
 
         <b-form-group label-for="basicInput">
           <label class="form-label required">Department</label>
@@ -201,7 +200,7 @@
 
 
 
-         <b-form-group  label-for="basicInput">
+        <b-form-group  label-for="basicInput">
           <label class="form-label required">Reporting Role</label>
           <v-select
           v-model="Roledata.reporting_role"
@@ -218,7 +217,7 @@
           </div>
         </b-form-group>
 
-        <label class="form-label required">Role Name</label>
+      <label class="form-label required">Role Name</label>
        <b-form-group  label-for="basicInput">
           <b-form-input id="basicInput" v-model="Roledata.name"   @input="RemoveError('name')"  placeholder="Enter Role Name" />
           <small class="text-danger">{{ errors[0] }}</small>
@@ -227,6 +226,73 @@
           </div>
         </b-form-group>
 
+       <b-form-group  label-for="basicInput">
+          <b-form-checkbox :value="Roledata.master_page" checked="1">Make Master Page</b-form-checkbox>
+          <small class="text-danger">{{ errors[0] }}</small>
+          <div class="text-danger" v-if="hasErrors('name')">
+            {{ getErrors("name") }}
+          </div>
+        </b-form-group>
+
+        <div>
+          <b-table :items="Roledata.roleFields" :fields="['title', 'type', 'required', 'action']">
+            
+            <template #cell(title)="data">
+              <b-card-text class="font-weight-bold mb-25">
+                <b-form-input id="basicInput" v-model="data.item.title" :disabled="data.item.is_default_field == 1" placeholder="Enter Field Name" />
+              </b-card-text>
+            </template>
+            <template #cell(type)="data">
+              <b-card-text class="text-nowrap">
+                <v-select id="select-field-type-option" :disabled="data.item.is_default_field == 1" :options="RoleTypes" label="title" value="id" :reduce="val => val.id" v-model.number="data.item.field_type_id" />
+                  <b-form-input id="basicInput" :disabled="data.item.is_default_field == 1" v-if="data.item.field_type_id == RoleTypes.filter(rt => rt.slug == 'enum')[0].id" v-model="data.item.field_value" placeholder="Enter Enum Values in Coma Saperated" />
+              </b-card-text>
+            </template>
+            <template #cell(required)="data">
+              <b-form-checkbox :value="1" unchecked-value="0" v-model="data.item.required" :disabled="data.item.is_default_field == 1" />
+            </template>
+            <template #cell(action)="data">
+              <b-button v-ripple.400="'rgba(255, 255, 255, 0.15)'" variant="success" pill @click="addField(data.index)">
+                <feather-icon icon="PlusIcon" size="18" />
+              </b-button>
+              <b-button v-ripple.400="'rgba(255, 255, 255, 0.15)'" v-if="data.item.role_id != 0" variant="danger" pill @click="removeField(data.index)">
+                <feather-icon icon="MinusIcon" size="18" />
+              </b-button>
+              <!-- <b-button v-ripple.400="'rgba(255, 255, 255, 0.15)'" variant="primary" pill>
+                <feather-icon icon="EditIcon" size="18" />
+              </b-button> -->
+
+                <!-- <b-avatar
+        size="16"
+        :src="userData.avatar"
+        variant="light-primary"
+        badge
+        class="badge-minimal"
+        badge-variant="success"
+      >
+        <feather-icon
+          icon="PlusIcon"
+          size="16"
+        />
+      </b-avatar> -->
+            </template>
+          </b-table>
+
+          <!-- <b-row v-for="field in Roledata.roleFields" :key="field.id" class="pt-1">
+             {{field.validation_rule}}
+          </b-row> -->
+          <!-- <b-form-group label="Using sub-components:" v-slot="{ ariaDescribedby }">
+            <b-form-checkbox-group
+              id="checkbox-group-2"
+              v-model="Roledata.roleFields"
+              :aria-describedby="ariaDescribedby"
+              name="flavour-2"
+            >
+              <b-form-checkbox v-for="field in Roledata.roleFields" :key="field.id" :value="field.id" checked="1">{{field.title}} - rules : {{field.validation_rule}}</b-form-checkbox>
+            </b-form-checkbox-group>
+          </b-form-group> -->
+        </div>
+        
 
         <!-- <b-form-group label="Team " label-for="basicInput">
           <v-select v-model="Roledata.team"
@@ -250,8 +316,11 @@
 
 <script>
 import {
+  BFormCheckboxGroup,
+  BFormCheckbox,
   BTable, BButton, BFormGroup, BAvatar, BBadge, BPagination,
-  BRow, BCol, BCard, BCollapse, VBToggle, BFormInput, BSidebar, BModal, VBModal, BForm, BFormDatepicker,BLink
+  BRow, BCol, BCard, BCollapse, VBToggle, BFormInput, BSidebar, BModal, VBModal, BForm, BFormDatepicker,BLink,
+  BCardText
 } from 'bootstrap-vue'
 import vSelect from 'vue-select'
 import { ValidationProvider, ValidationObserver } from "vee-validate";
@@ -268,6 +337,8 @@ export default {
     BTable,
     BButton,
     BFormGroup,
+    BFormCheckboxGroup,
+    BFormCheckbox,
     BAvatar,
     BBadge,
     vSelect,
@@ -278,6 +349,7 @@ export default {
     BFormDatepicker,
     ValidationProvider,
     ValidationObserver,
+    BCardText
   },
   directives: {
     'b-toggle': VBToggle,
@@ -322,7 +394,25 @@ export default {
           this.teamOptions = response.data
         });
       }
-      },
+    },
+    addField(index){
+      let data = {
+        created_at: null,
+        field_type_id: null,
+        required: 0,
+        role_id: null,
+        title:  null,
+        updated_at: null,
+        validation_rule: ""
+      }
+      this.Roledata.roleFields.splice(index+1, 0, data);
+
+    },
+    removeField(index){
+
+      this.Roledata.roleFields.splice(index, 1);
+
+    },
     handleOk(bvModalEvent) {
       // Prevent modal from closing
       bvModalEvent.preventDefault()
@@ -371,17 +461,14 @@ export default {
           this.Roledata.reporting_role = response.data.data.parent_id
           this.Roledata.team = response.data.data.team
           this.Roledata.id = response.data.data.id
+          this.Roledata.roleFields = response.data.data.roleFields
           axios.get(`/getRoleFromdepartmentId/${ this.Roledata.reporting_role,this.Roledata.department}`).then((response) => {
          this.ReportigRoleOptions = response.data.data;
 
         });
         });
       } else {
-        this.Roledata.name = "";
-        this.Roledata.department = "";
-        this.Roledata.reporting_role = "";
-        this.Roledata.team = "";
-        this.Roledata.id = null;
+        this.resetRoledata();
       }
     },
 
@@ -393,6 +480,7 @@ export default {
     });
   },
   setup(props, { emit }) {
+    const roleFields = ref([]);
     const submitRole = () => {
       if (Roledata.value.id != null) {
         axios.post(`/RoleUpdate/${Roledata.value.id}`, Roledata.value)
@@ -446,8 +534,8 @@ export default {
     }
     const [sortBy, isSortDirDesc] = [ ref(null), ref(false)]
 
-    const fecthRole = (ctx, callback) => {
-      axios.get('fecthRole', {
+    const fetchRole = (ctx, callback) => {
+      axios.get('fetchRole', {
         params: {
           ...Searchdata.value,
           page: currentPage.value,
@@ -486,14 +574,17 @@ export default {
       refetchData();
     };
     const toast = useToast();
-    const BlankProjectData = {
+    let BlankProjectData = {
       id: null,
       name: null,
       department: null,
       reporting_role: null,
       team: null,
-
+      roleFields: [],
+      master_page: 0
     };
+
+    
     const showRoleModel = ref(false);
     const errors = ref([]);
     const hasErrors = (fieldName) => {
@@ -507,6 +598,18 @@ export default {
     const currentPage = ref(1)
     const Roledata = ref(JSON.parse(JSON.stringify(BlankProjectData)));
     const refProjectListTable = ref(null)
+    const RoleTypes = ref([]);
+    
+    axios.get('getFieldTypes').then(response => {
+      RoleTypes.value = response.data.data;
+    })
+    
+    axios.get('getFieldsByRole').then(response =>  {
+      BlankProjectData.roleFields = response.data.data;
+      Roledata.value.roleFields = response.data.data;
+    });
+
+    const resetRoledata = () => { Roledata.value = JSON.parse(JSON.stringify(BlankProjectData))};
 
     const dataMeta = computed(() => {
       const localItemsCount = refProjectListTable.value ? refProjectListTable.value.localItems.length : 0
@@ -531,7 +634,8 @@ export default {
       ProjectFilterDataSubmit,
       Roledata,
       submitRole,
-      fecthRole,
+      fetchRole,
+      resetRoledata,
       toast,
       dataMeta,
       refetchData,
@@ -551,6 +655,8 @@ export default {
       RemoveError,
       sortBy,
       isSortDirDesc,
+      roleFields,
+      RoleTypes
     };
   }
 }
