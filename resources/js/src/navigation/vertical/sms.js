@@ -89,8 +89,35 @@ export default [
         },
     },
     {
-        title: 'Employee',
-        route: 'employee',
+        title: 'Swap',
+        route: 'swap',
+        icon: 'MenuIcon',
+        meta: {
+            resource: 'Auth',
+            action: "do",
+        },
+    },
+    {
+        title: 'Check Swap',
+        route: 'check-swap',
+        icon: 'MenuIcon',
+        meta: {
+            resource: 'Auth',
+            action: "do",
+        },
+    },
+    {
+    title: 'Employee',
+    route: 'employee',
+    icon: 'MenuIcon',
+    meta: {
+        resource: 'Auth',
+        action: "do",
+    },
+},
+    {
+        title: 'Holiday',
+        route: 'holiday',
         icon: 'MenuIcon',
         meta: {
             resource: 'Auth',
@@ -98,5 +125,22 @@ export default [
         },
     },
 
-   
+    {
+        title: 'Leave Type',
+        route: 'leave-type',
+        icon: 'MenuIcon',
+        meta: {
+            resource: 'Auth',
+            action: "do",
+        },
+    },
+    {
+        title: 'Register Step',
+        route: 'register-step',
+        icon: 'MenuIcon',
+        meta: {
+            resource: 'Auth',
+            action: "do",
+        },
+    },
 ]

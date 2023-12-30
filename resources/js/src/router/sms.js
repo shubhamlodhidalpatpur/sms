@@ -56,5 +56,54 @@ export default [
       name: 'Check-Attendance',
       component: () => import('@/views/sms/Attendance/CheckAttendance.vue'),
     },
+    {
+      path: '/Swap',
+      name: 'swap',
+      component: () => import('@/views/sms/Swap/SwapList.vue'),
+    },
+    {
+      path: '/Apply-Swap',
+      name: 'apply-swap',
+      component: () => import('@/views/sms/Swap/ApplySwap.vue'),
+      meta: {
+        navActiveLink: 'swap',
+      },
+    },
+    {
+      path: '/Check-Swap',
+      name: 'check-swap',
+      component: () => import('@/views/sms/Swap/ChckSwapList.vue'),
+    },
+    {
+      path: '/Holiday',
+      name: 'holiday',
+      component: () => import('@/views/sms/Holiday/Holiday.vue'),
+    },
+    {
+      path: '/leave-type',
+      name: 'leave-type',
+      component: () => import('@/views/sms/LeaveType/LeaveType.vue'),
+    },
+    {
+      path: '/add-leave-type',
+      name: 'add-leave-type',
+      component: () => import('@/views/sms/LeaveType/AddEditLeaveType.vue'),
+      meta: {
+        navActiveLink: 'leave-type',
+      },
+    },
+    {
+      path: '/leave-type/edit/:id',
+      name: 'edit-leave-type',
+      component: () => import('@/views/sms/LeaveType/AddEditLeaveType.vue'),
+      meta: {
+        navActiveLink: 'leave-type',
+      },
+    }, 
+    {
+      path: '/register-step',
+      name: 'register-step',
+      component: () => import('@/views/sms/RegisterStep/RegisterSteps.vue'),
+    },   
 ]
   

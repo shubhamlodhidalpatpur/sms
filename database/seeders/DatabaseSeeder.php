@@ -18,6 +18,11 @@ class DatabaseSeeder extends Seeder
             AdminSeeder::class,
             FieldTypeSeeder::class,
             FieldSeeder::class,
+            CountrySeeder::class,
+            StateSeeder::class,
+            CitySeeder::class,
+            IndustryTypeSeeder::class,
+            WorkingSeeder::class,
       ]); 
     }
 }
