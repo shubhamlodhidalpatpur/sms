@@ -83,24 +83,6 @@
             striped
             responsive
           >
-            <template #cell(view_details)="row">
-              <b-form-checkbox
-                v-model="row.detailsShowing"
-                plain
-                class="vs-checkbox-con"
-                @change="row.toggleDetails"
-              >
-                <span class="vs-checkbox">
-                  <span class="vs-checkbox--check">
-                    <i class="vs-icon feather icon-check" />
-                  </span>
-                </span>
-                <span class="vs-label">{{
-                  row.detailsShowing ? "Hide" : "Show"
-                }}</span>
-              </b-form-checkbox>
-            </template>
-
             <template #row-details="row">
               <b-card>
                 <b-row class="mb-2">
@@ -165,6 +147,15 @@
               </b-card>
             </template>
             <template #cell(sr)="data">
+               <div v-if="data.item.children.length!=0">
+                <b-form-checkbox
+                v-model="data.detailsShowing"
+                plain
+                class="vs-checkbox-con"
+                @change="data.toggleDetails"
+              >
+              </b-form-checkbox>
+               </div>
               <span class="text-nowrap">
                 {{ data.index+1 }}
               </span>
@@ -309,7 +300,7 @@
       :ok-title="EditSectionId ? 'Update' : 'Add'"
       @ok="SectionhandleOk"
       @show="SectionOnshown"
-      @hidden="resetModal"
+      @hidden="resetSectionModal"
       centered
       cancel-variant="outline-secondary"
     >
@@ -411,7 +402,7 @@ export default {
       DeleteId: 0,
       selected: "USA",
       option: ["USA", "Canada", "Maxico"],
-      fields: ['view_details', { key: "sr" }, { key: "class", sortable: true }, "Action"],
+      fields: [{ key: "sr" }, { key: "class", sortable: true }, "Action"],
       SectionColumn: [
         { key: "sr" },
         { key: "section", sortable: true },
@@ -511,6 +502,10 @@ export default {
       this.ShowClassModel = false;
       this.errors = [];
     },
+    resetSectionModal(){
+      this.ShowSectionModel = false;
+      this.errors = [];
+    }
   },
   setup(props, { emit }) {
     const toast = useToast();
@@ -732,7 +727,6 @@ export default {
         JSON.stringify({
           id: null,
           name: "",
-          date: "",
         })
       )
     );
