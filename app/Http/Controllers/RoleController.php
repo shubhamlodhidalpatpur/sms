@@ -369,15 +369,6 @@ class RoleController extends Controller
                 'fields.*',
                 'field_types.title as field_type',
                 'field_types.slug as field_type_slug',
-                DB::raw("
-                    Case When field_types.slug = 'string' then 'AAAAAA' 
-                     When field_types.slug = 'integer' then 123 
-                     When field_types.slug = 'float' then '78.34' 
-                     When field_types.slug = 'boolean' then 1 
-                     When field_types.slug = 'date' then '2023-12-24' 
-                     When field_types.slug = 'enum' then 'Male' 
-                     When field_types.slug = 'datetime' then '2023-12-24 11:00:00' END
-                as value")
             )
             ->get();
         if(isset($trace[1]['function']) && $trace[1]['function'] == 'callAction'){
