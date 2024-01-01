@@ -146,12 +146,21 @@ class UserController extends Controller
     {
         $data = $request->all();
         $value = [];
-        foreach($data as $d){
-            $value[] = ['id' => $d['id'], 'value' => $d['value']];
+        DB::beginTransaction();
+        try{
+
+            foreach($data as $d){
+                $value[] = ['id' => $d['id'], 'value' => $d['value']];
+            }
+            \DB::table('user_data')->insert([
+                'data' => json_encode($value)
+            ]);
+            DB::commit();
         }
-        \DB::table('user_data')->insert([
-            'data' => json_encode($value)
-        ]);
-        dd(json_encode($value));
+        catch(\Exception $e){
+            DB::rollback();
+            dd($e, $d);
+        }
+        return response(['status'=>'success', 'message' => 'Employee Added Successfully']);
     }
 }
