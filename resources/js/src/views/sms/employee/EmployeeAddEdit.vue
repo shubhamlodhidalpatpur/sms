@@ -1205,8 +1205,34 @@ console.log("employeeData----------", employeeData.value)
 
         const submit = () => {
           axios.post('submitUserForm', Fields.value).then(response => {
-            console.log(response.data);
-          })
+            toast({
+               component: ToastificationContent,
+               props: {
+                 title: "Employee Created Successfully.",
+                 icon: "CheckIcon",
+                 variant: "success",
+               },
+             });
+               router.push({name: 'employee'})
+           })
+           .catch((error) => {
+             show.value = false;
+             if (error.response.data.code == 422) {
+               errors.value = error.response.data.errors;
+             } else {
+               toast(
+                 {
+                   component: ToastificationContent,
+                   props: {
+                     title: "Something went wrong Please try again later",
+                     icon: "bellIcon",
+                     variant: "danger",
+                   },
+                 },
+                 { timeout: 3000 }
+               );
+             }
+           });
         }
 
     return {
