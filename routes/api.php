@@ -9,6 +9,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\ClassSectionMasterController;
 use App\Http\Controllers\UserController;
 
 
@@ -97,3 +98,12 @@ Route::get('country', [OrganizationController::class, 'getCountry']);
 Route::get('/getStateFromCountryId/{id}', [OrganizationController::class, 'getStateFromCountryId']);
 Route::get('/getCityFromStateId/{id}', [OrganizationController::class, 'getCityFromStateId']);
 Route::get('industryType', [OrganizationController::class, 'industryType']);
+
+Route::resource('ClassSections',ClassSectionMasterController::class);
+Route::post('ClassStore', [ClassSectionMasterController::class ,'ClassStore']);
+Route::post('SectionStore', [ClassSectionMasterController::class ,'SectionStore']);
+Route::get('getClass', [ClassSectionMasterController::class, 'getClass']);
+Route::get('class/{id}/edit', [ClassSectionMasterController::class, 'classEdit']);
+Route::post('ClassUpdate/{id}', [ClassSectionMasterController::class ,'ClassUpdate']);
+Route::post('SectionUpdate/{id}', [ClassSectionMasterController::class ,'SectionUpdate']);
+Route::get('deleteClassSection/{id}', [ClassSectionMasterController::class, 'destroy']);

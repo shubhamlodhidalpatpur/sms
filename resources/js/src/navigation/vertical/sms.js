@@ -143,4 +143,13 @@ export default [
             action: "do",
         },
     },
+    {
+        title: 'Class Section Master',
+        route: 'class-section-master',
+        icon: 'MenuIcon',
+        meta: {
+            resource: 'Auth',
+            action: "do",
+        },
+    },
 ]

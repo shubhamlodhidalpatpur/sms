@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             CitySeeder::class,
             IndustryTypeSeeder::class,
             WorkingSeeder::class,
+            ClassSectionTypeSeeder::class,
       ]); 
     }
 }

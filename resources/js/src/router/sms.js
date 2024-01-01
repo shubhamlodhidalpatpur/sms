@@ -104,6 +104,11 @@ export default [
       path: '/register-step',
       name: 'register-step',
       component: () => import('@/views/sms/RegisterStep/RegisterSteps.vue'),
+    }, 
+    {
+      path: '/Class-Section-Master',
+      name: 'class-section-master',
+      component: () => import('@/views/sms/ClassSectionMaster/ClassSectionMaster.vue'),
     },   
 ]
   
