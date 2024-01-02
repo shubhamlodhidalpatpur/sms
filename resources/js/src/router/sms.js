@@ -109,6 +109,11 @@ export default [
       path: '/Class-Section-Master',
       name: 'class-section-master',
       component: () => import('@/views/sms/ClassSectionMaster/ClassSectionMaster.vue'),
+    },  
+    {
+      path: '/subject',
+      name: 'subject',
+      component: () => import('@/views/sms/Subject/Subject.vue'),
     },   
 ]
   

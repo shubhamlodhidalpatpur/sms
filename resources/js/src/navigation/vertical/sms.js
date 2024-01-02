@@ -152,4 +152,13 @@ export default [
             action: "do",
         },
     },
+    {
+        title: 'Subject',
+        route: 'subject',
+        icon: 'MenuIcon',
+        meta: {
+            resource: 'Auth',
+            action: "do",
+        },
+    },
 ]

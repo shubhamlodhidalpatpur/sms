@@ -16,6 +16,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\LeaveTypeController;
 use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\SwapRequestController;
 
 /*
@@ -107,3 +108,7 @@ Route::get('class/{id}/edit', [ClassSectionMasterController::class, 'classEdit']
 Route::post('ClassUpdate/{id}', [ClassSectionMasterController::class ,'ClassUpdate']);
 Route::post('SectionUpdate/{id}', [ClassSectionMasterController::class ,'SectionUpdate']);
 Route::get('deleteClassSection/{id}', [ClassSectionMasterController::class, 'destroy']);
+
+
+
+Route::resource('Subject',SubjectController::class);
