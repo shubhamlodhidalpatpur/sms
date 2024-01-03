@@ -98,5 +98,10 @@ class SubjectController extends Controller
         $BU=Subject::where('id', $id)->delete();
         return response(['status'=>'success', 'message'=>'Subject Deleted successfully'], 200);
     }
+    public function getSubject()
+    {
+        $data = Subject::select('subjects.name as label', 'subjects.id as value')->get();
+            return response(['data' => $data, 'status' => 'success'], 200);
+    }
 
 }

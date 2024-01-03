@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\ClassSectionMaster;
 use App\Models\ClassSectionType;
+use App\Models\ClassSubject;
+use App\Models\Subject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +21,7 @@ class ClassSectionMasterController extends Controller
     {
         $classsection = ClassSectionMaster::leftJoin('class_section_types', 'class_section_types.id', 'class_section_masters.class_section_type_id')
             ->where('class_section_types.slug','class')
-            ->select('class_section_masters.*')->with('children')->get();
+            ->select('class_section_masters.*')->with('children')->withCount('children')->get();
         return response(['data' => $classsection, 'status' => 'success'], 200);
     }
 
@@ -203,4 +205,58 @@ class ClassSectionMasterController extends Controller
         DB::commit();
         return response(['data' => 'Section Updated Successfully!', 'status' => 'success'], 200);
     }
+    public function getClassSection()
+    {
+        $data = ClassSectionMaster::leftJoin('class_section_types', 'class_section_types.id', 'class_section_masters.class_section_type_id') //phpcs:ignore
+            ->select('class_section_masters.name as label', 'class_section_masters.id as value')->get();
+            return response(['data' => $data, 'status' => 'success'], 200);
+    }
+    public function AssignSubject(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'class' => 'required',
+            'subject' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response(['errors' => $validator->errors()->messages(), 'code' => 422], 422);
+        }
+
+        DB::beginTransaction();
+
+        try {
+            $class=ClassSubject::where('class_id',$request->class)->delete();
+            foreach($request->subject as $sub){
+                $ClassSubjects = new ClassSubject;
+                $ClassSubjects->subject_id =$sub;
+                $ClassSubjects->class_id =$request->class;
+                $ClassSubjects->save();
+
+            }
+        } catch (\Exception $e) {
+            report($e);
+            dd($e);
+            DB::rollback();
+            return response(['data' => 'Something Went Wrong', 'status' => 'failure'], 500);
+        }
+        DB::commit();
+        return response(['data' => 'Subject Assign Successfully!', 'status' => 'success'], 200);
+    }
+    public function AssignSubjectListing()
+    {
+        $data = ClassSectionMaster::leftJoin('class_section_types', 'class_section_types.id', 'class_section_masters.class_section_type_id') //phpcs:ignore
+            ->select('class_section_masters.*')->whereNotNull('subject')->get();
+
+        foreach($data as $item){
+            $data['subject']=Subject::whereIn('id',json_decode($item->subject))->get();
+        }    
+        return response(['data' => $data, 'status' => 'success'], 200);
+    }
+
+    public function getSubjects($id)
+    {
+        $data = ClassSubject::where('class_id',$id)->pluck('subject_id')->toArray();  
+        return response(['data' => $data, 'status' => 'success'], 200);
+    }
+    
+    
 }

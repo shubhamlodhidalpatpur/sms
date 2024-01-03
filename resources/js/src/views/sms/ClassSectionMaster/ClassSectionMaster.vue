@@ -104,13 +104,19 @@
                         </span>
                       </div>
                     </template>
-                    <template #cell(Action)="data">
+                    <template #cell(Action)="row">
+                    <b-link  @click="showAssignSubjectModel=true; AssignClassId=row.item.id" title="Assign Subjects">
+                      <feather-icon class="custom-class" icon="AwardIcon" size="1.5x" />
+                    </b-link>
+                    <b-link  @click="showAssignTeacherModel=true; AssignClassId=row.item.id" title="Assign Teachers">
+                      <feather-icon class="custom-class" icon="UserIcon" size="1.5x" />
+                    </b-link>
                       <div class="icon_flx">
                         <b-link
                           v-b-modal.modal-select2
                           @click="
-                            ClassData.id = data.item.id;
-                            editSection(data.item.id);
+                            ClassData.id = row.item.id;
+                            editSection(row.item.id);
                           "
                           title="Edit"
                         >
@@ -123,7 +129,7 @@
                         <b-link
                           @click="
                             showDeleteConfirmation();
-                            DeleteId = data.item.id;
+                            DeleteId = row.item.id;
                           "
                           title="Delete"
                         >
@@ -147,15 +153,6 @@
               </b-card>
             </template>
             <template #cell(sr)="data">
-               <div v-if="data.item.children.length!=0">
-                <b-form-checkbox
-                v-model="data.detailsShowing"
-                plain
-                class="vs-checkbox-con"
-                @change="data.toggleDetails"
-              >
-              </b-form-checkbox>
-               </div>
               <span class="text-nowrap">
                 {{ data.index+1 }}
               </span>
@@ -165,8 +162,24 @@
                 {{ data.item.name }}
               </span>
             </template>
+            <template #cell(section)="data">
+              <div v-if="data.item.children.length!=0">
+              <b-link  @click="data.toggleDetails" title="View Section">
+                  <feather-icon class="custom-class" icon="EyeIcon" size="1.5x" />
+                </b-link>
+              <span class="text-nowrap">
+                {{'('+ data.item.children_count+')'}}
+              </span>
+              </div>
+            </template>
             <template #cell(Action)="data">
               <div class="icon_flx">
+                <b-link v-if="data.item.children.length==0" @click="showAssignSubjectModel=true ; AssignClassId=data.item.id" title="Assign Subjects">
+                  <feather-icon class="custom-class" icon="AwardIcon" size="1.5x" />
+                </b-link>
+                <b-link v-if="data.item.children.length==0"  @click="showAssignTeacherModel=true; AssignClassId=data.item.id" title="Assign Teachers">
+                      <feather-icon class="custom-class" icon="UserIcon" size="1.5x" />
+                </b-link>
                 <b-link
                   v-b-modal.modal-select2
                   @click="
@@ -181,6 +194,7 @@
                     size="1.5x"
                   />
                 </b-link>
+                
                 <b-link
                   @click="
                     showDeleteConfirmation();
@@ -263,6 +277,108 @@
       Are you sure you want to delete ?
     </b-modal>
     <!-- Sidebar Ends -->
+   <!-- Assign Subject Model -->
+    <b-modal
+      :visible="showAssignSubjectModel"
+      title="Assign Subject"
+      ok-title="Submit"
+      @ok="AssignSubjecthandleOk"
+      @show="AssignSubjectOnshown"
+      @hidden="resetAssignSubjectModel"
+      centered
+      cancel-variant="outline-secondary"
+    >
+      <b-form @submit.stop.prevent="SubmitAssignSubject">
+        <b-form-group class="myform" label-for="branch">
+          <label class="form-label required">Class</label>
+          <v-select
+            v-model="AssignSubjectData.class"
+            @input="RemoveError('branch')"
+            :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+            :options="ClassOptionData"
+            disabled
+            :reduce="(val) => val.value"
+            input-id="status"
+            placeholder="Select Class"
+          />
+          <small class="text-danger">{{ errors[0] }}</small>
+          <div class="text-danger" v-if="hasErrors('branch')">
+            {{ getErrors("branch") }}
+          </div>
+        </b-form-group>
+        <b-form-group class="myform" label-for="branch">
+          <label class="form-label required">Subject</label>
+          <v-select
+            v-model="AssignSubjectData.subject"
+            @input="RemoveError('subject')"
+            :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+            :options="SubjectData"
+            multiple
+            :reduce="(val) => val.value"
+            :clearable="true"
+            input-id="status"
+            placeholder="Select Subject"
+          />
+          <small class="text-danger">{{ errors[0] }}</small>
+          <div class="text-danger" v-if="hasErrors('branch')">
+            {{ getErrors("branch") }}
+          </div>
+        </b-form-group>
+      </b-form>
+    </b-modal>
+       <!-- Assign Subject Model -->
+    <b-modal
+      :visible="showAssignTeacherModel"
+      title="Assign Teacher"
+      ok-title="Submit"
+      @ok="AssignSubjecthandleOk"
+      @show="AssignSubjectOnshown"
+      @hidden="resetAssignSubjectModel"
+      centered
+      cancel-variant="outline-secondary"
+    >
+      <b-form @submit.stop.prevent="SubmitAssignSubject">
+        <b-form-group class="myform" label-for="branch">
+          <label class="form-label required">Class</label>
+          <v-select
+            v-model="AssignSubjectData.class"
+            @input="RemoveError('branch')"
+            :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+            :options="ClassOptionData"
+            disabled
+            :reduce="(val) => val.value"
+            input-id="status"
+            placeholder="Select Class"
+          />
+          <small class="text-danger">{{ errors[0] }}</small>
+          <div class="text-danger" v-if="hasErrors('branch')">
+            {{ getErrors("branch") }}
+          </div>
+        </b-form-group>
+        <b-form-group class="myform" label-for="branch">
+          <label class="form-label required">Subject</label>
+          <v-select
+            v-model="AssignSubjectData.subject"
+            @input="RemoveError('subject')"
+            :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+            :options="SubjectData"
+            multiple
+            :reduce="(val) => val.value"
+            :clearable="true"
+            input-id="status"
+            placeholder="Select Subject"
+          />
+          <small class="text-danger">{{ errors[0] }}</small>
+          <div class="text-danger" v-if="hasErrors('branch')">
+            {{ getErrors("branch") }}
+          </div>
+        </b-form-group>
+      </b-form>
+    </b-modal>
+
+
+
+
 
     <!-- Class Modal Starts -->
     <b-modal
@@ -402,12 +518,13 @@ export default {
       DeleteId: 0,
       selected: "USA",
       option: ["USA", "Canada", "Maxico"],
-      fields: [{ key: "sr" }, { key: "class", sortable: true }, "Action"],
+      fields: [{ key: "sr" }, { key: "class", sortable: true },"section", "Action"],
       SectionColumn: [
         { key: "sr" },
         { key: "section", sortable: true },
         "Action",
       ],
+      AssignClassId:0,
       ClassOptionsData: [],
       EmployeesData: [],
       DesignationOptions: [],
@@ -416,6 +533,8 @@ export default {
       holidayMemberData: [],
       EditClassId: 0,
       EditSectionId: 0,
+      ClassOptionData:[],
+      SubjectData:[],
     };
   },
   mounted() {},
@@ -428,6 +547,12 @@ export default {
       bvModalEvent.preventDefault();
       // Trigger submit handler
       this.SubmitClass();
+    },
+    AssignSubjecthandleOk(bvModalEvent) {
+      // Prevent modal from closing
+      bvModalEvent.preventDefault();
+      // Trigger submit handler
+      this.SubmitAssignSubject();
     },
     SectionhandleOk(bvModalEvent) {
       // Prevent modal from closing
@@ -481,6 +606,21 @@ export default {
         this.ClassData.id = null;
       }
     },
+    AssignSubjectOnshown() {
+      axios.get("getClassSection").then((response) => {
+        this.ClassOptionData = response.data.data;
+        this.AssignSubjectData.class = this.AssignClassId;
+
+      });
+      axios.get("getSubject").then((response) => {
+        this.SubjectData = response.data.data;
+      });
+      axios
+          .get(`getSubjects/${this.AssignClassId}`)
+          .then((response) => {
+            this.AssignSubjectData.subject = response.data.data;
+        });
+    },
     SectionOnshown() {
       axios.get(`getClass`).then((response) => {
         this.ClassOptionsData = response.data.class;
@@ -505,7 +645,11 @@ export default {
     resetSectionModal(){
       this.ShowSectionModel = false;
       this.errors = [];
+    },
+    resetAssignSubjectModel(){
+      this.showAssignSubjectModel=false;
     }
+
   },
   setup(props, { emit }) {
     const toast = useToast();
@@ -681,6 +825,40 @@ export default {
           });
       }
     };
+    const SubmitAssignSubject = () => {
+        axios
+          .post("AssignSubject", AssignSubjectData.value)
+          .then(() => {
+            refetchData();
+            showAssignSubjectModel.value = false;
+
+            toast({
+              component: ToastificationContent,
+              props: {
+                title: "Subject Assign   Successfully.",
+                icon: "CheckIcon",
+                variant: "success",
+              },
+            });
+          })
+          .catch((error) => {
+            if (error.response.data.code == 422) {
+              errors.value = error.response.data.errors;
+            } else {
+              toast(
+                {
+                  component: ToastificationContent,
+                  props: {
+                    title: "Something went wrong Please try again later",
+                    icon: "bellIcon",
+                    variant: "danger",
+                  },
+                },
+                { timeout: 3000 }
+              );
+            }
+          });
+    };
     const EmployeeFilterDataSubmit = () => {
       refetchData();
     };
@@ -693,10 +871,17 @@ export default {
       class: null,
       name: null,
     };
+    const blankAssignSubjectData = {
+      id: null,
+      class: null,
+      subject:[],
+    };
+    const AssignSubjectData = ref(JSON.parse(JSON.stringify(blankAssignSubjectData)));
     const errors = ref([]);
     const ShowClassModel = ref(false);
     const ShowSectionModel = ref(false);
-
+    const showAssignSubjectModel = ref(false);
+    const showAssignTeacherModel = ref(false);
     const RemoveError = (errorName) => {
       errors.value[errorName] = " ";
     };
@@ -776,7 +961,7 @@ export default {
       totalEmployees,
       EmployeeFilterDataSubmit,
       sortBy,
-      isSortDirDesc,
+      isSortDirDesc,AssignSubjectData,blankAssignSubjectData,SubmitAssignSubject,showAssignSubjectModel,showAssignTeacherModel
     };
   },
 };

@@ -108,7 +108,9 @@ Route::get('class/{id}/edit', [ClassSectionMasterController::class, 'classEdit']
 Route::post('ClassUpdate/{id}', [ClassSectionMasterController::class ,'ClassUpdate']);
 Route::post('SectionUpdate/{id}', [ClassSectionMasterController::class ,'SectionUpdate']);
 Route::get('deleteClassSection/{id}', [ClassSectionMasterController::class, 'destroy']);
-
-
-
+Route::post('AssignSubject', [ClassSectionMasterController::class ,'AssignSubject']);
+Route::get('AssignSubjectListing', [ClassSectionMasterController::class, 'AssignSubjectListing']);
+Route::get('getSubjects/{id}', [ClassSectionMasterController::class, 'getSubjects']);
+Route::get('getClassSection', [ClassSectionMasterController::class, 'getClassSection']);
+Route::get('getSubject', [SubjectController::class, 'getSubject']);
 Route::resource('Subject',SubjectController::class);

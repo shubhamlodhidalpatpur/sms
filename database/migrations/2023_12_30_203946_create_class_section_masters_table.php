@@ -18,6 +18,7 @@ class CreateClassSectionMastersTable extends Migration
             $table->string('name');
             $table->integer('parent_id');
             $table->integer('class_section_type_id');
+            $table->integer('class_teacher')->nullable(true);
             $table->enum('status', ['A','I'])->default('A');
             $table->timestamps();
             $table->softDeletes();
