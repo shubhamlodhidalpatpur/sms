@@ -335,7 +335,6 @@
       @show="AssignTeacherOnshown"
       @hidden="resetAssignTeacherModel"
       centered
-      size="xl"
       cancel-variant="outline-secondary"
     >
       <b-form @submit.stop.prevent="SubmitAssignSubject">
