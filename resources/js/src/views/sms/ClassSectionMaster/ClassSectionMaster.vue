@@ -737,6 +737,10 @@ export default {
       this.showAssignSubjectModel=false;
     },
     resetAssignTeacherModel(){
+      this.AssignTeacherData.id= null;
+      this.AssignTeacherData.class= null;
+      this.AssignTeacherData.class_teacher= null;
+      this.AssignTeacherData.SubjctTeacherData=[];
       this.showAssignTeacherModel=false;
     }
 
