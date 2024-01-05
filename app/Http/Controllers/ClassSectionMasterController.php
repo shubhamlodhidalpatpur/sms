@@ -257,6 +257,35 @@ class ClassSectionMasterController extends Controller
         $data = ClassSubject::where('class_id',$id)->pluck('subject_id')->toArray();  
         return response(['data' => $data, 'status' => 'success'], 200);
     }
+    public function getSubjectsWithTeacher($id)
+    {
+        $data = ClassSubject::where('class_id',$id)->select('*')->get();  
+        return response(['data' => $data, 'status' => 'success'], 200);
+    }
+    public function AssignTeacher(Request $request)
+    {
+
+        $classsection=ClassSectionMaster::find($request->class);
+        $classsection->class_teacher=$request->class_teacher;
+        $classsection->save();
+        $class=ClassSubject::where('class_id',$request->class)->delete();
+        foreach($request->SubjctTeacherData as $sub){
+            $ClassSubjects = new ClassSubject;
+            $ClassSubjects->subject_id =$sub['subject_id'];
+            $ClassSubjects->class_id =$request->class;
+            $ClassSubjects->subject_teacher_id=$sub['subject_teacher_id'];
+            $ClassSubjects->save();
+        }
+        return response(['status' => 'success'], 200);
+    }
+    public function getClassTeacher($id)
+    {
+        $data = ClassSectionMaster::where('id',$id)->select('class_teacher')->first();  
+        return $data;
+    }
+    
+
+    
     
     
 }

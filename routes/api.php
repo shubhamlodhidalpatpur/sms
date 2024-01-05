@@ -111,6 +111,10 @@ Route::get('deleteClassSection/{id}', [ClassSectionMasterController::class, 'des
 Route::post('AssignSubject', [ClassSectionMasterController::class ,'AssignSubject']);
 Route::get('AssignSubjectListing', [ClassSectionMasterController::class, 'AssignSubjectListing']);
 Route::get('getSubjects/{id}', [ClassSectionMasterController::class, 'getSubjects']);
+Route::get('getSubjectsWithTeacher/{id}', [ClassSectionMasterController::class, 'getSubjectsWithTeacher']);
 Route::get('getClassSection', [ClassSectionMasterController::class, 'getClassSection']);
 Route::get('getSubject', [SubjectController::class, 'getSubject']);
 Route::resource('Subject',SubjectController::class);
+Route::post('AssignTeacher', [ClassSectionMasterController::class ,'AssignTeacher']);
+Route::get('getClassTeacher/{id}', [ClassSectionMasterController::class, 'getClassTeacher']);
+

@@ -331,48 +331,101 @@
       :visible="showAssignTeacherModel"
       title="Assign Teacher"
       ok-title="Submit"
-      @ok="AssignSubjecthandleOk"
-      @show="AssignSubjectOnshown"
-      @hidden="resetAssignSubjectModel"
+      @ok="AssignTeacherhandleOk"
+      @show="AssignTeacherOnshown"
+      @hidden="resetAssignTeacherModel"
       centered
+      size="xl"
       cancel-variant="outline-secondary"
     >
       <b-form @submit.stop.prevent="SubmitAssignSubject">
-        <b-form-group class="myform" label-for="branch">
-          <label class="form-label required">Class</label>
-          <v-select
-            v-model="AssignSubjectData.class"
-            @input="RemoveError('branch')"
-            :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-            :options="ClassOptionData"
-            disabled
-            :reduce="(val) => val.value"
-            input-id="status"
-            placeholder="Select Class"
-          />
-          <small class="text-danger">{{ errors[0] }}</small>
-          <div class="text-danger" v-if="hasErrors('branch')">
-            {{ getErrors("branch") }}
+          <b-row>
+            <b-col md="6">
+              <b-form-group class="myform" label-for="branch">
+                <label class="form-label required">Class</label>
+                <v-select
+                  v-model="AssignTeacherData.class"
+                  @input="RemoveError('class')"
+                  :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                  :options="ClassOptionData"
+                  disabled
+                  :reduce="(val) => val.value"
+                  input-id="status"
+                  placeholder="Select Class"
+                />
+                <small class="text-danger">{{ errors[0] }}</small>
+                <div class="text-danger" v-if="hasErrors('branch')">
+                  {{ getErrors("branch") }}
+                </div>
+              </b-form-group>
+            </b-col>
+            <b-col md="6">
+              <b-form-group class="myform" label-for="branch">
+                <label class="form-label required"> Class Teacher</label>
+                <v-select
+                  v-model="AssignTeacherData.class_teacher"
+                  @input="RemoveError('subject')"
+                  :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                  :options="TeacherData"
+                  :reduce="(val) => val.user_id"
+                  :clearable="true"
+                  label="user_name"
+                  value="user_id"
+                  input-id="status"
+                  placeholder="Select Teacher"
+                />
+                <small class="text-danger">{{ errors[0] }}</small>
+                <div class="text-danger" v-if="hasErrors('branch')">
+                  {{ getErrors("branch") }}
+                </div>
+              </b-form-group>
+            </b-col> 
+          </b-row>
+          <div v-for="data in AssignTeacherData.SubjctTeacherData" :key="data">
+          <b-row > 
+              <b-col md="6">
+              <b-form-group class="myform" label-for="branch">
+                <label class="form-label required">Subject</label>
+                <v-select
+                  v-model="data.subject_id"
+                  @input="RemoveError('subject')"
+                  :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                  :options="SubjectData"
+                  disabled
+                  :reduce="(val) => val.value"
+                  :clearable="true"
+                  input-id="status"
+                  placeholder="Select Subject"
+                />
+                <small class="text-danger">{{ errors[0] }}</small>
+                <div class="text-danger" v-if="hasErrors('branch')">
+                  {{ getErrors("branch") }}
+                </div>
+              </b-form-group>
+            </b-col>
+            <b-col md="6">
+              <b-form-group class="myform" label-for="branch">
+                <label class="form-label required">Subject Teacher</label>
+                <v-select
+                  v-model="data.subject_teacher_id"
+                  @input="RemoveError('subject')"
+                  :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                  :options="TeacherData"
+                  label="user_name"
+                  value="user_id"
+                  :reduce="(val) => val.user_id"
+                  :clearable="true"
+                  input-id="status"
+                  placeholder="Select Teacher"
+                />
+                <small class="text-danger">{{ errors[0] }}</small>
+                <div class="text-danger" v-if="hasErrors('branch')">
+                  {{ getErrors("branch") }}
+                </div>
+              </b-form-group>
+            </b-col> 
+          </b-row> 
           </div>
-        </b-form-group>
-        <b-form-group class="myform" label-for="branch">
-          <label class="form-label required">Subject</label>
-          <v-select
-            v-model="AssignSubjectData.subject"
-            @input="RemoveError('subject')"
-            :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-            :options="SubjectData"
-            multiple
-            :reduce="(val) => val.value"
-            :clearable="true"
-            input-id="status"
-            placeholder="Select Subject"
-          />
-          <small class="text-danger">{{ errors[0] }}</small>
-          <div class="text-danger" v-if="hasErrors('branch')">
-            {{ getErrors("branch") }}
-          </div>
-        </b-form-group>
       </b-form>
     </b-modal>
 
@@ -535,6 +588,7 @@ export default {
       EditSectionId: 0,
       ClassOptionData:[],
       SubjectData:[],
+      TeacherData:[],
     };
   },
   mounted() {},
@@ -553,6 +607,12 @@ export default {
       bvModalEvent.preventDefault();
       // Trigger submit handler
       this.SubmitAssignSubject();
+    },
+    AssignTeacherhandleOk(bvModalEvent) {
+      // Prevent modal from closing
+      bvModalEvent.preventDefault();
+      // Trigger submit handler
+      this.SubmitAssignTeacher();
     },
     SectionhandleOk(bvModalEvent) {
       // Prevent modal from closing
@@ -621,6 +681,34 @@ export default {
             this.AssignSubjectData.subject = response.data.data;
         });
     },
+    AssignTeacherOnshown() {
+      axios.get("getClassSection").then((response) => {
+        this.ClassOptionData = response.data.data;
+        this.AssignTeacherData.class = this.AssignClassId;
+
+      });
+      axios.get(`getClassTeacher/${this.AssignClassId}`).then((response) => {
+        this.AssignTeacherData.class_teacher = response.data.class_teacher;
+      });
+      axios.get("users").then((response) => {
+        this.TeacherData = response.data.table_data;
+      });
+      axios.get("getSubject").then((response) => {
+        this.SubjectData = response.data.data;
+      });
+      axios.get(`getSubjectsWithTeacher/${this.AssignClassId}`).then((response) => {
+        const newDataArray = response.data.data.map((data) => {
+          return {
+            subject_id: data.subject_id,
+            subject_teacher_id: data.subject_teacher_id 
+          };
+        });
+        if (newDataArray.length > 0) {
+          this.AssignTeacherData.SubjctTeacherData = newDataArray;
+        }
+      });
+
+    },
     SectionOnshown() {
       axios.get(`getClass`).then((response) => {
         this.ClassOptionsData = response.data.class;
@@ -648,6 +736,9 @@ export default {
     },
     resetAssignSubjectModel(){
       this.showAssignSubjectModel=false;
+    },
+    resetAssignTeacherModel(){
+      this.showAssignTeacherModel=false;
     }
 
   },
@@ -859,6 +950,40 @@ export default {
             }
           });
     };
+    const SubmitAssignTeacher = () => {
+        axios
+          .post("AssignTeacher", AssignTeacherData.value)
+          .then(() => {
+            refetchData();
+            showAssignTeacherModel.value = false;
+
+            toast({
+              component: ToastificationContent,
+              props: {
+                title: "Teacher Assign Successfully.",
+                icon: "CheckIcon",
+                variant: "success",
+              },
+            });
+          })
+          .catch((error) => {
+            if (error.response.data.code == 422) {
+              errors.value = error.response.data.errors;
+            } else {
+              toast(
+                {
+                  component: ToastificationContent,
+                  props: {
+                    title: "Something went wrong Please try again later",
+                    icon: "bellIcon",
+                    variant: "danger",
+                  },
+                },
+                { timeout: 3000 }
+              );
+            }
+          });
+    };
     const EmployeeFilterDataSubmit = () => {
       refetchData();
     };
@@ -876,7 +1001,14 @@ export default {
       class: null,
       subject:[],
     };
+    const blankAssignTeacherData = {
+      id: null,
+      class: null,
+      class_teacher: null,
+      SubjctTeacherData:[{subject_id:null},{subject_teacher_id:null}],
+    };
     const AssignSubjectData = ref(JSON.parse(JSON.stringify(blankAssignSubjectData)));
+    const AssignTeacherData = ref(JSON.parse(JSON.stringify(blankAssignTeacherData)));
     const errors = ref([]);
     const ShowClassModel = ref(false);
     const ShowSectionModel = ref(false);
@@ -960,7 +1092,7 @@ export default {
       ShowSectionModel,
       totalEmployees,
       EmployeeFilterDataSubmit,
-      sortBy,
+      sortBy,SubmitAssignTeacher,AssignTeacherData,blankAssignTeacherData,
       isSortDirDesc,AssignSubjectData,blankAssignSubjectData,SubmitAssignSubject,showAssignSubjectModel,showAssignTeacherModel
     };
   },
