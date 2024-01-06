@@ -343,6 +343,7 @@
               <b-form-group class="myform" label-for="branch">
                 <label class="form-label required">Class</label>
                 <v-select
+                  class="selctboxdisable"
                   v-model="AssignTeacherData.class"
                   @input="RemoveError('class')"
                   :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
@@ -380,50 +381,35 @@
               </b-form-group>
             </b-col> 
           </b-row>
-          <div v-for="data in AssignTeacherData.SubjctTeacherData" :key="data">
-          <b-row > 
-              <b-col md="6">
-              <b-form-group class="myform" label-for="branch">
-                <label class="form-label required">Subject</label>
-                <v-select
-                  v-model="data.subject_id"
-                  @input="RemoveError('subject')"
-                  :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                  :options="SubjectData"
-                  disabled
-                  :reduce="(val) => val.value"
-                  :clearable="true"
-                  input-id="status"
-                  placeholder="Select Subject"
-                />
-                <small class="text-danger">{{ errors[0] }}</small>
-                <div class="text-danger" v-if="hasErrors('branch')">
-                  {{ getErrors("branch") }}
-                </div>
-              </b-form-group>
-            </b-col>
-            <b-col md="6">
-              <b-form-group class="myform" label-for="branch">
-                <label class="form-label required">Subject Teacher</label>
-                <v-select
-                  v-model="data.subject_teacher_id"
-                  @input="RemoveError('subject')"
-                  :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                  :options="TeacherData"
-                  label="user_name"
-                  value="user_id"
-                  :reduce="(val) => val.user_id"
-                  :clearable="true"
-                  input-id="status"
-                  placeholder="Select Teacher"
-                />
-                <small class="text-danger">{{ errors[0] }}</small>
-                <div class="text-danger" v-if="hasErrors('branch')">
-                  {{ getErrors("branch") }}
-                </div>
-              </b-form-group>
-            </b-col> 
-          </b-row> 
+          <div >
+            <b-table responsive striped :items="AssignTeacherData.SubjctTeacherData" :fields="AssignTeacherTableFields">
+            <template #cell(subject)="data">
+              <v-select
+                class="selctboxdisable"
+                v-model="data.item.subject_id"
+                @input="RemoveError('subject')"
+                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                :options="SubjectData"
+                disabled
+                :reduce="(val) => val.value"
+                input-id="status"
+                placeholder="Select Subject"
+              />
+            </template>
+            <template #cell(subject_teacher)="data">
+              <v-select
+                v-model="data.item.subject_teacher_id"
+                @input="RemoveError('subject')"
+                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                :options="TeacherData"
+                label="user_name"
+                value="user_id"
+                :reduce="(val) => val.user_id"
+                input-id="status"
+                placeholder="Select Teacher"
+              />
+            </template>
+          </b-table>
           </div>
       </b-form>
     </b-modal>
@@ -571,6 +557,7 @@ export default {
       selected: "USA",
       option: ["USA", "Canada", "Maxico"],
       fields: [{ key: "sr" }, { key: "class", sortable: true },"section", "Action"],
+      AssignTeacherTableFields:[{ key: "subject", sortable: true },{ key: "subject_teacher", sortable: true }],
       SectionColumn: [
         { key: "sr" },
         { key: "section", sortable: true },
@@ -689,12 +676,6 @@ export default {
       axios.get(`getClassTeacher/${this.AssignClassId}`).then((response) => {
         this.AssignTeacherData.class_teacher = response.data.class_teacher;
       });
-      axios.get("users").then((response) => {
-        this.TeacherData = response.data.table_data;
-      });
-      axios.get("getSubject").then((response) => {
-        this.SubjectData = response.data.data;
-      });
       axios.get(`getSubjectsWithTeacher/${this.AssignClassId}`).then((response) => {
         const newDataArray = response.data.data.map((data) => {
           return {
@@ -705,6 +686,12 @@ export default {
         if (newDataArray.length > 0) {
           this.AssignTeacherData.SubjctTeacherData = newDataArray;
         }
+      });
+      axios.get("users").then((response) => {
+        this.TeacherData = response.data.table_data;
+      });
+      axios.get("getSubject").then((response) => {
+        this.SubjectData = response.data.data;
       });
 
     },
@@ -1103,10 +1090,35 @@ export default {
 </script>
 
 <style lang="scss">
-.b-table-selectable {
-  .feather {
-    font-size: 1.3rem;
-  }
+.repeater-form {
+  overflow: hidden;
+  transition: 0.35s height;
 }
+
+.vue-form-wizard .wizard-navigation .wizard-nav {
+  padding: 0px !important;
+}
+.v-select {
+    background-color: #fff;
+    background: #fff;
+    // margin-bottom: 10px !important
+}
+.selctboxdisable{
+  button{
+    .feather-x{
+      display: none;
+    }
+
+  }
+    .vs__open-indicator{
+      display: none;
+    }
+}
+
+
+@import "~@core/scss/vue/libs/vue-wizard.scss";
+@import "~@core/scss/vue/libs/vue-select.scss";
+@import "~@core/scss/vue/libs/quill.scss";
 </style>
+
 
