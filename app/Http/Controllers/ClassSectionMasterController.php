@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ClassSectionMaster;
 use App\Models\ClassSectionType;
 use App\Models\ClassSubject;
+use App\Models\ScheduleLecture;
 use App\Models\Subject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -283,7 +284,27 @@ class ClassSectionMasterController extends Controller
         $data = ClassSectionMaster::where('id',$id)->select('class_teacher')->first();  
         return $data;
     }
-    
+
+    public function updateClassLacture(Request $request){
+
+       $data=ScheduleLecture::where('class_id',$request->class)->first();
+       if($data!=null){
+        $data->delete();
+       }
+       $updateClassLacture = new ScheduleLecture();
+       $updateClassLacture->class_id=$request->class;
+       $updateClassLacture->lecture_data = json_encode($request->LectureItems);
+       $updateClassLacture->save();
+       return response(['status' => 'success'], 200);
+
+
+    }
+    public function getLectureData($id)
+    {
+        $data = ScheduleLecture::where('class_id',$id)->select('*')->first();  
+        $data['lecture_data']=json_decode($data->lecture_data);
+        return response(['data' => $data, 'status' => 'success'], 200);
+    }
 
     
     

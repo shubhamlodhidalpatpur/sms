@@ -346,7 +346,7 @@ export default {
     const getErrors = (fieldName) => {
       return errors.value[fieldName][0];
     };
-     if(route.value.params.id ){
+     if(route.value.params.id){
       
       if(route.value.name == "edit-leave-type"){
         axios.get(`LeaveTypes/${route.value.params.id}/edit`).then((response) => {

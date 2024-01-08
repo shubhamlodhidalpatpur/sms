@@ -111,6 +111,11 @@ export default [
       component: () => import('@/views/sms/ClassSectionMaster/ClassSectionMaster.vue'),
     },  
     {
+      path: '/Class-Section-Time-Scheduler/:id',
+      name: 'class-section-time-scheduler',
+      component: () => import('@/views/sms/ClassSectionMaster/ClassSectionTimeSeduler.vue'),
+    },  
+    {
       path: '/subject',
       name: 'subject',
       component: () => import('@/views/sms/Subject/Subject.vue'),

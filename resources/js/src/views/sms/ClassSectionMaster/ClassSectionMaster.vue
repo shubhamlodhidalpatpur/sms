@@ -111,6 +111,9 @@
                     <b-link  @click="showAssignTeacherModel=true; AssignClassId=row.item.id" title="Assign Teachers">
                       <feather-icon class="custom-class" icon="UserIcon" size="1.5x" />
                     </b-link>
+                    <b-link :to="{ name: 'class-section-time-scheduler', params: { id: row.item.id } }" title="Class Scheduler" >
+                      <feather-icon class="custom-class" icon="EyeIcon" size="1.5x" />
+                    </b-link>
                       <div class="icon_flx">
                         <b-link
                           v-b-modal.modal-select2
@@ -180,6 +183,9 @@
                 <b-link v-if="data.item.children.length==0"  @click="showAssignTeacherModel=true; AssignClassId=data.item.id" title="Assign Teachers">
                       <feather-icon class="custom-class" icon="UserIcon" size="1.5x" />
                 </b-link>
+                <b-link  v-if="data.item.children.length==0" :to="{ name: 'class-section-time-scheduler', params: { id: data.item.id } }" title="Class Scheduler" >
+                      <feather-icon class="custom-class" icon="EyeIcon" size="1.5x" />
+                    </b-link>
                 <b-link
                   v-b-modal.modal-select2
                   @click="
@@ -1098,11 +1104,7 @@ export default {
 .vue-form-wizard .wizard-navigation .wizard-nav {
   padding: 0px !important;
 }
-.v-select {
-    background-color: #fff;
-    background: #fff;
-    // margin-bottom: 10px !important
-}
+
 .selctboxdisable{
   button{
     .feather-x{

@@ -118,3 +118,5 @@ Route::resource('Subject',SubjectController::class);
 Route::post('AssignTeacher', [ClassSectionMasterController::class ,'AssignTeacher']);
 Route::get('getClassTeacher/{id}', [ClassSectionMasterController::class, 'getClassTeacher']);
 
+Route::post('updateClassLacture', [ClassSectionMasterController::class ,'updateClassLacture']);
+Route::get('getLectureData/{id}', [ClassSectionMasterController::class, 'getLectureData']);
