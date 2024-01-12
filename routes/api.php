@@ -120,3 +120,4 @@ Route::get('getClassTeacher/{id}', [ClassSectionMasterController::class, 'getCla
 
 Route::post('updateClassLacture', [ClassSectionMasterController::class ,'updateClassLacture']);
 Route::get('getLectureData/{id}', [ClassSectionMasterController::class, 'getLectureData']);
+Route::get('getLectureScheduleData/{id}', [ClassSectionMasterController::class, 'getLectureScheduleData']);

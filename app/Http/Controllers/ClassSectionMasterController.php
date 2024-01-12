@@ -286,25 +286,53 @@ class ClassSectionMasterController extends Controller
     }
 
     public function updateClassLacture(Request $request){
-
-       $data=ScheduleLecture::where('class_id',$request->class)->first();
-       if($data!=null){
-        $data->delete();
+       $data=ScheduleLecture::where('class_id',$request->class)->get();
+       if(count($data)!=0){
+        foreach ($data as $item) {
+            $item->delete();
+        }
        }
-       $updateClassLacture = new ScheduleLecture();
-       $updateClassLacture->class_id=$request->class;
-       $updateClassLacture->lecture_data = json_encode($request->LectureItems);
-       $updateClassLacture->save();
+       foreach($request->LectureItems as $index => $value){
+           $updateClassLacture = new ScheduleLecture();
+           $updateClassLacture->class_id=$request->class;
+           $updateClassLacture->subject_teacher_id=$value['subject_and_teacher'];
+           $updateClassLacture->lecture_number=$index+1;
+           $updateClassLacture->lecture_start_time =$value['startTime'];
+           $updateClassLacture->lecture_end_time =$value['endTime'];
+           $updateClassLacture->save();
+        }
        return response(['status' => 'success'], 200);
 
 
     }
     public function getLectureData($id)
     {
-        $data = ScheduleLecture::where('class_id',$id)->select('*')->first();  
-        $data['lecture_data']=json_decode($data->lecture_data);
+        $data = ScheduleLecture::where('class_id',$id)->select('*')->get();  
         return response(['data' => $data, 'status' => 'success'], 200);
     }
+    public function getLectureScheduleData($id)
+    {   
+        $data=[];
+        $data['lecture_number'] = ScheduleLecture::where('class_id',$id)->pluck('lecture_number')->toArray(); 
+        $lectureTimes = ScheduleLecture::where('class_id', $id)->select('lecture_start_time', 'lecture_end_time') ->get();
+        $data['subjectWithTeacher'] = ClassSubject::leftjoin('subjects','subjects.id','class_subjects.subject_id')
+        ->leftjoin('user_data','user_data.user_id','class_subjects.subject_teacher_id')
+        ->where('class_id', $id)->select('class_subjects.id',
+        DB::raw("CONCAT(subjects.name, '-', user_data.user_id) as subject_with_teacher")
+        ) ->get();
+
+        if ($lectureTimes->isNotEmpty()) {
+            $lectureTimeArray = [];
+            foreach ($lectureTimes as $lectureTime) {
+                $timeSlot = "{$lectureTime->lecture_start_time} to {$lectureTime->lecture_end_time}";
+                $lectureTimeArray[] =  $timeSlot;
+            }
+            $data['lecture_time'] = $lectureTimeArray;
+        } 
+        return response(['data' => $data, 'status' => 'success'], 200);
+    }
+
+    
 
     
     
