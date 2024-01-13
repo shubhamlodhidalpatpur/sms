@@ -24,16 +24,24 @@
         <template #title>
           <feather-icon icon="HomeIcon" /> <span>Scheduler Setting</span>
         </template>
-        <div>
-          <b-button
+        <div class="d-flex justify-content-between mt-2 mt-md-0">
+            <b-button
             @click="addLectureRow"
+            v-if="Editable"
             v-ripple.400="'rgba(255, 255, 255, 0.15)'"
             variant="primary"
-            style="margin-left: 800px"
-            class="mb-0 mr-1 basicButton"
+              class="mb-0 ml-md-1 basicButton"
             >Add Row</b-button
           >
-          <br /><br />
+            <b-button
+                @click="Editable=!Editable"
+                v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+                variant="primary"
+                class="mb-0 ml-1 basicButton"
+                >{{Editable?'View':"Edit"}}
+            </b-button>
+        </div>            
+        <div>
           <b-table
             striped
             hover
@@ -47,12 +55,14 @@
               <b-form-timepicker
                 v-model="data.item.startTime"
                 class="form-control"
+                :disabled="!Editable"
                 @input="RemoveError('conduct_time')"
               />
             </template>
             <template #cell(endTime)="data">
               <b-form-timepicker
                 v-model="data.item.endTime"
+                :disabled="!Editable"
                 class="form-control"
                 @input="RemoveError('conduct_time')"
               />
@@ -63,6 +73,7 @@
                   @input="RemoveError('subject')"
                   :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                   :options="SubjectTeacherData"
+                  :disabled="!Editable"
                   :reduce="(val) => val.id"
                   :clearable="true"
                   label="subject_with_teacher"
@@ -73,6 +84,7 @@
             </template>
             <template #cell(Action)="data">
               <b-button
+                v-if="Editable"
                 v-ripple.400="'rgba(234, 84, 85, 0.15)'"
                 variant="outline-danger"
                 class="mt-0 mt-md-2"
@@ -86,8 +98,8 @@
           <b-row class="mt-1">
             <b-col sm="12" class="text-center">
               <b-button
+                v-if="Editable"
                 v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                :disabled="show"
                 variant="primary"
                 @click="formSubmitted"
                 class="btn d-inline-block mr-1 btn-primary"
@@ -336,9 +348,10 @@ export default {
       errors.value[errorName] = " ";
     };
     const errors = ref([]);
+    const Editable = ref(false);
     return {
       blanklectureSchedule,
-      lectureSchedule,RemoveError,errors
+      lectureSchedule,RemoveError,errors,Editable
     };
   },
 };
