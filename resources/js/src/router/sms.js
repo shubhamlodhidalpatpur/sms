@@ -141,11 +141,6 @@ export default [
       component: () => import('@/views/sms/Modules/Modules.vue'),
     },
     {
-      path: '/Customer',
-      name: 'Customer',
-      component: () => import('@/views/sms/Modules/Modules.vue'),
-    },
-    {
       path: '/Supplier',
       name: 'Supplier',
       component: () => import('@/views/sms/Modules/Modules.vue'),
