@@ -15,6 +15,8 @@ use App\Http\Controllers\UserController;
 
 use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\LeaveTypeController;
+use App\Http\Controllers\MasterController;
+use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\SwapRequestController;
@@ -85,6 +87,7 @@ Route::get('/CHeckTodayAttendance', [AttendanceController::class, 'checkTodayAtt
 Route::get('/CheckAttendances', [AttendanceController::class, 'CheckAttendances']);
 Route::post('changeStatus/{status}/{id}', [AttendanceController::class,'changeStatus']);
 Route::get('getFieldsByRole/{role_id?}', [RoleController::class,'getFieldsByRole']);
+Route::get('getMasterFieldsBydefault/{role_id?}', [MasterController::class,'getFieldsByMasterId']);
 Route::get('getFieldTypes', [RoleController::class, 'getFieldTypes']);
 Route::post('submitUserForm', [UserController::class, 'submitUserForm']);
 Route::resource('users', UserController::class);
@@ -121,3 +124,12 @@ Route::get('getClassTeacher/{id}', [ClassSectionMasterController::class, 'getCla
 Route::post('updateClassLacture', [ClassSectionMasterController::class ,'updateClassLacture']);
 Route::get('getLectureData/{id}', [ClassSectionMasterController::class, 'getLectureData']);
 Route::get('getLectureScheduleData/{id}', [ClassSectionMasterController::class, 'getLectureScheduleData']);
+
+Route::resource('/master', MasterController::class);
+Route::get('getFields/{modulename}', [ModuleController::class, 'getFields']);
+Route::get('getListingFields/{modulename}', [ModuleController::class, 'getListingFields']);
+Route::get('getModuleData/{modulename}', [ModuleController::class, 'index']);
+Route::post('SubmitModule/{modulename}', [ModuleController::class, 'store']);
+Route::get('getFieldsData/{modulename}/{id}', [ModuleController::class, 'getFieldsData']);
+Route::post('UpdateModule/{modulename}/{id}', [ModuleController::class, 'update']);
+Route::delete('deleteModule/{modulename}/{id}', [ModuleController::class, 'destroy']);

@@ -161,4 +161,31 @@ export default [
             action: "do",
         },
     },
+    {
+        title: 'Master',
+        route: 'master',
+        icon: 'MenuIcon',
+        meta: {
+            resource: 'Auth',
+            action: "do",
+        },
+    },
+    {
+        title: 'Customer',
+        route: 'Customer',
+        icon: 'MenuIcon',
+        meta: {
+            resource: 'Auth',
+            action: "do",
+        },
+    },
+    {
+        title: 'Supplier',
+        route: 'Supplier',
+        icon: 'MenuIcon',
+        meta: {
+            resource: 'Auth',
+            action: "do",
+        },
+    },
 ]

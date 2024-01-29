@@ -32,6 +32,11 @@ export default [
       component: () => import('@/views/sms/role/Role.vue'),
     },
     {
+      path: '/master',
+      name: 'master',
+      component: () => import('@/views/sms/Master/master.vue'),
+    },
+    {
       path: '/employee',
       name: 'employee',
       component: () => import('@/views/sms/employee/Employee.vue'),
@@ -110,15 +115,40 @@ export default [
       name: 'class-section-master',
       component: () => import('@/views/sms/ClassSectionMaster/ClassSectionMaster.vue'),
     },  
-    {
+{
       path: '/Class-Section-Time-Scheduler/:id',
       name: 'class-section-time-scheduler',
       component: () => import('@/views/sms/ClassSectionMaster/ClassSectionTimeSeduler.vue'),
     },  
     {
-      path: '/subject',
-      name: 'subject',
-      component: () => import('@/views/sms/Subject/Subject.vue'),
-    },   
+      path: '/Add/:module_name',
+      name: 'add_module',
+      component: () => import('@/views/sms/Modules/AddModules.vue'),
+    }, 
+    {
+      path: '/Edit/:module_name/:id',
+      name: 'Edit',
+      component: () => import('@/views/sms/Modules/EditModules.vue'),
+    }, 
+    {
+      path: '/View/:module_name/:id',
+      name: 'View',
+      component: () => import('@/views/sms/Modules/EditModules.vue'),
+    }, 
+    {
+      path: '/Customer',
+      name: 'Customer',
+      component: () => import('@/views/sms/Modules/Modules.vue'),
+    },
+    {
+      path: '/Customer',
+      name: 'Customer',
+      component: () => import('@/views/sms/Modules/Modules.vue'),
+    },
+    {
+      path: '/Supplier',
+      name: 'Supplier',
+      component: () => import('@/views/sms/Modules/Modules.vue'),
+    },      
 ]
   
