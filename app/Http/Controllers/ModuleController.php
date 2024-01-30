@@ -121,7 +121,7 @@ class ModuleController extends Controller
 
 
     }
-    public function getFields($modulename){
+    public function getFields(Request $request,$modulename){
         $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
         $fields = MasterField::leftJoin('masters','masters.id','master_fields.master_id')
             ->leftJoin('field_types','field_types.id','master_fields.field_type_id')
@@ -130,7 +130,13 @@ class ModuleController extends Controller
                 'master_fields.*',
                 'field_types.title as field_type',
                 'field_types.slug as field_type_slug',
-            )->get();
+            );
+            if($request->filter==true || $request->filter=="true"){
+                $fields = $fields->where('master_fields.show_filter',1)->get();
+            }else{
+                $fields =  $fields->get();
+
+            }
         if(isset($trace[1]['function']) && $trace[1]['function'] == 'callAction'){
             return response(['data' => $fields, 'status' => 'success'], 200);
         }

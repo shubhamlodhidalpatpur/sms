@@ -73,6 +73,7 @@ class MasterController extends Controller
                     'field_value' => isset($field['field_value'])? $field['field_value'] : null,
                     'required' => $field['required'],
                     'show_list' => $field['show_list'],
+                    'show_filter' => $field['show_filter'],
                     'is_default_field' => $field['is_default_field'],
                 ];
             }
@@ -108,6 +109,7 @@ class MasterController extends Controller
                     'created_at' => now(),
                     'field_value' => isset($field['field_value'])? $field['field_value'] : null,
                     'show_list' => $field['show_list'],
+                    'show_filter' => $field['show_filter'],
                     'required' => $field['required'],
                     'is_default_field' => 0,
                 ];

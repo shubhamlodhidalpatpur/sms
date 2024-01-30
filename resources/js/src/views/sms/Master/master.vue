@@ -163,7 +163,7 @@
       Are you sure you want to delete this role?
     </b-modal>
 
-    <b-modal size="lg" :visible="showMasterModel" :title="MasterEdit ? 'Update Master' : 'Add Master'"
+    <b-modal size="xl" :visible="showMasterModel" :title="MasterEdit ? 'Update Master' : 'Add Master'"
       :ok-title="MasterEdit ? 'Update' : 'Add'" @ok="handleOk" @hidden="resetModal" @show="Onshown" centered
       cancel-variant="outline-secondary">
 
@@ -188,7 +188,7 @@
         </b-form-group>
 
         <div>
-          <b-table :items="MasterData.masterFields" :fields="['title', 'type', 'required','show_list', 'action']">
+          <b-table :items="MasterData.masterFields" :fields="['title', 'type', 'required','show_list','show_filter', 'action']">
             
             <template #cell(title)="data">
               <b-card-text class="font-weight-bold mb-25">
@@ -206,6 +206,9 @@
             </template>
             <template #cell(show_list)="data">
               <b-form-checkbox :value="1" unchecked-value="0" v-model="data.item.show_list" :disabled="data.item.is_default_field == 1" />
+            </template>
+            <template #cell(show_filter)="data">
+              <b-form-checkbox :value="1" unchecked-value="0" v-model="data.item.show_filter" :disabled="data.item.is_default_field == 1" />
             </template>
             <template #cell(action)="data">
               <b-button v-ripple.400="'rgba(255, 255, 255, 0.15)'" variant="success" pill @click="addField(data.index)">
@@ -355,6 +358,7 @@ export default {
         field_type_id: null,
         required: 0,
         show_list:0,
+        show_filter:0,
         master_id: null,
         title:  null,
         updated_at: null,

@@ -9,9 +9,15 @@
               <p class="card-title p-50 mb-0">{{$route.name}}</p>
             </div>
             <div>
-            <b-row>
-      <b-col cols="12" md="12" class="marbalign">
-        <div class="d-flex align-items-center justify-content-end">
+        <div class="d-flex justify-content-between mt-2 mt-md-0">
+           <b-button
+              variant="primary"
+              class="mb-0 ml-md-1 basicButton"
+              v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+              v-b-toggle.collapse-1
+            >
+              Filter
+            </b-button>
           <b-button
             variant="primary"
             :to="{
@@ -23,9 +29,140 @@
             <span class="text-nowrap">Add</span>
           </b-button>
         </div>
-      </b-col>
-    </b-row>
             </div>
+          </div>
+                 <div>
+            <b-collapse id="collapse-1" class="my-2">
+              <b-card class="filterBox mb-0">
+                   <b-row>
+              <b-col md="3" class="mt-2" v-for="field in FilterFields" :key="field.id">
+                <label class="form-label required d-block">{{field.title}}</label>
+                  <validation-provider #default="{ errors }" :name="field.title">
+                    
+                    <div v-if="field.field_type_slug == 'string'">
+                    <b-form-input
+                      v-model="field.value"
+                       @input="RemoveError(field.slug)"
+                      :state="errors.length > 0 ? false : null"
+                      placeholder="Enter Name"
+                      autocomplete="off"
+                    />
+                        <small class="text-danger">{{ errors[0] }}</small>
+                        <div class="text-danger" v-if="hasErrors(field.slug)">
+                            {{ getErrors(field.slug) }}
+                        </div>
+                    </div>
+                    <div v-if="field.field_type_slug == 'bigInteger'">
+                    <b-form-input
+                      type="number"
+                      @input="RemoveError(field.slug)"
+                      v-model="field.value"
+                      :state="errors.length > 0 ? false : null"
+                      placeholder="Enter Name"
+                      autocomplete="off"
+                    />
+                        <small class="text-danger">{{ errors[0] }}</small>
+                        <div class="text-danger" v-if="hasErrors(field.slug)">
+                            {{ getErrors(field.slug) }}
+                        </div>
+                    </div>
+                    <div v-if="field.field_type_slug == 'float'">
+                    <b-form-input
+                      type="number"
+                      step=".01"
+                      v-model="field.value"
+                      :state="errors.length > 0 ? false : null"
+                      placeholder="Enter Name"
+                      autocomplete="off"
+                      @input="RemoveError(field.slug)"
+                    />
+                        <small class="text-danger">{{ errors[0] }}</small>
+                        <div class="text-danger" v-if="hasErrors(field.slug)">
+                            {{ getErrors(field.slug) }}
+                        </div>
+                    </div>
+                    <div v-if="field.field_type_slug == 'date'">
+                    <b-form-datepicker
+                      v-model="field.value"
+                      class="mb-1"
+                      @input="RemoveError(field.slug)"
+                    />
+                     <small class="text-danger">{{ errors[0] }}</small>
+                        <div class="text-danger" v-if="hasErrors(field.slug)">
+                            {{ getErrors(field.slug) }}
+                        </div>
+                    </div>
+                    <div v-if="field.field_type_slug == 'enum'">
+                    <v-select
+                      :options="field.field_value.split(',')"
+                      v-model="field.value"
+                      @input="RemoveError(field.slug)"
+                      class="mb-1"
+                    />
+                     <small class="text-danger">{{ errors[0] }}</small>
+                        <div class="text-danger" v-if="hasErrors(field.slug)">
+                            {{ getErrors(field.slug) }}
+                        </div>
+                    </div>
+                    <div v-if="field.field_type_slug == 'file'">
+                    <b-form-file
+                      v-model="field.value"
+                      @input="RemoveError(field.slug)"
+                      class="mb-1"
+                    />
+                     <small class="text-danger">{{ errors[0] }}</small>
+                        <div class="text-danger" v-if="hasErrors(field.slug)">
+                            {{ getErrors(field.slug) }}
+                        </div>
+                    </div>
+                    <div v-if="field.field_type_slug == 'boolean'">
+                      <b-form-checkbox
+                        checked="true"
+                        class="custom-control-success"
+                        @input="RemoveError(field.slug)"
+                        name="check-button"
+                        switch
+                        v-model="field.value"
+                      />
+                       <small class="text-danger">{{ errors[0] }}</small>
+                        <div class="text-danger" v-if="hasErrors(field.slug)">
+                            {{ getErrors(field.slug) }}
+                        </div>
+                    </div>
+                    <div v-if="field.field_type_slug == 'datetime'">
+                      <flat-pickr
+                        v-model="field.value"
+                        class="form-control"
+                        @input="RemoveError(field.slug)"
+                        :config="{ enableTime: true,dateFormat: 'Y-m-d H:i'}"
+                      />
+                       <small class="text-danger">{{ errors[0] }}</small>
+                        <div class="text-danger" v-if="hasErrors(field.slug)">
+                            {{ getErrors(field.slug) }}
+                        </div>
+                    </div>
+                  </validation-provider>
+              </b-col>
+            </b-row>
+
+                <b-col cols="12" md="12">
+                  <b-button
+                    variant="primary mt-1"
+                    v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+                    @click="BUFilterDataSubmit"
+                  >
+                    Search
+                  </b-button>
+                  <b-button
+                    variant="primary mt-1"
+                    v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+                    @click="resetBUFilter()"
+                  >
+                    <span class="text-nowrap">Reset</span>
+                  </b-button>
+                </b-col>
+              </b-card>
+            </b-collapse>
           </div>
         <b-table
             responsive
@@ -146,13 +283,15 @@ import {
   BCol,
   BCard,
   BCollapse,
-  VBToggle,
-  BFormInput,
   BSidebar,
   BModal,
   VBModal,
   BForm,
-  BPagination,BSpinner,BOverlay
+  BPagination,BSpinner,BOverlay,BFormInput,   BFormRadioGroup,VBToggle,
+    BFormDatepicker,
+    BFormFile,
+    BFormCheckbox
+
 } from "bootstrap-vue";
 import vSelect from "vue-select";
 import Ripple from "vue-ripple-directive";
@@ -162,6 +301,9 @@ import { useToast } from "vue-toastification/composition";
 import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
 import { EditIcon } from "vue-feather-icons";
 import { useRouter } from "@core/utils/utils";
+import formValidation from "@core/comp-functions/forms/form-validation";
+import { required, alphaNum, email } from "@validations";
+import { ValidationProvider, ValidationObserver } from "vee-validate";
 export default {
   components: {
     BTable,
@@ -174,13 +316,18 @@ export default {
     BCol,
     BCard,
     BCollapse,
-    BFormInput,
     BModal,
     VBModal,
     BForm,
     BLink,
     BSidebar,
-    BPagination,BSpinner,BOverlay,EditIcon
+    BPagination,BSpinner,BOverlay,EditIcon,
+    BFormInput,   BFormRadioGroup,
+    BFormDatepicker,
+    BFormFile,
+    BFormCheckbox, ValidationProvider,
+    ValidationObserver,
+
   },
   directives: {
     "b-toggle": VBToggle,
@@ -227,6 +374,7 @@ export default {
   },
   mounted() {
     this.FetchTableFilds();
+    this.fethFilterFields();
   },
   setup(props, { emit }) {
     const { route, router } = useRouter();
@@ -236,7 +384,7 @@ export default {
     const fetchLeaveType = (ctx, callback) => {
      axios.get(`getModuleData/${route.value.name}`, {
                  params: {
-                    ...SearchFilter.value,
+                    ...FilterFields.value,
                     page:currentPage.value,
                     perPage:perPage.value,
                     sortBy : sortBy.value,
@@ -272,6 +420,12 @@ export default {
         fields.value=response.data.data;
     });
    }
+    const FilterFields = ref([])
+    const fethFilterFields = () => {
+      axios.get(`getFields/${route.value.name}`,{params:{filter:true}}).then(response =>  {
+        FilterFields.value = response.data.data;
+      });
+    }
     
 
     const BUListTable = ref(null);
@@ -341,7 +495,7 @@ export default {
       showBUModal,
       RemoveError,
       sortBy,
-      isSortDirDesc,fields,FetchTableFilds
+      isSortDirDesc,fields,FetchTableFilds,fethFilterFields,FilterFields
     };
   },
 };
