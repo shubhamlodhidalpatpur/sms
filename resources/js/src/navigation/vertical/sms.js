@@ -188,4 +188,13 @@ export default [
             action: "do",
         },
     },
+    {
+        title: 'Teacher',
+        route: 'Teacher',
+        icon: 'MenuIcon',
+        meta: {
+            resource: 'Auth',
+            action: "do",
+        },
+    },
 ]
