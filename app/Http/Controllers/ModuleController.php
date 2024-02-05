@@ -15,10 +15,19 @@ class ModuleController extends Controller
      */
     public function index(Request $request,$modulename)
     {  
-        $data=DB::table($modulename)->select('*', DB::raw('count(*) OVER() AS total_row_count'))
-        ->forPage($request->page, $request->perPage);
-        $data = $data->get();
-
+        $data=DB::table($modulename)->select('*', DB::raw('count(*) OVER() AS total_row_count'));
+        if ($request->has('filter')) {
+            foreach ($request->filter as $item) {
+                $jsonData = json_decode($item, true);
+                $field = $jsonData['field'];
+                $value = $jsonData['value'];
+    
+                if($value!=null){
+                    $data->where($field, 'like', '%' . $value . '%');
+                }
+            }
+        }
+        $data = $data->forPage($request->page, $request->perPage)->get();
         if (count($data) > 0) {
             return response(['data' => $data, 'status' => 'success'], 200);
         } else {

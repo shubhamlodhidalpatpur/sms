@@ -382,9 +382,14 @@ export default {
     const toast = useToast();
     const [sortBy, isSortDirDesc] = [ ref(null), ref(false)]
     const fetchLeaveType = (ctx, callback) => {
+      FilterFields.value.forEach((item) => {
+      console.log("data", item);
+      SearchFilter.value.push({'field':item.slug,'value':(item.value)?item.value:null})
+      // You can perform any logic or operations here
+    });
      axios.get(`getModuleData/${route.value.name}`, {
                  params: {
-                    ...FilterFields.value,
+                    'filter':SearchFilter.value,
                     page:currentPage.value,
                     perPage:perPage.value,
                     sortBy : sortBy.value,
@@ -404,7 +409,10 @@ export default {
       refetchData();
     };
       const resetBUFilter = () => {
-      SearchFilter.value = JSON.parse(JSON.stringify(SearchFilter));
+       SearchFilter.value=[];
+       FilterFields.value.forEach((item) => {
+        item.value = null;
+      });
       refetchData();
     };
      const refetchData = () => {
@@ -433,12 +441,10 @@ export default {
 
    
     const FilterData = {
-      id: null,
-      name: null,
-      hod: null,
+     
     };
 
-    const SearchFilter =ref(JSON.parse(JSON.stringify({ FilterData }))) ;
+    const SearchFilter =ref([]) ;
        const ResetFilter=()=>{
          employeeFilterData.value= ref(JSON.parse(JSON.stringify({FilterData}))) ;
          refetchData();
