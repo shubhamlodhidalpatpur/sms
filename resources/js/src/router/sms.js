@@ -149,6 +149,12 @@ export default [
       path: '/Teacher',
       name: 'Teacher',
       component: () => import('@/views/sms/Modules/Modules.vue'),
-    },      
+    }, 
+    {
+      path: '/HomePage',
+      name: 'HomePage',
+      component: () => import('@/views/sms/Modules/Modules.vue'),
+    }, 
+    
 ]
   

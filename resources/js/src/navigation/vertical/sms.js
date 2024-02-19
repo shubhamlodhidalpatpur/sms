@@ -197,4 +197,14 @@ export default [
             action: "do",
         },
     },
+    {
+        title: 'HomePageSetup',
+        route: 'HomePage',
+        icon: 'MenuIcon',
+        meta: {
+            resource: 'Auth',
+            action: "do",
+        },
+    },
+    
 ]
