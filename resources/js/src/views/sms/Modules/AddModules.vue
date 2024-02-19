@@ -273,7 +273,33 @@ setup(props, { emit }) {
     // const roleOptions = ref([]);
 
         const submit = () => {
-          axios.post(`SubmitModule/${route.value.params.module_name}`, Fields.value).then(response => {
+          const formData = new FormData();
+
+    Fields.value.forEach((field, index) => {
+      // Append each field's data as an array with an index
+      formData.append(`fields[${index}][id]`, field.id);
+      formData.append(`fields[${index}][field_type_id]`, field.field_type_id);
+      formData.append(`fields[${index}][required]`, field.required);
+      formData.append(`fields[${index}][field_type_slug]`, field.field_type_slug);
+      formData.append(`fields[${index}][title]`, field.title);
+      formData.append(`fields[${index}][slug]`, field.slug);
+
+      // Append the value based on the field type
+      switch (field.field_type_slug) {
+        case 'file':
+          formData.append(`fields[${index}][value]`, field.value);
+          break;
+        default:
+          formData.append(`fields[${index}][value]`, field.value);
+          break;
+      }
+    });
+
+          axios.post(`SubmitModule/${route.value.params.module_name}`, formData,{
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }).then(response => {
             toast({
                component: ToastificationContent,
                props: {

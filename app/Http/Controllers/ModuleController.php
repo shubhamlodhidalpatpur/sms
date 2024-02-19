@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\MasterField;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use File;
+use Image;
+use Str;
 
 class ModuleController extends Controller
 {
@@ -57,16 +60,19 @@ class ModuleController extends Controller
         $error = [];
         $data=$request->all();
         $InsertData=[];
-        foreach ($data as $d) {
-            $validation=array_key_exists('value',$d);
+        foreach ($data['fields'] as $d) {
             if($d['required']==1){
-                if (!$validation) {
+                if ($d['value']=='undefined') {
                     $error = array_merge($error, [$d['slug'] => [' The '.$d['title'].' is require']]);
                 }
                
             }
-            if($validation){
-                $InsertData[$d['slug']] = $d['value'];
+            if($d['value']!='undefined'){
+                if($d['field_type_slug']=='file'){
+                    $InsertData[$d['slug']] =  $this->FileUpload($d['value']);    
+                }else{
+                    $InsertData[$d['slug']] = $d['value'];
+                }
             }
         }
         if ($error != []) {
@@ -108,10 +114,28 @@ class ModuleController extends Controller
      */
     public function update(Request $request,$modulename,$id)
     {
+        $error = [];
         $data=$request->all();
         $InsertData=[];
-        foreach ($data as $d) {
-            $InsertData[$d['slug']] = $d['value'];
+        foreach ($data['fields'] as $d) {
+            if($d['required']==1){
+                if ($d['value']=='undefined') {
+                    $error = array_merge($error, [$d['slug'] => [' The '.$d['title'].' is require']]);
+                }
+               
+            }
+            if($d['value']!='undefined'){
+                if($d['field_type_slug']=='file'){
+                    if($d['value']!=null && $d['value']!="null" ){
+                        $InsertData[$d['slug']] =  $this->FileUpload($d['value']);    
+                    }
+                }else{
+                    $InsertData[$d['slug']] = $d['value'];
+                }   
+            }
+        }
+        if ($error != []) {
+            return response(['errors' => $error, 'code' => 422], 422);
         }
         DB::table($modulename)->where('id', $id)->update($InsertData);
         return response(['status'=>'success', 'message' => $modulename.'Updated Successfully']);
@@ -185,6 +209,10 @@ class ModuleController extends Controller
             foreach ($data as $key => $value) {
                 if ($field->slug === $key) {
                     $field->value = $value;
+                    if($field->field_type_slug=="file"){
+                        $field->image_link=config('global.FileViewPath').$value;
+                        $field->value=null;
+                    }
                     break; // If the match is found, exit the loop for efficiency
                 }
             }
@@ -196,5 +224,25 @@ class ModuleController extends Controller
           return $fields;
       }
      
+    }
+    public function FileUpload($file_name) //phpcs:ignore
+    {
+        $originalImgStorage = config('global.FileUploadPath');
+        if (!File::exists($originalImgStorage)) {
+            File::makeDirectory($originalImgStorage, 0755, true);
+        }
+        if ($file_name->getClientOriginalExtension()=="jpg"||$file_name->getClientOriginalExtension()=="png") {
+            $filename = Str::random(20) . '_' .now()->format('YmdHis') . '.'.$file_name->getClientOriginalExtension();
+            $originalimgpath = $originalImgStorage . '/' . $filename;
+            Image::make(file_get_contents($file_name))->save($originalimgpath);
+        } else {
+            $filenameWithExt = $file_name->getClientOriginalName();
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            $extension = $file_name->getClientOriginalExtension();
+            $fileNameToStore = $filename . '-' . time() . '.' . $extension;
+            $filename = Str::random(20) . '_' . now()->format('YmdHis') . '.'.$extension;
+            $path = $file_name->move($originalImgStorage, $filename);
+        }
+        return $filename;
     }
 }

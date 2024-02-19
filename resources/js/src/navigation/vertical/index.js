@@ -38,7 +38,7 @@ import uiElements from './ui-elements'
 import formAndTable from './forms-and-table'
 import custom from './custom'
 import sms from './sms'
-
+import axios from "@axios";
 // Array of sections
 export default [
     {
@@ -56,5 +56,4 @@ export default [
         ]
     }
 ]
-
 // export default [...custom]
