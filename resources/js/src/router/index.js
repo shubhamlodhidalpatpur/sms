@@ -54,6 +54,15 @@ router.beforeEach((to, _, next) => {
   //   const userData = getUserData()
   //   next(getHomeRouteForLoggedInUser(userData ? userData.role : null))
   // }
+  const meta = to.meta;
+  if (to.path =='/Add/'+to.params.module_name) {
+    meta.navActiveLink = to.params.module_name;
+    console.log('meta.navActiveLink',meta.navActiveLink);
+  }
+  if (to.path =='/Edit/'+to.params.module_name+'/'+to.params.id) {
+    meta.navActiveLink = to.params.module_name;
+    console.log('meta.navActiveLink',meta.navActiveLink);
+  }
 
   return next()
 })

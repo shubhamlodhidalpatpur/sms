@@ -124,6 +124,9 @@ export default [
       path: '/Add/:module_name',
       name: 'add_module',
       component: () => import('@/views/sms/Modules/AddModules.vue'),
+      meta: {
+        navActiveLink: '', // Initial value
+      },
     }, 
     {
       path: '/Edit/:module_name/:id',
