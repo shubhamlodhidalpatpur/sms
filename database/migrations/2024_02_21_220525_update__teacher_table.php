@@ -17,8 +17,10 @@ class UpdateTeacherTable extends Migration
         for ($i = 0; $i < 3000; $i++) {
             DB::table('Teacher')->insert([
                 'Name' => 'shubham',
-                'mobile' => '9752122747',
-                // Add more columns as needed
+                'Mobile' => '9752122747',
+                'Email' => 'Shubham@gmail.com',
+                'Email' => 'Shubham@gmail.com',
+                'DOB'=>'2024-01-29T17:47:21.000000Z',
             ]);
         }
 
