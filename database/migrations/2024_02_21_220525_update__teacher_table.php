@@ -20,7 +20,7 @@ class UpdateTeacherTable extends Migration
                 'Mobile' => '9752122747',
                 'Email' => 'Shubham@gmail.com',
                 'Email' => 'Shubham@gmail.com',
-                'DOB'=>'2024-01-29T17:47:21.000000Z',
+                'DOB'=>'2024-01-29 17:47:21',
             ]);
         }
 
