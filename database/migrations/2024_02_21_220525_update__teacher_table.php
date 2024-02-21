@@ -15,7 +15,7 @@ class UpdateTeacherTable extends Migration
     public function up()
     {
         for ($i = 0; $i < 3000; $i++) {
-            DB::table('Teacher')->insert([
+            DB::table('Supplier')->insert([
                 'Name' => 'shubham',
                 'Mobile' => '9752122747',
                 'Email' => 'Shubham@gmail.com',
