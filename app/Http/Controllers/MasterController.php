@@ -50,7 +50,7 @@ class MasterController extends Controller
                 foreach ($fields as $field) {
                     $columnName = str_replace(' ', '_', $field['title']);
                     $columnType = FieldType::where('id',$field['field_type_id'])->first()->slug;
-                    if($columnType=='file' || $columnType=='boolean'){
+                    if($columnType=='file' || $columnType=='boolean' || $columnType=='enum'){
                         $columnType='string';
                     }
                     $table->$columnType($columnName)->nullable(true);

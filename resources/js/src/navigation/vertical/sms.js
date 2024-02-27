@@ -206,5 +206,25 @@ export default [
             action: "do",
         },
     },
+    {
+        title: 'inventry',
+        route: 'inventry',
+        icon: 'MenuIcon',
+        meta: {
+            resource: 'Auth',
+            action: "do",
+        },
+    },
+    {
+        title: 'Client',
+        route: 'Client',
+        icon: 'MenuIcon',
+        meta: {
+            resource: 'Auth',
+            action: "do",
+        },
+    },
+    
+    
     
 ]

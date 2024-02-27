@@ -158,6 +158,16 @@ export default [
       name: 'HomePage',
       component: () => import('@/views/sms/Modules/Modules.vue'),
     }, 
+    {
+      path: '/inventry',
+      name: 'inventry',
+      component: () => import('@/views/sms/Modules/Modules.vue'),
+    }, 
+    {
+      path: '/Client',
+      name: 'Client',
+      component: () => import('@/views/sms/Modules/Modules.vue'),
+    }, 
     
 ]
   
