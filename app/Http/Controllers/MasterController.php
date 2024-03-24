@@ -50,8 +50,15 @@ class MasterController extends Controller
                 foreach ($fields as $field) {
                     $columnName = str_replace(' ', '_', $field['title']);
                     $columnType = FieldType::where('id',$field['field_type_id'])->first()->slug;
-                    if($columnType=='file' || $columnType=='boolean' || $columnType=='enum'){
+                    if($columnType=='file' || $columnType=='boolean'){
                         $columnType='string';
+                    }
+                    if($columnType=='enum'){
+                        if($field['list_type']=='Daynmic'){
+                            $columnType='bigInteger';
+                        }else{
+                            $columnType='string';
+                        }
                     }
                     $table->$columnType($columnName)->nullable(true);
                 }
@@ -78,6 +85,8 @@ class MasterController extends Controller
                     'show_list' => $field['show_list'],
                     'show_filter' => $field['show_filter'],
                     'is_default_field' => $field['is_default_field'],
+                    'list_master_table_id' => isset($field['list_master_table_id'])? $field['list_master_table_id'] : 0,
+                    'list_field_table_id' => isset($field['list_field_table_id'])? $field['list_field_table_id'] : 0,
                 ];
             }
             else{
@@ -115,6 +124,8 @@ class MasterController extends Controller
                     'show_filter' => $field['show_filter'],
                     'required' => $field['required'],
                     'is_default_field' => 0,
+                    'list_master_table_id' => isset($field['list_master_table_id'])? $field['list_master_table_id'] : 0,
+                    'list_field_table_id' => isset($field['list_field_table_id'])? $field['list_field_table_id'] : 0,
                 ];
             }
             catch(\Exception $e){

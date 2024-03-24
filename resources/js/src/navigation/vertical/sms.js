@@ -224,6 +224,37 @@ export default [
             action: "do",
         },
     },
+    {
+        title: 'Product',
+        route: 'Product',
+        icon: 'MenuIcon',
+        meta: {
+            resource: 'Auth',
+            action: "do",
+        },
+    },
+    {
+        title: 'section',
+        route: 'section',
+        icon: 'MenuIcon',
+        meta: {
+            resource: 'Auth',
+            action: "do",
+        },
+    },
+    {
+        title: 'village',
+        route: 'village',
+        icon: 'MenuIcon',
+        meta: {
+            resource: 'Auth',
+            action: "do",
+        },
+    },
+    
+    
+    
+
     
     
     

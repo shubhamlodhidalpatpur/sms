@@ -133,3 +133,4 @@ Route::post('SubmitModule/{modulename}', [ModuleController::class, 'store']);
 Route::get('getFieldsData/{modulename}/{id}', [ModuleController::class, 'getFieldsData']);
 Route::post('UpdateModule/{modulename}/{id}', [ModuleController::class, 'update']);
 Route::delete('deleteModule/{modulename}/{id}', [ModuleController::class, 'destroy']);
+Route::get('getFieldsData/{id}', [MasterController::class, 'getFieldsByMasterId']);

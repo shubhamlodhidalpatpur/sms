@@ -198,7 +198,10 @@
             <template #cell(type)="data">
               <b-card-text class="text-nowrap">
                 <v-select id="select-field-type-option" :disabled="data.item.is_default_field == 1" :options="RoleTypes" label="title" value="id" :reduce="val => val.id" v-model.number="data.item.field_type_id" />
-                  <b-form-input id="basicInput" :disabled="data.item.is_default_field == 1" v-if="data.item.field_type_id == RoleTypes.filter(rt => rt.slug == 'enum')[0].id" v-model="data.item.field_value" placeholder="Enter Enum Values in Coma Saperated" />
+                  <v-select id="select-field-type-option" :disabled="data.item.is_default_field == 1" v-if="data.item.field_type_id == RoleTypes.filter(rt => rt.slug == 'enum')[0].id" v-model="data.item.list_type" :options="dropdownType" :reduce="val => val.value"/>
+                  <v-select id="select-field-type-option" :disabled="data.item.is_default_field == 1" v-if="data.item.field_type_id == RoleTypes.filter(rt => rt.slug == 'enum')[0].id && data.item.list_type=='Daynmic'" v-model="data.item.list_master_table_id" :options="masterTableOptions" @input="onChange('masterTablechange', $event)" label="title" value="id" :reduce="val => val.id"/>
+                  <v-select id="select-field-type-option" v-if="data.item.list_master_table_id" v-model="data.item.list_field_table_id" :options="masterFieldTableOptions"  label="title" value="id" :reduce="val => val.id"/>
+                  <b-form-input id="basicInput" :disabled="data.item.is_default_field == 1" v-if="data.item.field_type_id == RoleTypes.filter(rt => rt.slug == 'enum')[0].id && data.item.list_type=='Static'" v-model="data.item.field_value" placeholder="Enter Enum Values in Coma Saperated" />
               </b-card-text>
             </template>
             <template #cell(required)="data">
@@ -330,7 +333,8 @@ export default {
         'action',
 
       ],
-      name: {}
+      name: {},
+      masterFieldTableOptions:[],
     }
   },
   methods: {
@@ -349,6 +353,11 @@ export default {
       if(element == "departmentforTeam"){
         axios.get(`/teamoption/${value}`).then((response) => {
           this.teamOptions = response.data
+        });
+      }
+      if(element =="masterTablechange"){
+        axios.get(`/getFieldsData/${value}`).then((response) => {
+          this.masterFieldTableOptions = response.data.data
         });
       }
     },
@@ -497,6 +506,7 @@ export default {
         }
       }
       ).then(response => {
+        masterTableOptions.value=response.data
         const projects = response.data
 
         callback(projects)
@@ -536,6 +546,7 @@ export default {
     
     const showMasterModel = ref(false);
     const errors = ref([]);
+    const masterTableOptions =ref([])
     const hasErrors = (fieldName) => {
       return fieldName in errors.value;
     };
@@ -548,6 +559,7 @@ export default {
     const MasterData = ref(JSON.parse(JSON.stringify(BlankProjectData)));
     const refProjectListTable = ref(null)
     const RoleTypes = ref([]);
+    const dropdownType =ref([{label:'Static',value:'Static'},{label:'Daynmic',value:'Daynmic'}]);
     
     axios.get('getFieldTypes').then(response => {
       RoleTypes.value = response.data.data;
@@ -605,7 +617,7 @@ export default {
       sortBy,
       isSortDirDesc,
       masterFields,
-      RoleTypes
+      RoleTypes,dropdownType,masterTableOptions
     };
   }
 }

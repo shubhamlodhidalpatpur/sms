@@ -62,9 +62,19 @@
                     </div>
                     <div v-if="field.field_type_slug == 'enum'">
                     <v-select
+                      v-if="field.is_options==false"
                       :disabled="$route.name==='View'"
                       :options="field.field_value.split(',')"
                       v-model="field.value"
+                      class="mb-1"
+                    />
+                    <v-select
+                      v-if="field.is_options==true"
+                      :disabled="$route.name==='View'"
+                      :options="field.options"
+                      v-model="field.value"
+                      :reduce="(val) => val.value"
+                      @input="RemoveError(field.slug)"
                       class="mb-1"
                     />
                     </div>
@@ -204,7 +214,26 @@ export default {
     this.fetchModuleForm();
     
   },
+    computed: {
+parseInteger(value) {
+        // Check if the value is defined and not null
+        if (value !== undefined && value !== null) {
+            // Use parseInt to convert the string to an integer
+            const intValue = parseInt(value);
 
+            // Check if the result is a valid integer
+            if (!isNaN(intValue)) {
+                return intValue;
+            }
+        }
+
+        // Return null or default value if parsing fails
+        return null; // or return a default value as needed
+    }
+  },
+methods:{
+
+},
 setup(props, { emit }) {
   const { route, router } = useRouter();
 
@@ -310,7 +339,7 @@ setup(props, { emit }) {
       encodeBase64,
       decodeBase64,
       Fields,
-      submit,fetchModuleForm
+      submit,fetchModuleForm,RemoveError
       // roleOptions
     };
   },

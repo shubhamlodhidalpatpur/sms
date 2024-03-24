@@ -75,8 +75,17 @@
                     </div>
                     <div v-if="field.field_type_slug == 'enum'">
                     <v-select
+                      v-if="field.is_options==false"
                       :options="field.field_value.split(',')"
                       v-model="field.value"
+                      @input="RemoveError(field.slug)"
+                      class="mb-1"
+                    />
+                     <v-select
+                      v-if="field.is_options==true"
+                      :options="field.options"
+                      v-model="field.value"
+                      :reduce="(val) => val.value"
                       @input="RemoveError(field.slug)"
                       class="mb-1"
                     />

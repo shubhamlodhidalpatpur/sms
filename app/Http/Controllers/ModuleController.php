@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Master;
 use App\Models\MasterField;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -18,19 +19,38 @@ class ModuleController extends Controller
      */
     public function index(Request $request,$modulename)
     {  
+       $fieldType =DB::table('masters')->leftJoin('master_fields','master_fields.master_id','masters.id')
+       ->leftJoin('field_types','field_types.id','master_fields.field_type_id')
+       ->select('master_fields.*','field_types.slug as field_type')
+       ->where('masters.title',DB::raw("'".$modulename."'"))
+       ->get();
+    //    dd($fieldType);
+       
+
         $data=DB::table($modulename)->select('*', DB::raw('count(*) OVER() AS total_row_count'));
         if ($request->has('filter')) {
-            foreach ($request->filter as $item) {
-                $jsonData = json_decode($item, true);
-                $field = $jsonData['field'];
-                $value = $jsonData['value'];
+        foreach ($request->filter as $item) {
+        $jsonData = json_decode($item, true);
+        $field = $jsonData['field'];
+        $value = $jsonData['value'];
     
-                if($value!=null){
-                    $data->where($field, 'like', '%' . $value . '%');
-                }
+        if($value!=null){
+        $data->where($field, 'like', '%' . $value . '%');
+        }
             }
         }
         $data = $data->forPage($request->page, $request->perPage)->get();
+        $firstItem = $data->first();
+
+        if ($firstItem) {
+            $fieldNames = array_keys($firstItem->getAttributes());
+            // $fieldNames now contains the field names (keys) of the object
+            dd($fieldNames);
+        }
+        dd($data);
+        foreach($data  as $key => $value){
+            dd($key);
+        }
         if (count($data) > 0) {
             return response(['data' => $data, 'status' => 'success'], 200);
         } else {
@@ -168,7 +188,22 @@ class ModuleController extends Controller
                 $fields = $fields->where('master_fields.show_filter',1)->get();
             }else{
                 $fields =  $fields->get();
+                
+            }
+            foreach($fields as $field){
+                if($field->field_type_slug=='enum'){
+                    if($field->list_master_table_id!=0 && $field->list_field_table_id!=0){
+                        $table_name=Master::where('id',$field->list_master_table_id)->first()->title;
+                        $field_name=MasterField::where('id',$field->list_field_table_id)->first()->slug;
+                        $field->options = DB::table($table_name)->select('id as value', DB::raw("$field_name as label"))->get();
+                        $field->is_options=true;
+    
+                    }else{
 
+                        $field->is_options=false;
+                    }
+
+                }
             }
         if(isset($trace[1]['function']) && $trace[1]['function'] == 'callAction'){
             return response(['data' => $fields, 'status' => 'success'], 200);
@@ -214,6 +249,18 @@ class ModuleController extends Controller
                         $field->value=null;
                     }
                     break; // If the match is found, exit the loop for efficiency
+                }
+                if($field->field_type_slug=='enum'){
+                    if($field->list_master_table_id!=0 && $field->list_field_table_id!=0){
+                        $table_name=Master::where('id',$field->list_master_table_id)->first()->title;
+                        $field_name=MasterField::where('id',$field->list_field_table_id)->first()->slug;
+                        $field->options = DB::table($table_name)->select('id as value', DB::raw("$field_name as label"))->get();
+                        $field->is_options=true;
+    
+                    }else{
+                        $field->is_options=false;
+                    }
+
                 }
             }
         }

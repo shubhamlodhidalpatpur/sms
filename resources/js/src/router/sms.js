@@ -168,6 +168,22 @@ export default [
       name: 'Client',
       component: () => import('@/views/sms/Modules/Modules.vue'),
     }, 
+    {
+      path: '/Product',
+      name: 'Product',
+      component: () => import('@/views/sms/Modules/Modules.vue'),
+    }, 
+    {
+      path: '/section',
+      name: 'section',
+      component: () => import('@/views/sms/Modules/Modules.vue'),
+    }, 
+    {
+      path: '/village',
+      name: 'village',
+      component: () => import('@/views/sms/Modules/Modules.vue'),
+    }, 
+    
     
 ]
   
