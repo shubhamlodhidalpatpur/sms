@@ -4,7 +4,7 @@
 		<!-- Required meta tags --> 
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<title>Marshmallow Bootstrap Admin Dashboard Template</title>
+		<title>School Management System</title>
 		<link rel="stylesheet" href="vendors/mdi/css/materialdesignicons.min.css">
 		<link rel="stylesheet" href="vendors/owl.carousel/css/owl.carousel.css">
 		<link rel="stylesheet" href="vendors/owl.carousel/css/owl.theme.default.min.css">
@@ -17,7 +17,8 @@
 		<div id="mobile-menu-overlay"></div>
 		<nav class="navbar navbar-expand-lg fixed-top">
 			<div class="container">
-				<a class="navbar-brand" href="#"><img src="images/logo.svg" alt="Marshmallow"></a>
+                <h4 class="navbar-brand">SMS</h4>
+				<!-- <a class="navbar-brand" href="#"><img src="images/logo.svg" alt="Marshmallow"></a> -->
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"><i class="mdi mdi-menu"> </i></span>
 				</button>
@@ -62,14 +63,12 @@
 									<div data-aos="zoom-in-up">
 										<div class="banner-title">
 												<h3 class="font-weight-medium">We Help Power
-												Millions Of Businesses 
-												in 100+ Countries
+												Millions Of School Management Systemm 
+												in India
 											</h3>
 										</div>
-										<p class="mt-3">Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+										<p class="mt-3">Student management system (SMS) helps in managing all the academics, financial records of all the students. 
 
-											<br>
-											Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
 										</p>
 										<a href="#" class="btn btn-secondary mt-3">Learn more</a>
 									</div>
@@ -86,41 +85,35 @@
 				<div class="container">
 					<div class="row">
 						<div class="col-sm-12">
-							<h5 class="text-dark">We’re offering</h5>
-							<h3 class="font-weight-medium text-dark mb-5">Creative Digital Agency</h3>
+							<h3 class="font-weight-medium text-dark mb-5">Our Services</h3>
 						</div>
 					</div>
 					<div class="row" data-aos="fade-up">
 						<div class="col-sm-4 text-center text-lg-left">
 							<div class="services-box" data-aos="fade-down" data-aos-easing="linear" data-aos-duration="1500">
 								<img src="images/integrated-marketing.svg" alt="integrated-marketing" data-aos="zoom-in">
-								<h6 class="text-dark mb-3 mt-4 font-weight-medium">Integrated 
-									Marketing
+								<h6 class="text-dark mb-3 mt-4 font-weight-medium">Fee Management System
 								</h6>
-								<p>Lorem ipsum dolor sit amet, 
-									pretium pretium tempor.Lorem ipsum 
+								<p>Strong fee management system to manage the balance fees, submitted fees, incoming payments, and receipts of students.
 								</p>
 							</div>
 						</div>
 						<div class="col-sm-4 text-center text-lg-left">
 							<div class="services-box"   data-aos="fade-down" data-aos-easing="linear" data-aos-duration="1500">
 								<img src="images/design-development.svg" alt="design-development" data-aos="zoom-in">
-								<h6 class="text-dark mb-3 mt-4 font-weight-medium">Design & 
-									Development
+								<h6 class="text-dark mb-3 mt-4 font-weight-medium">Student Management System
 								</h6>
-								<p>Lorem ipsum dolor sit amet, 
-									pretium pretium tempor.Lorem ipsum 
+								<p>Student management system (SMS) helps in managing all the academics,
+									 financial records of all the students. 
 								</p>
 							</div>
 						</div>
 						<div class="col-sm-4 text-center text-lg-left">
 							<div class="services-box" data-aos="fade-down" data-aos-easing="linear" data-aos-duration="1500">
 								<img src="images/digital-strategy.svg" alt="digital-strategy" data-aos="zoom-in">
-								<h6 class="text-dark mb-3 mt-4 font-weight-medium">Digital 
-									Strategy
+								<h6 class="text-dark mb-3 mt-4 font-weight-medium">Teacher Management
 								</h6>
-								<p>Lorem ipsum dolor sit amet, 
-									pretium pretium tempor.Lorem ipsum 
+								<p>You can view the schedule, reports, activities, and class timings of every single teacher using the software.
 								</p>
 							</div>
 						</div>
@@ -129,33 +122,27 @@
 						<div class="col-sm-4 text-center text-lg-left">
 							<div class="services-box  pb-lg-0" data-aos="fade-down" data-aos-easing="linear" data-aos-duration="1500">
 								<img src="images/digital-marketing.svg" alt="digital-marketing" data-aos="zoom-in">
-								<h6 class="text-dark mb-3 mt-4 font-weight-medium">Digital 
-									Marketing
+								<h6 class="text-dark mb-3 mt-4 font-weight-medium">Exam & Results
 								</h6>
-								<p>Lorem ipsum dolor sit amet, 
-									pretium pretium tempor.Lorem ipsum 
+								<p>The software allows students to give online assessments, and generate a report card of each student.
 								</p>
 							</div>
 						</div>
 						<div class="col-sm-4 text-center text-lg-left">
 							<div class="services-box pb-lg-0" data-aos="fade-down" data-aos-easing="linear" data-aos-duration="1500">
 								<img src="images/growth-strategy.svg" alt="growth-strategy" data-aos="zoom-in">
-								<h6 class="text-dark mb-3 mt-4 font-weight-medium">Growth 
-									Strategy
+								<h6 class="text-dark mb-3 mt-4 font-weight-medium">Class Management
 								</h6>
-								<p>Lorem ipsum dolor sit amet, 
-									pretium pretium tempor.Lorem ipsum 
+								<p>Create class as per your requirement with custom details like logo, name, slug and sections. You can edit anytime.
 								</p>
 							</div>
 						</div>
 						<div class="col-sm-4 text-center text-lg-left">
 							<div class="services-box pb-0" data-aos="fade-down" data-aos-easing="linear" data-aos-duration="1500">
 								<img src="images/saving-strategy.svg" alt="saving-strategy" data-aos="zoom-in">
-								<h6 class="text-dark mb-3 mt-4 font-weight-medium">Saving 
-									Strategy
+								<h6 class="text-dark mb-3 mt-4 font-weight-medium">Attendance Management
 								</h6>
-								<p>Lorem ipsum dolor sit amet, 
-									pretium pretium tempor.Lorem ipsum 
+								<p>Manage the attendance of all the students, teachers & staff members & reduce the chances of errors. 
 								</p>
 							</div>
 						</div>
@@ -490,15 +477,15 @@
 					<div class="row">
 						<div class="col-sm-6">
 							<address>
-								<p>143 castle road 517</p>
-								<p class="mb-4">district, kiyev port south Canada</p>
+								<p>dalpatpur sagar kanpur road </p>
+								<p class="mb-4">district, sagar port madhya pradesh</p>
 								<div class="d-flex align-items-center">
-									<p class="mr-4 mb-0">+3 123 456 789</p>
-									<a href="mailto:info@yourmail.com" class="footer-link">info@yourmail.com</a>
+									<p class="mr-4 mb-0">9752122747</p>
+									<a href="mailto:lodhishubham376@gmail.com" class="footer-link">lodhishubham376@gmail.com</a>
 								</div>
 								<div class="d-flex align-items-center">
-									<p class="mr-4 mb-0">+1 222 345 342</p>
-									<a href="mailto:Marshmallow@yourmail.com" class="footer-link">Marshmallow@yourmail.com</a>
+									<p class="mr-4 mb-0">7828716043</p>
+									<a href="mailto:sanvish92@gmail.com" class="footer-link">sanvish92@gmail.com</a>
 								</div>
 							</address>
 							<div class="social-icons">
@@ -552,10 +539,7 @@
 				<div class="container">
 					<div class="d-flex justify-content-between align-items-center">
 						<div class="d-flex align-items-center">
-							<img src="images/logo.svg" alt="logo" class="mr-3"></br>
-							<p class="mb-0 text-small pt-1">© 2019-2020 <a href="https://www.bootstrapdash.com" class="text-white" target="_blank">BootstrapDash</a>. All rights reserved.</p>
-            
-							<p class="mb-0 text-small pt-1 pl-4">Distributed By: <a href="https://www.themewagon.com" class="text-white" target="_blank">Themewagon</a></p>
+							<p class="mb-0 text-small pt-1">© 2024-2025 <a href="https://freejob24.com" class="text-white" target="_blank">FreeJob24</a>. All rights reserved.</p>
 						</div>
            
 						<div>
