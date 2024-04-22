@@ -19,38 +19,41 @@ class ModuleController extends Controller
      */
     public function index(Request $request,$modulename)
     {  
-       $fieldType =DB::table('masters')->leftJoin('master_fields','master_fields.master_id','masters.id')
-       ->leftJoin('field_types','field_types.id','master_fields.field_type_id')
-       ->select('master_fields.*','field_types.slug as field_type')
-       ->where('masters.title',DB::raw("'".$modulename."'"))
-       ->get();
-    //    dd($fieldType);
-       
+        $select = ['master_fields.*','field_types.slug as field_type', 'field_master_table.title as master_table'];
+        $fieldTypeQuery =DB::table('masters')->leftJoin('master_fields','master_fields.master_id','masters.id')
+        ->leftJoin('masters as field_master_table','field_master_table.id','master_fields.list_master_table_id')
+        ->leftJoin('field_types','field_types.id','master_fields.field_type_id')
+        ->select($select)
+        ->where('masters.title',DB::raw("'".$modulename."'"));
+        $fieldTypes = $fieldTypeQuery->get();
 
-        $data=DB::table($modulename)->select('*', DB::raw('count(*) OVER() AS total_row_count'));
-        if ($request->has('filter')) {
-        foreach ($request->filter as $item) {
-        $jsonData = json_decode($item, true);
-        $field = $jsonData['field'];
-        $value = $jsonData['value'];
-    
-        if($value!=null){
-        $data->where($field, 'like', '%' . $value . '%');
+
+        $data = DB::table($modulename);
+        $select = [];
+        foreach($fieldTypes as $field ){
+            if($field->field_type == 'enum' && $field->field_value == null){
+                $data->leftJoin($field->master_table, $field->master_table.".id", $modulename.'.'.$field->slug);
+                $select[] = $field->master_table.".Name as ".$field->slug;
+            }
+            else{
+                $select[] = $modulename.".".$field->slug;
+            }
         }
+        $select[] = DB::raw('count(*) OVER() AS total_row_count');
+
+        if ($request->has('filter')) {
+            foreach ($request->filter as $item) {
+                $jsonData = json_decode($item, true);
+                $field = $jsonData['field'];
+                $value = $jsonData['value'];
+            
+                if($value!=null){
+                    $data->where($field, 'like', '%' . $value . '%');
+                }
             }
         }
         $data = $data->forPage($request->page, $request->perPage)->get();
-        $firstItem = $data->first();
-
-        if ($firstItem) {
-            $fieldNames = array_keys($firstItem->getAttributes());
-            // $fieldNames now contains the field names (keys) of the object
-            dd($fieldNames);
-        }
-        dd($data);
-        foreach($data  as $key => $value){
-            dd($key);
-        }
+        $data = $data->select($select)->get();
         if (count($data) > 0) {
             return response(['data' => $data, 'status' => 'success'], 200);
         } else {
