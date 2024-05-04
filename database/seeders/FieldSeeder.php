@@ -34,7 +34,7 @@ class FieldSeeder extends Seeder
             ],
             [
                 'title' => 'Contact Number',
-                'field_type_id' => FieldType::where('slug', 'integer')->first()->id,
+                'field_type_id' => FieldType::where('slug', 'bigInteger')->first()->id,
                 'validation_rule' => 'required|digit',
                 'role_id' => '0',
                 'required' => 1,
@@ -42,7 +42,7 @@ class FieldSeeder extends Seeder
             ],
             [
                 'title' => 'Salary',
-                'field_type_id' => FieldType::where('slug', 'integer')->first()->id,
+                'field_type_id' => FieldType::where('slug', 'bigInteger')->first()->id,
                 'validation_rule' => 'required|integer',
                 'role_id' => '0',
                 'required' => 1,
