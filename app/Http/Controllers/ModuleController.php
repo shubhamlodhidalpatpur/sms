@@ -27,7 +27,6 @@ class ModuleController extends Controller
         ->where('masters.title',DB::raw("'".$modulename."'"));
         $fieldTypes = $fieldTypeQuery->get();
 
-
         $data = DB::table($modulename);
         $select = [];
         foreach($fieldTypes as $field ){
@@ -40,6 +39,7 @@ class ModuleController extends Controller
             }
         }
         $select[] = DB::raw('count(*) OVER() AS total_row_count');
+        $select[] = $modulename.".id";
 
         if ($request->has('filter')) {
             foreach ($request->filter as $item) {
@@ -52,7 +52,7 @@ class ModuleController extends Controller
                 }
             }
         }
-        $data = $data->forPage($request->page, $request->perPage)->get();
+        $data = $data->forPage($request->page, $request->perPage);
         $data = $data->select($select)->get();
         if (count($data) > 0) {
             return response(['data' => $data, 'status' => 'success'], 200);

@@ -171,8 +171,8 @@ export default [
         },
     },
     {
-        title: 'Customer',
-        route: 'Customer',
+        title: 'Road',
+        route: 'Road',
         icon: 'MenuIcon',
         meta: {
             resource: 'Auth',
@@ -180,78 +180,14 @@ export default [
         },
     },
     {
-        title: 'Supplier',
-        route: 'Supplier',
+        title: 'driver',
+        route: 'driver',
         icon: 'MenuIcon',
         meta: {
             resource: 'Auth',
             action: "do",
         },
     },
-    {
-        title: 'Teacher',
-        route: 'Teacher',
-        icon: 'MenuIcon',
-        meta: {
-            resource: 'Auth',
-            action: "do",
-        },
-    },
-    {
-        title: 'HomePageSetup',
-        route: 'HomePage',
-        icon: 'MenuIcon',
-        meta: {
-            resource: 'Auth',
-            action: "do",
-        },
-    },
-    {
-        title: 'inventry',
-        route: 'inventry',
-        icon: 'MenuIcon',
-        meta: {
-            resource: 'Auth',
-            action: "do",
-        },
-    },
-    {
-        title: 'Client',
-        route: 'Client',
-        icon: 'MenuIcon',
-        meta: {
-            resource: 'Auth',
-            action: "do",
-        },
-    },
-    {
-        title: 'Product',
-        route: 'Product',
-        icon: 'MenuIcon',
-        meta: {
-            resource: 'Auth',
-            action: "do",
-        },
-    },
-    {
-        title: 'section',
-        route: 'section',
-        icon: 'MenuIcon',
-        meta: {
-            resource: 'Auth',
-            action: "do",
-        },
-    },
-    {
-        title: 'village',
-        route: 'village',
-        icon: 'MenuIcon',
-        meta: {
-            resource: 'Auth',
-            action: "do",
-        },
-    },
-    
     
     
 

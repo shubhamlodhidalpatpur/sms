@@ -14,15 +14,15 @@ class UpdateTeacherTable extends Migration
      */
     public function up()
     {
-        for ($i = 0; $i < 3000; $i++) {
-            DB::table('Supplier')->insert([
-                'Name' => 'shubham',
-                'Mobile' => '9752122747',
-                'Email' => 'Shubham@gmail.com',
-                'Email' => 'Shubham@gmail.com',
-                'DOB'=>'2024-01-29 17:47:21',
-            ]);
-        }
+        // for ($i = 0; $i < 3000; $i++) {
+        //     DB::table('Supplier')->insert([
+        //         'Name' => 'shubham',
+        //         'Mobile' => '9752122747',
+        //         'Email' => 'Shubham@gmail.com',
+        //         'Email' => 'Shubham@gmail.com',
+        //         'DOB'=>'2024-01-29 17:47:21',
+        //     ]);
+        // }
 
     }
 

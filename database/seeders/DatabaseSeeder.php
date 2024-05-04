@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             IndustryTypeSeeder::class,
             WorkingSeeder::class,
             ClassSectionTypeSeeder::class,
+            MasterFieldSeeder::class,
       ]); 
     }
 }

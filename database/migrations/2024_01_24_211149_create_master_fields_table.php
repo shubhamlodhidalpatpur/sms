@@ -25,6 +25,8 @@ class CreateMasterFieldsTable extends Migration
             $table->tinyInteger('show_list')->nullable()->default(0);
             $table->tinyInteger('show_filter')->nullable()->default(0);
             $table->tinyInteger('is_default_field')->nullable()->default(0);
+            $table->tinyInteger('list_field_table_id')->nullable()->default(0);
+            $table->tinyInteger('list_master_table_id')->nullable()->default(0);
             $table->bigInteger('default_field_parent_id')->nullable();
             $table->foreign('field_type_id')->references('id')->on('field_types')->onDelete('cascade');
             $table->timestamps();

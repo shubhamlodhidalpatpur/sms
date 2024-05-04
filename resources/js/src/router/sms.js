@@ -139,48 +139,13 @@ export default [
       component: () => import('@/views/sms/Modules/EditModules.vue'),
     }, 
     {
-      path: '/Customer',
-      name: 'Customer',
-      component: () => import('@/views/sms/Modules/Modules.vue'),
-    },
-    {
-      path: '/Supplier',
-      name: 'Supplier',
-      component: () => import('@/views/sms/Modules/Modules.vue'),
-    },  
-    {
-      path: '/Teacher',
-      name: 'Teacher',
+      path: '/Road',
+      name: 'Road',
       component: () => import('@/views/sms/Modules/Modules.vue'),
     }, 
     {
-      path: '/HomePage',
-      name: 'HomePage',
-      component: () => import('@/views/sms/Modules/Modules.vue'),
-    }, 
-    {
-      path: '/inventry',
-      name: 'inventry',
-      component: () => import('@/views/sms/Modules/Modules.vue'),
-    }, 
-    {
-      path: '/Client',
-      name: 'Client',
-      component: () => import('@/views/sms/Modules/Modules.vue'),
-    }, 
-    {
-      path: '/Product',
-      name: 'Product',
-      component: () => import('@/views/sms/Modules/Modules.vue'),
-    }, 
-    {
-      path: '/section',
-      name: 'section',
-      component: () => import('@/views/sms/Modules/Modules.vue'),
-    }, 
-    {
-      path: '/village',
-      name: 'village',
+      path: '/driver',
+      name: 'driver',
       component: () => import('@/views/sms/Modules/Modules.vue'),
     }, 
     

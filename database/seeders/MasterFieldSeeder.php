@@ -21,7 +21,7 @@ class MasterFieldSeeder extends Seeder
                 'slug' => 'Name',
                 'field_type_id' => FieldType::where('slug', 'string')->first()->id,
                 'validation_rule' => 'required|string',
-                'master_id' => '0',
+                'master_id' => 0,
                 'required' => 1,
                 'show_list' => 1,
                 'show_filter' => 1,
