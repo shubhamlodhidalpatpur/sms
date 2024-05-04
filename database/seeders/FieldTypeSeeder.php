@@ -21,7 +21,7 @@ class FieldTypeSeeder extends Seeder
             ],
             [
                 'title' => 'Number',
-                'slug' => 'integer',
+                'slug' => 'bigInteger',
             ],
             [
                 'title' => 'Decimal Number',
