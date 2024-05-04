@@ -148,7 +148,21 @@ export default [
       name: 'driver',
       component: () => import('@/views/sms/Modules/Modules.vue'),
     }, 
-    
+    {
+      path: '/supplier',
+      name: 'supplier',
+      component: () => import('@/views/sms/Modules/Modules.vue'),
+    }, 
+    {
+      path: '/customer',
+      name: 'customer',
+      component: () => import('@/views/sms/Modules/Modules.vue'),
+    }, 
+    {
+      path: '/teacher',
+      name: 'teacher',
+      component: () => import('@/views/sms/Modules/Modules.vue'),
+    },     
     
 ]
   
