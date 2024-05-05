@@ -160,7 +160,7 @@
 
     </b-sidebar>
     <b-modal v-model="showModal" title="Delete Confirmation" @ok="deleteMaster">
-      Are you sure you want to delete this role?
+      Are you sure you want to delete this master module?
     </b-modal>
 
     <b-modal size="xl" :visible="showMasterModel" :title="MasterEdit ? 'Update Master' : 'Add Master'"
