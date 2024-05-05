@@ -2,7 +2,7 @@
   <div class="add_users">
     <b-row>
       <b-col cols="12" md="6">
-        <h4 class="card-title fontgry">
+        <h4 class="card-title font-grey">
           <span >Add</span> {{$route.params.module_name}}
         </h4>
       </b-col>
@@ -134,7 +134,11 @@
                   </validation-provider>
               </b-col>
             </b-row>
-            <b-button @click="submit">Submit</b-button>
+            <b-row>
+              <b-col md="12">
+                <b-button @click="submit" variant="primary">Submit</b-button>
+              </b-col>
+            </b-row>         
           </b-col>
         </b-card>
     </b-form>
@@ -361,6 +365,21 @@ setup(props, { emit }) {
 </style>
 
 <style lang="scss" scoped>
+.add-users {
+  margin-top: 20px;
+}
+
+.card-title {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  font-weight: bold;
+}
+
+.text-danger {
+  margin-top: 5px;
+}
 .per-page-selector {
   width: 90px;
 }
