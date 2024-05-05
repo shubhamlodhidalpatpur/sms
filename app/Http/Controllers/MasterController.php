@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\FieldType;
 use App\Models\Master;
 use App\Models\MasterField;
+use Illuminate\Support\Facades\DB;
 
 class MasterController extends Controller
 {
@@ -187,7 +188,13 @@ class MasterController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $master = Master::find($id);
+        $fieldType =MasterField::where('master_id',$id)->delete();
+        $tableName = $master->title; // Replace 'your_table_name' with the actual name of your table
+        DB::statement("DROP TABLE IF EXISTS $tableName");
+        $master->delete();
+        return response(['status' => 'success'], 200);
+
     }
     public function getFieldsByMasterId($master_id = 0)
     {

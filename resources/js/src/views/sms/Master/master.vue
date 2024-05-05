@@ -159,7 +159,7 @@
     <b-sidebar id="sidebar-right" bg-variant="white" right backdrop shadow>
 
     </b-sidebar>
-    <b-modal v-model="showModal" title="Delete Confirmation" @ok="deleteRole">
+    <b-modal v-model="showModal" title="Delete Confirmation" @ok="deleteMaster">
       Are you sure you want to delete this role?
     </b-modal>
 
@@ -387,8 +387,8 @@ export default {
       // Trigger submit handler
       this.submitRole()
     },
-    deleteRole(){
-      axios.delete(`role/${this.DeleteId}`).then((response) => {
+    deleteMaster(){
+      axios.delete(`master/${this.DeleteId}`).then((response) => {
         this.refetchData()
 
         this.$toast({
