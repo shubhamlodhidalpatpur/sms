@@ -48,7 +48,7 @@ class ModuleController extends Controller
                 $value = $jsonData['value'];
             
                 if($value!=null){
-                    $data->where($field, 'like', '%' . $value . '%');
+                    $data->where($modulename.'.'.$field, 'like', '%' . $value . '%');
                 }
             }
         }

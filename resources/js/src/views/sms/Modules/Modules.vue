@@ -391,6 +391,7 @@ export default {
     const toast = useToast();
     const [sortBy, isSortDirDesc] = [ ref(null), ref(false)]
     const fetchLeaveType = (ctx, callback) => {
+      SearchFilter.value=[]
       FilterFields.value.forEach((item) => {
       console.log("data", item);
       SearchFilter.value.push({'field':item.slug,'value':(item.value)?item.value:null})
