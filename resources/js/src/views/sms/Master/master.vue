@@ -200,7 +200,9 @@
                 <v-select id="select-field-type-option" :disabled="data.item.is_default_field == 1" :options="RoleTypes" label="title" value="id" :reduce="val => val.id" v-model.number="data.item.field_type_id" />
                   <v-select id="select-field-type-option" :disabled="data.item.is_default_field == 1" v-if="data.item.field_type_id == RoleTypes.filter(rt => rt.slug == 'enum')[0].id" v-model="data.item.list_type" :options="dropdownType" :reduce="val => val.value"/>
                   <v-select id="select-field-type-option" :disabled="data.item.is_default_field == 1" v-if="data.item.field_type_id == RoleTypes.filter(rt => rt.slug == 'enum')[0].id && data.item.list_type=='Daynmic'" v-model="data.item.list_master_table_id" :options="masterTableOptions" @input="onChange('masterTablechange', $event)" label="title" value="id" :reduce="val => val.id"/>
-                  <v-select id="select-field-type-option" v-if="data.item.list_master_table_id" v-model="data.item.list_field_table_id" :options="masterFieldTableOptions"  label="title" value="id" :reduce="val => val.id"/>
+                  <v-select id="select-field-type-option" v-if="data.item.list_master_table_id" v-model="data.item.list_field_table_id" :options="masterFieldTableOptions"   label="title" value="id" :reduce="val => val.id"/>
+                  <v-select id="select-field-type-option" v-if="data.item.list_field_table_id" v-model="data.item.is_parent" :options="IsParentOptions" :reduce="val => val.value"  @input="onChange('is_parent_change', $event)" />
+                  <v-select id="select-field-type-option" v-if="data.item.is_parent=='yes'" v-model="data.item.parent_field" :options="ParentOptions" :reduce="val => val.value" />
                   <b-form-input id="basicInput" :disabled="data.item.is_default_field == 1" v-if="data.item.field_type_id == RoleTypes.filter(rt => rt.slug == 'enum')[0].id && data.item.list_type=='Static'" v-model="data.item.field_value" placeholder="Enter Enum Values in Coma Saperated" />
               </b-card-text>
             </template>
@@ -335,6 +337,8 @@ export default {
       ],
       name: {},
       masterFieldTableOptions:[],
+      ParentOptions:[],
+      IsParentOptions:[{label:'yes',value:'yes'},{label:'no',value:'no'}],
     }
   },
   methods: {
@@ -360,6 +364,17 @@ export default {
           this.masterFieldTableOptions = response.data.data
         });
       }
+      if(element =="is_parent_change"){
+        if(value=='yes'){
+          console.log('yes',this.MasterData)
+          this.MasterData.masterFields.forEach(item => {
+              if(item.field_type_id==8 && item.list_type=='Daynmic'){
+               this.ParentOptions.push({label:item.title,value:item.title})
+              }
+          });
+        }
+      }
+      
     },
     addField(index){
       let data = {

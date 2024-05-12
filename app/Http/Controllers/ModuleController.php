@@ -198,7 +198,7 @@ class ModuleController extends Controller
                     if($field->list_master_table_id!=0 && $field->list_field_table_id!=0){
                         $table_name=Master::where('id',$field->list_master_table_id)->first()->title;
                         $field_name=MasterField::where('id',$field->list_field_table_id)->first()->slug;
-                        $field->options = DB::table($table_name)->select('id as value', DB::raw("$field_name as label"))->get();
+                        $field->options = ($field->default_field_parent_id==0)?DB::table($table_name)->select('id as value', DB::raw("$field_name as label"))->get():[];
                         $field->is_options=true;
     
                     }else{
@@ -294,5 +294,12 @@ class ModuleController extends Controller
             $path = $file_name->move($originalImgStorage, $filename);
         }
         return $filename;
+    }
+    public function getChindrenData(Request $request){
+        $children_table = Master::find($request->children_list_master_table_id);
+        $field_name=MasterField::where('id',$request->children_list_field_table_id)->first()->slug;
+        $getChildreData =  DB::table($children_table->title)->where($request->parent_column_name,$request->parent_value)
+        ->select('id as value', DB::raw("$field_name as label"))->get();
+        return response(['status'=>'success', 'data'=>$getChildreData ,'message' => 'fetch Successfully']);
     }
 }

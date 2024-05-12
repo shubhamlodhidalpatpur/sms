@@ -67,28 +67,28 @@ class MasterController extends Controller
                 $table->timestamps();
             });
         }
-        $FieldData = [];
         $master = new Master();
         $master->title=$request->name;
         $master->save();
         foreach($request->masterFields as $field){
             if($field['master_id'] == '0'){
                 $field['master_id'] = $master->id;
-                $FieldData[] = [
-                    'title' => $field['title'],
-                    'slug' => str_replace(' ', '_', $field['title']),
-                    'field_type_id' => $field['field_type_id'],
-                    'validation_rule' => $field['validation_rule'],
-                    'master_id' => $master->id,
-                    'created_at' => now(),
-                    'field_value' => isset($field['field_value'])? $field['field_value'] : null,
-                    'required' => $field['required'],
-                    'show_list' => $field['show_list'],
-                    'show_filter' => $field['show_filter'],
-                    'is_default_field' => $field['is_default_field'],
-                    'list_master_table_id' => isset($field['list_master_table_id'])? $field['list_master_table_id'] : 0,
-                    'list_field_table_id' => isset($field['list_field_table_id'])? $field['list_field_table_id'] : 0,
-                ];
+                $newField = new MasterField();
+                $newField->title = $field['title'];
+                $newField->slug = str_replace(' ', '_', $field['title']);
+                $newField->field_type_id = $field['field_type_id'];
+                $newField->validation_rule = $field['validation_rule'];
+                $newField->master_id = $master->id;
+                $newField->created_at = now();
+                $newField->field_value = isset($field['field_value']) ? $field['field_value'] : null;
+                $newField->required = $field['required'];
+                $newField->show_list = $field['show_list'];
+                $newField->show_filter = $field['show_filter'];
+                $newField->is_default_field = $field['is_default_field'];
+                $newField->list_master_table_id = isset($field['list_master_table_id']) ? $field['list_master_table_id'] : 0;
+                $newField->list_field_table_id = isset($field['list_field_table_id']) ? $field['list_field_table_id'] : 0;
+                $newField->default_field_parent_id = isset($field['parent_field']) ? MasterField::where('title', $field['parent_field'])->where('master_id', $master->id)->first()->id : 0;
+                $newField->save();
             }
             else{
                 try{
@@ -113,21 +113,23 @@ class MasterController extends Controller
                 if($ft->slug == 'file'){
                     $validation[] = "file";
                 }
-                $FieldData[] = [
-                    'title' => $field['title'], 
-                    'slug' => str_replace(' ', '_', $field['title']),
-                    'field_type_id' => $field['field_type_id'],
-                    'validation_rule' => implode('|', $validation),
-                    'master_id' => $master->id,
-                    'created_at' => now(),
-                    'field_value' => isset($field['field_value'])? $field['field_value'] : null,
-                    'show_list' => $field['show_list'],
-                    'show_filter' => $field['show_filter'],
-                    'required' => $field['required'],
-                    'is_default_field' => 0,
-                    'list_master_table_id' => isset($field['list_master_table_id'])? $field['list_master_table_id'] : 0,
-                    'list_field_table_id' => isset($field['list_field_table_id'])? $field['list_field_table_id'] : 0,
-                ];
+                $newField = new MasterField();
+                $newField->title = $field['title'];
+                $newField->slug = str_replace(' ', '_', $field['title']);
+                $newField->field_type_id = $field['field_type_id'];
+                $newField->validation_rule = implode('|', $validation);
+                $newField->master_id = $master->id;
+                $newField->created_at = now();
+                $newField->field_value = isset($field['field_value']) ? $field['field_value'] : null;
+                $newField->show_list = $field['show_list'];
+                $newField->show_filter = $field['show_filter'];
+                $newField->required = $field['required'];
+                $newField->is_default_field = 0;
+                $newField->list_master_table_id = isset($field['list_master_table_id']) ? $field['list_master_table_id'] : 0;
+                $newField->list_field_table_id = isset($field['list_field_table_id']) ? $field['list_field_table_id'] : 0;
+                $newField->default_field_parent_id = isset($field['parent_field']) ? MasterField::where('title', $field['parent_field'])->where('master_id', $master->id)->first()->id : 0;
+                $newField->save();
+                
             }
             catch(\Exception $e){
                 dd($e,$field, $ft, implode('|', $validation));
@@ -136,8 +138,6 @@ class MasterController extends Controller
 
             }
         }
-        MasterField::insert($FieldData);
-
         return response()->json(['message' => 'Table created successfully'], 200);
 
         //

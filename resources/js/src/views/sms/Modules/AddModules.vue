@@ -86,7 +86,7 @@
                       :options="field.options"
                       v-model="field.value"
                       :reduce="(val) => val.value"
-                      @input="RemoveError(field.slug)"
+                      @input="RemoveError(field.slug); onChange('is_parent_change', field)"
                       class="mb-1"
                     />
                      <small class="text-danger">{{ errors[0] }}</small>
@@ -244,6 +244,24 @@ export default {
   mounted(){
     this.fetchModuleForm();
     
+  },
+  methods:{
+      onChange(element, value) {
+        if (element == "is_parent_change") {
+        const foundItem = this.Fields.find(item => item.default_field_parent_id === value.id);
+       if (foundItem) {
+          axios.get(`/getChindrenData`,{params:{parent_column_name:value.slug , parent_value:value.value, children_list_master_table_id:foundItem.list_master_table_id ,children_list_field_table_id:foundItem.list_field_table_id}}).then((response) => {
+            this.Fields.forEach(item => {
+                if (item.default_field_parent_id === value.id) {
+                    item.options = response.data.data;
+                }
+            });
+
+        });
+        } else {
+        }
+        }
+      }
   },
 
 setup(props, { emit }) {
