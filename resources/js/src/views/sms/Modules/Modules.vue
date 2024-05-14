@@ -173,6 +173,18 @@
               </b-card>
             </b-collapse>
           </div>
+
+        <b-overlay :show="tableLoader" rounded="lg" opacity="0.6" spinner-variant="primary" spinner-type="grow"
+          class="base-loader">
+          <template v-slot:overlay>
+            <div class="d-flex align-items-center">
+              <b-spinner small type="grow" variant="primary" class="spinner-dots dot1" />
+              <b-spinner small type="grow" variant="primary" class="spinner-dots dot2" />
+              <b-spinner small type="grow" variant="primary" class="spinner-dots dot3" />
+              <!-- We add an SR only text for screen readers -->
+              <span class="sr-only">Please wait...</span>
+            </div>
+          </template>
         <b-table
             responsive
             stacked="sm"
@@ -217,7 +229,8 @@
               </b-link>
             </template>
            </b-table>
-           
+        </b-overlay>
+
           <div class="mx-2 mb-2">
           <b-row v-if="totalBUs!=0">
             
@@ -299,7 +312,7 @@ import {
   BPagination,BSpinner,BOverlay,BFormInput,   BFormRadioGroup,VBToggle,
     BFormDatepicker,
     BFormFile,
-    BFormCheckbox
+    BFormCheckbox,
 
 } from "bootstrap-vue";
 import vSelect from "vue-select";
@@ -387,10 +400,12 @@ export default {
   },
   setup(props, { emit }) {
     const { route, router } = useRouter();
+    const tableLoader = ref(false);
     const fields =ref([])
     const toast = useToast();
     const [sortBy, isSortDirDesc] = [ ref(null), ref(false)]
     const fetchLeaveType = (ctx, callback) => {
+      tableLoader.value=true
       SearchFilter.value=[]
       FilterFields.value.forEach((item) => {
       console.log("data", item);
@@ -407,6 +422,7 @@ export default {
                 }}
        ) .then((response) => {
          const  BU = response.data.data
+        tableLoader.value=false;
        // console.log("fetchUser response",task, total,response.data)
 
         callback(BU)
@@ -512,7 +528,7 @@ export default {
       showBUModal,
       RemoveError,
       sortBy,
-      isSortDirDesc,fields,FetchTableFilds,fethFilterFields,FilterFields
+      isSortDirDesc,fields,FetchTableFilds,fethFilterFields,FilterFields,tableLoader
     };
   },
 };
