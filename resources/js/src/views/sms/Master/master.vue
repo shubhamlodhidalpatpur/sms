@@ -192,28 +192,28 @@
             
             <template #cell(title)="data">
               <b-card-text class="font-weight-bold mb-25">
-                <b-form-input id="basicInput" v-model="data.item.title" :disabled="data.item.is_default_field == 1" placeholder="Enter Field Name" />
+                <b-form-input id="basicInput" v-model="data.item.title"  placeholder="Enter Field Name" />
               </b-card-text>
             </template>
             <template #cell(type)="data">
               <b-card-text class="text-nowrap">
-                <v-select id="select-field-type-option" :disabled="data.item.is_default_field == 1" :options="RoleTypes" label="title" value="id" :reduce="val => val.id" v-model.number="data.item.field_type_id" />
-                  <v-select id="select-field-type-option" :disabled="data.item.is_default_field == 1" v-if="data.item.field_type_id == RoleTypes.filter(rt => rt.slug == 'enum')[0].id" v-model="data.item.list_type" :options="dropdownType" :reduce="val => val.value"/>
-                  <v-select id="select-field-type-option" :disabled="data.item.is_default_field == 1" v-if="data.item.field_type_id == RoleTypes.filter(rt => rt.slug == 'enum')[0].id && data.item.list_type=='Daynmic'" v-model="data.item.list_master_table_id" :options="masterTableOptions" @input="onChange('masterTablechange', $event)" label="title" value="id" :reduce="val => val.id"/>
+                <v-select id="select-field-type-option"  :options="RoleTypes" label="title" value="id" :reduce="val => val.id" v-model.number="data.item.field_type_id" />
+                  <v-select id="select-field-type-option"  v-if="data.item.field_type_id == RoleTypes.filter(rt => rt.slug == 'enum')[0].id" v-model="data.item.list_type" :options="dropdownType" :reduce="val => val.value"/>
+                  <v-select id="select-field-type-option"  v-if="data.item.field_type_id == RoleTypes.filter(rt => rt.slug == 'enum')[0].id && data.item.list_type=='Daynmic'" v-model="data.item.list_master_table_id" :options="masterTableOptions" @input="onChange('masterTablechange', $event)" label="title" value="id" :reduce="val => val.id"/>
                   <v-select id="select-field-type-option" v-if="data.item.list_master_table_id" v-model="data.item.list_field_table_id" :options="masterFieldTableOptions"   label="title" value="id" :reduce="val => val.id"/>
                   <v-select id="select-field-type-option" v-if="data.item.list_field_table_id" v-model="data.item.is_parent" :options="IsParentOptions" :reduce="val => val.value"  @input="onChange('is_parent_change', $event)" />
                   <v-select id="select-field-type-option" v-if="data.item.is_parent=='yes'" v-model="data.item.parent_field" :options="ParentOptions" :reduce="val => val.value" />
-                  <b-form-input id="basicInput" :disabled="data.item.is_default_field == 1" v-if="data.item.field_type_id == RoleTypes.filter(rt => rt.slug == 'enum')[0].id && data.item.list_type=='Static'" v-model="data.item.field_value" placeholder="Enter Enum Values in Coma Saperated" />
+                  <b-form-input id="basicInput"  v-if="data.item.field_type_id == RoleTypes.filter(rt => rt.slug == 'enum')[0].id && data.item.list_type=='Static'" v-model="data.item.field_value" placeholder="Enter Enum Values in Coma Saperated" />
               </b-card-text>
             </template>
             <template #cell(required)="data">
-              <b-form-checkbox :value="1" unchecked-value="0" v-model="data.item.required" :disabled="data.item.is_default_field == 1" />
+              <b-form-checkbox :value="1" unchecked-value="0" v-model="data.item.required"  />
             </template>
             <template #cell(show_list)="data">
-              <b-form-checkbox :value="1" unchecked-value="0" v-model="data.item.show_list" :disabled="data.item.is_default_field == 1" />
+              <b-form-checkbox :value="1" unchecked-value="0" v-model="data.item.show_list"  />
             </template>
             <template #cell(show_filter)="data">
-              <b-form-checkbox :value="1" unchecked-value="0" v-model="data.item.show_filter" :disabled="data.item.is_default_field == 1" />
+              <b-form-checkbox :value="1" unchecked-value="0" v-model="data.item.show_filter"  />
             </template>
             <template #cell(action)="data">
               <b-button v-ripple.400="'rgba(255, 255, 255, 0.15)'" variant="success" pill @click="addField(data.index)">
