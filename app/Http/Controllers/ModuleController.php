@@ -31,8 +31,9 @@ class ModuleController extends Controller
         $select = [];
         foreach($fieldTypes as $field ){
             if($field->field_type == 'enum' && $field->field_value == null){
+                $JoinField = MasterField::where('master_id',$field->list_master_table_id)->where('id',$field->list_field_table_id)->select('slug')->first();
                 $data->leftJoin($field->master_table, $field->master_table.".id", $modulename.'.'.$field->slug);
-                $select[] = $field->master_table.".Name as ".$field->slug;
+                $select[] = $field->master_table.".".$JoinField->slug." as ".$field->slug;
             }
             else{
                 $select[] = $modulename.".".$field->slug;
