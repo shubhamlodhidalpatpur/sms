@@ -11,7 +11,7 @@ import pages from './routes/pages'
 import chartsMaps from './routes/charts-maps'
 import formsTable from './routes/forms-tables'
 import others from './routes/others'
-import sms from './sms'
+import invoice from './invoice'
 
 Vue.use(VueRouter)
 
@@ -30,7 +30,7 @@ const router = new VueRouter({
     ...formsTable,
     ...uiElements,
     ...others,
-    ...sms,
+    ...invoice,
     {
       path: '*',
       redirect: 'error-404',

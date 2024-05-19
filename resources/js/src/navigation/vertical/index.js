@@ -37,7 +37,7 @@ import chartsAndMaps from './charts-and-maps'
 import uiElements from './ui-elements'
 import formAndTable from './forms-and-table'
 import custom from './custom'
-import sms from './sms'
+import invoice from './invoice'
 import axios from "@axios";
 // Array of sections
 export default [
@@ -49,10 +49,10 @@ export default [
         ]
     },
     {
-        title: 'SMS',
+        title: 'Invoice',
         icon: 'HomeIcon',
         children: [
-            ...sms
+            ...invoice
         ]
     }
 ]
