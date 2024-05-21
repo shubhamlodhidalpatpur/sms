@@ -26,7 +26,7 @@ export default [
       component: () => import('@/views/sms/Modules/EditModules.vue'),
     }, 
     {
-      path: '/profile',
+      path: '/Profile',
       name: 'profile',
       component: () => import('@/views/sms/Modules/Modules.vue'),
     }, 
