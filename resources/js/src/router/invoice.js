@@ -27,32 +27,32 @@ export default [
     }, 
     {
       path: '/Profile',
-      name: 'profile',
+      name: 'Profile',
       component: () => import('@/views/sms/Modules/Modules.vue'),
     }, 
     {
       path: '/Invoice-setup',
-      name: 'Invoice-setup',
+      name: 'Invoice setup', 
       component: () => import('@/views/sms/Modules/Modules.vue'),
     }, 
     {
       path: '/Create-sales-invoice',
-      name: 'Create-sales-invoice',
+      name: 'Create sales invoice',
       component: () => import('@/views/sms/Modules/Modules.vue'),
     }, 
     {
       path: '/Update-purchase-order',
-      name: 'Update-purchase-order',
+      name: 'Update purchase order',
       component: () => import('@/views/sms/Modules/Modules.vue'),
     }, 
     {
       path: '/Update-product-inventory',
-      name: 'Update-product-inventory',
+      name: 'Update product inventory',
       component: () => import('@/views/sms/Modules/Modules.vue'),
     }, 
     {
       path: '/Customers-parties',
-      name: 'Customers-parties',
+      name: 'Customers and parties',
       component: () => import('@/views/sms/Modules/Modules.vue'),
     },     
     

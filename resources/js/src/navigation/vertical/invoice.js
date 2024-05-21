@@ -12,7 +12,7 @@ export default [
     },
     {
         title: 'Profile',
-        route: 'profile',
+        route: 'Profile',
         icon: 'MenuIcon',
         meta: {
             resource: 'Auth',
@@ -21,7 +21,7 @@ export default [
     },
     {
         title: 'Invoice setup',
-        route: 'Invoice-setup',
+        route: 'Invoice setup',
         icon: 'MenuIcon',
         meta: {
             resource: 'Auth',
@@ -30,7 +30,7 @@ export default [
     },
     {
         title: 'Create sales invoice',
-        route: 'Create-sales-invoice',
+        route: 'Create sales invoice',
         icon: 'MenuIcon',
         meta: {
             resource: 'Auth',
@@ -39,7 +39,7 @@ export default [
     },
     {
         title: 'Update purchase order',
-        route: 'Update-purchase-order',
+        route: 'Update purchase order',
         icon: 'MenuIcon',
         meta: {
             resource: 'Auth',
@@ -47,8 +47,8 @@ export default [
         },
     },
     {
-        title: 'Update product / inventory',
-        route: 'Update-product-inventory',
+        title: 'Update product inventory',
+        route: 'Update product inventory',
         icon: 'MenuIcon',
         meta: {
             resource: 'Auth',
@@ -56,8 +56,8 @@ export default [
         },
     },
     {
-        title: 'Customers /parties',
-        route: 'Customers-parties',
+        title: 'Customers and parties',
+        route: 'Customers and parties',
         icon: 'MenuIcon',
         meta: {
             resource: 'Auth',
