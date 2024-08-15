@@ -6,6 +6,7 @@ use App\Models\ClassSectionMaster;
 use App\Models\ClassSectionType;
 use App\Models\ClassSubject;
 use App\Models\ScheduleLecture;
+use App\Models\StudentIdCount;
 use App\Models\Subject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -331,6 +332,28 @@ class ClassSectionMasterController extends Controller
         } 
         return response(['data' => $data, 'status' => 'success'], 200);
     }
+    public function getSectionBasedOnClass($id){
+        $data = [];
+        $data['section'] = ClassSectionMaster::leftJoin('class_section_types', 'class_section_types.id', 'class_section_masters.class_section_type_id') //phpcs:ignore
+            ->select('class_section_masters.name as label', 'class_section_masters.id as value')
+            ->where('class_section_types.slug', 'section')
+            ->where('class_section_masters.parent_id', $id)
+            ->get();
+        return $data;
+    }
+    public function getStudenId(){
+        $NewStudentId = null;
+        $studentId = StudentIdCount::first();
+        if($studentId==null){
+            
+            $NewStudentId = config('global.school_student_code')."000"."1";
+        }else{
+            $NewStudentId = config('global.school_student_code')."000".$studentId->count+1;
+            
+        }
+        return response(['data' => $NewStudentId, 'status' => 'success'], 200);
+    }
+   
 
     
 

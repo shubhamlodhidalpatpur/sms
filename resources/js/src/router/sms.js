@@ -32,11 +32,6 @@ export default [
       component: () => import('@/views/sms/role/Role.vue'),
     },
     {
-      path: '/master',
-      name: 'master',
-      component: () => import('@/views/sms/Master/master.vue'),
-    },
-    {
       path: '/employee',
       name: 'employee',
       component: () => import('@/views/sms/employee/Employee.vue'),
@@ -121,34 +116,6 @@ export default [
       component: () => import('@/views/sms/ClassSectionMaster/ClassSectionTimeSeduler.vue'),
     },  
     {
-      path: '/Add/:module_name',
-      name: 'add_module',
-      component: () => import('@/views/sms/Modules/AddModules.vue'),
-      meta: {
-        navActiveLink: '', // Initial value
-      },
-    }, 
-    {
-      path: '/Edit/:module_name/:id',
-      name: 'Edit',
-      component: () => import('@/views/sms/Modules/EditModules.vue'),
-    }, 
-    {
-      path: '/View/:module_name/:id',
-      name: 'View',
-      component: () => import('@/views/sms/Modules/EditModules.vue'),
-    }, 
-    {
-      path: '/Customer',
-      name: 'Customer',
-      component: () => import('@/views/sms/Modules/Modules.vue'),
-    },
-    {
-      path: '/Supplier',
-      name: 'Supplier',
-      component: () => import('@/views/sms/Modules/Modules.vue'),
-    },  
-    {
       path: '/Teacher',
       name: 'Teacher',
       component: () => import('@/views/sms/Modules/Modules.vue'),
@@ -159,30 +126,26 @@ export default [
       component: () => import('@/views/sms/Modules/Modules.vue'),
     }, 
     {
-      path: '/inventry',
-      name: 'inventry',
-      component: () => import('@/views/sms/Modules/Modules.vue'),
+      path: '/student',
+      name: 'student',
+      component: () => import('@/views/sms/Student/Student.vue'),
     }, 
     {
-      path: '/Client',
-      name: 'Client',
-      component: () => import('@/views/sms/Modules/Modules.vue'),
-    }, 
+      path: '/add-student',
+      name: 'add-student',
+      component: () => import('@/views/sms/Student/AddEditStudent.vue'),
+      meta: {
+        navActiveLink: 'student',
+      },
+    },
     {
-      path: '/Product',
-      name: 'Product',
-      component: () => import('@/views/sms/Modules/Modules.vue'),
-    }, 
-    {
-      path: '/section',
-      name: 'section',
-      component: () => import('@/views/sms/Modules/Modules.vue'),
-    }, 
-    {
-      path: '/village',
-      name: 'village',
-      component: () => import('@/views/sms/Modules/Modules.vue'),
-    }, 
+      path: '/view-student/:id',
+      name: 'view-student',
+      component: () => import('@/views/sms/Student/StudentProfile.vue'),
+      meta: {
+        navActiveLink: 'student',
+      },
+    },
     
     
 ]

@@ -18,6 +18,7 @@ use App\Http\Controllers\LeaveTypeController;
 use App\Http\Controllers\MasterController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\SwapRequestController;
 
@@ -120,12 +121,17 @@ Route::get('getSubject', [SubjectController::class, 'getSubject']);
 Route::resource('Subject',SubjectController::class);
 Route::post('AssignTeacher', [ClassSectionMasterController::class ,'AssignTeacher']);
 Route::get('getClassTeacher/{id}', [ClassSectionMasterController::class, 'getClassTeacher']);
+Route::get('getSectionBasedOnClass/{id}', [ClassSectionMasterController::class, 'getSectionBasedOnClass']);
+Route::get('getStudenId', [ClassSectionMasterController::class, 'getStudenId']);
 
 Route::post('updateClassLacture', [ClassSectionMasterController::class ,'updateClassLacture']);
 Route::get('getLectureData/{id}', [ClassSectionMasterController::class, 'getLectureData']);
 Route::get('getLectureScheduleData/{id}', [ClassSectionMasterController::class, 'getLectureScheduleData']);
+Route::get('profile/{id}', [StudentController::class, 'profile']);
+Route::post('profile', [StudentController::class, 'updateProfile']);
 
 Route::resource('/master', MasterController::class);
+Route::resource('/students', StudentController::class);
 Route::get('getFields/{modulename}', [ModuleController::class, 'getFields']);
 Route::get('getListingFields/{modulename}', [ModuleController::class, 'getListingFields']);
 Route::get('getModuleData/{modulename}', [ModuleController::class, 'index']);

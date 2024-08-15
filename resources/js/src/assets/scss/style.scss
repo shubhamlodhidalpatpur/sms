@@ -1,6 +1,203 @@
-/*================================================================================
+$primaryColor: #35dabe;
+$secondaryColor: #003E79;
+$newSecondaryColor: #600d6b;
+@import url('https://fonts.googleapis.com/css2?family=Gabarito:wght@400;500;600;700;800;900&display=swap');
+.user__profile {
+    .upload__pic {
+        text-align: center;
 
-NOTE:
-------
-PLACE HERE YOUR OWN SCSS CODES AND IF NEEDED, OVERRIDE THE STYLES FROM THE OTHER STYLESHEETS.
-WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BETTER LIKE THIS.  */
+        .card-text {
+            font-size: 10px;
+        }
+    }
+
+    .profile__pic {
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+        padding: 20px;
+        border-radius: 10px;
+        background-color: #fff;
+    }
+
+    h4 {
+        text-align: center;
+        margin-top: 15px;
+        font-weight: 700;
+        color: #000;
+        font-size: 17px;
+        margin-bottom: 3px;
+    }
+
+    p {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    ul {
+        padding: 0px;
+
+        li {
+            list-style: none;
+            border-bottom: 1px solid #ddd;
+            padding: 10px 15px;
+
+            &:last-child {
+                border-bottom: none;
+            }
+
+            span {
+                img {
+                    width: 14px;
+                    margin-right: 10px;
+                }
+
+                font-size: 13px;
+                font-weight: 500;
+            }
+        }
+    }
+
+    .profiletab__txt {
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+        border-radius: 10px;
+    }
+
+    .nav-tabs {
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+        border-radius: 10px;
+    }
+
+    .nav-link.active {
+        background-color: $newSecondaryColor;
+        color: #fff;
+        border-radius: 6px;
+        padding: 10px 50px;
+    }
+
+    .form-control {
+        border-radius: 3px;
+    }
+
+    .rbbld {
+        color: $primaryColor;
+        font-weight: 600;
+        font-size: 11px;
+        float: right;
+    }
+
+    .basic__info {
+        label {
+            font-size: 11px;
+            font-weight: 400;
+            margin-bottom: 3px;
+        }
+
+        p {
+            text-align: left;
+            color: #000;
+        }
+    }
+
+    .contact__detailsfrm {
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+        border-radius: 10px;
+    }
+
+    .document__frm {
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+        border-radius: 10px;
+    }
+
+    .bord__line {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+    }
+
+    .dash__lin {
+        border: 1px dashed $primaryColor;
+        border-radius: 10px;
+    }
+
+    .upload__docpreview {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+        padding: 10px;
+        border-radius: 10px;
+
+        .filenameUpload{
+            display: block;
+            font-size: 0.833vw;
+            line-height: 1.146vw;
+            font-weight: 700;
+            text-align: left;
+            color: #000;
+            text-decoration: underline;
+        }
+        .fileiconUpload{
+            width: 2.083vw;
+        }
+        &.erasebox{
+            padding: 0 !important;
+            box-shadow: none !important;
+        }
+        .uploadtime{
+            display: block;
+            font-size: 0.729vw;
+            line-height: 1.042vw;
+            font-weight: 400;
+            text-align: left;
+            color: #6D6D6D;
+        }
+        .deleteIconUpload{
+            width: 1.667vw;
+            height: 1.667vw;
+        }
+        img {
+            width: 35px;
+        }
+
+
+        .trashicon {
+            background-color: $secondaryColor;
+            color: #fff;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        p {
+            text-align: left;
+            margin-bottom: 0px;
+            color: #000;
+        }
+
+        span {
+            text-align: left;
+            font-size: 11px;
+            font-weight: 500;
+        }
+    }
+    .contact__detailsfrm {
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+        border-radius: 10px;
+    }
+    .confirmation-dialog {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 20px;
+        border: 1px solid #ccc;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        text-align: center;
+    }
+
+}

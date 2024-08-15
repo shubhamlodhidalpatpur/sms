@@ -162,26 +162,8 @@ export default [
         },
     },
     {
-        title: 'Master',
-        route: 'master',
-        icon: 'MenuIcon',
-        meta: {
-            resource: 'Auth',
-            action: "do",
-        },
-    },
-    {
-        title: 'Customer',
-        route: 'Customer',
-        icon: 'MenuIcon',
-        meta: {
-            resource: 'Auth',
-            action: "do",
-        },
-    },
-    {
-        title: 'Supplier',
-        route: 'Supplier',
+        title: 'Student',
+        route: 'student',
         icon: 'MenuIcon',
         meta: {
             resource: 'Auth',
@@ -191,60 +173,6 @@ export default [
     {
         title: 'Teacher',
         route: 'Teacher',
-        icon: 'MenuIcon',
-        meta: {
-            resource: 'Auth',
-            action: "do",
-        },
-    },
-    {
-        title: 'HomePageSetup',
-        route: 'HomePage',
-        icon: 'MenuIcon',
-        meta: {
-            resource: 'Auth',
-            action: "do",
-        },
-    },
-    {
-        title: 'inventry',
-        route: 'inventry',
-        icon: 'MenuIcon',
-        meta: {
-            resource: 'Auth',
-            action: "do",
-        },
-    },
-    {
-        title: 'Client',
-        route: 'Client',
-        icon: 'MenuIcon',
-        meta: {
-            resource: 'Auth',
-            action: "do",
-        },
-    },
-    {
-        title: 'Product',
-        route: 'Product',
-        icon: 'MenuIcon',
-        meta: {
-            resource: 'Auth',
-            action: "do",
-        },
-    },
-    {
-        title: 'section',
-        route: 'section',
-        icon: 'MenuIcon',
-        meta: {
-            resource: 'Auth',
-            action: "do",
-        },
-    },
-    {
-        title: 'village',
-        route: 'village',
         icon: 'MenuIcon',
         meta: {
             resource: 'Auth',
