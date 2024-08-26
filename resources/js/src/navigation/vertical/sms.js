@@ -172,7 +172,7 @@ export default [
     },
     {
         title: 'Teacher',
-        route: 'Teacher',
+        route: 'teacher',
         icon: 'MenuIcon',
         meta: {
             resource: 'Auth',

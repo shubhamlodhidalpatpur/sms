@@ -43,23 +43,18 @@
               />
             </div>
             <h4>{{ userData.first_name + " " + userData.last_name }}</h4>
-            <p>
-              {{
-                userData.role_name == "Blood Donor/ Organize Blood Camp"
-                  ? "Blood Donor"
-                  : userData.role_name == "Patient"
-                  ? "Patient/Relatives"
-                  : userData.role_name
-              }}
-            </p>
             <h3 class="bloodText donorSpecifier">
-              <span>You're Student</span>
+              <span>You're {{ userData.role_name }}</span>
             </h3>
             <ul>
               <div>
                 <li>
-                  <span> </span
-                  ><span> Student Id : {{ userData.roll_number }}</span>
+                  <span v-if="userData.role == 'student'">
+                    Student Id : {{ userData.roll_number }}</span
+                  >
+                  <span v-if="userData.role == 'teacher'">
+                    Teacher Id : {{ userData.employee_id }}</span
+                  >
                 </li>
                 <li>
                   <span
@@ -70,8 +65,12 @@
                 </li>
                 <li>
                   <span
-                    ><img src="../../../assets/images/profile/Call.png" /></span
-                  ><span>{{ userData.prsnol_number }}</span>
+                    ><img src="../../../assets/images/profile/Call.png"
+                  /></span>
+                  <span v-if="userData.role == 'student'">{{
+                    userData.prsnol_number
+                  }}</span>
+                  <span v-else>{{ userData.mobile_no }}</span>
                 </li>
               </div>
             </ul>
@@ -370,7 +369,7 @@
                       <hr class="mt-0 mb-2" />
 
                       <b-row>
-                        <b-col md="4">
+                        <b-col md="4" v-if="userData.role == 'student'">
                           <b-form-group
                             label="persnol mobile number"
                             label-for="prsnol_number"
@@ -395,7 +394,7 @@
                             </validation-provider>
                           </b-form-group>
                         </b-col>
-                        <b-col md="4">
+                        <b-col md="4" v-if="userData.role == 'student'">
                           <b-form-group
                             label="parent mobile number"
                             label-for="parent_number"
@@ -416,6 +415,57 @@
                                 v-if="hasErrors('parent_number')"
                               >
                                 {{ getErrors("parent_number") }}
+                              </div>
+                            </validation-provider>
+                          </b-form-group>
+                        </b-col>
+
+                        <b-col md="4" v-if="userData.role == 'teacher'">
+                          <b-form-group
+                            label="mobile number"
+                            label-for="mobile_number"
+                          >
+                            <validation-provider
+                              #default="{ errors }"
+                              name="mobile_number"
+                            >
+                              <b-form-input
+                                v-model="userData.mobile_no"
+                                name="mobile_no"
+                                placeholder="Mobile number"
+                                @input="RemoveError('mobile_no')"
+                              />
+                              <small class="text-danger">{{ errors[0] }}</small>
+                              <div
+                                class="text-danger"
+                                v-if="hasErrors('mobile_no')"
+                              >
+                                {{ getErrors("mobile_no") }}
+                              </div>
+                            </validation-provider>
+                          </b-form-group>
+                        </b-col>
+                        <b-col md="4" v-if="userData.role == 'teacher'">
+                          <b-form-group
+                            label="Altranate mobile number"
+                            label-for="altranate_number"
+                          >
+                            <validation-provider
+                              #default="{ errors }"
+                              name="altranate_number"
+                            >
+                              <b-form-input
+                                v-model="userData.altranate_number"
+                                name="altranate_number"
+                                placeholder="Altranate number"
+                                @input="RemoveError('altranate_number')"
+                              />
+                              <small class="text-danger">{{ errors[0] }}</small>
+                              <div
+                                class="text-danger"
+                                v-if="hasErrors('altranate_number')"
+                              >
+                                {{ getErrors("altranate_number") }}
                               </div>
                             </validation-provider>
                           </b-form-group>
@@ -474,7 +524,7 @@
                   <div class="basic__frm">
                     <b-form class="px-2">
                       <hr class="mt-0 mb-2" />
-                      <b-row>
+                      <b-row v-if="userData.role == 'student'">
                         <b-col md="4">
                           <label class="form-label">Class</label>
                           <b-form-group label-for="class">
@@ -563,6 +613,54 @@
                           </b-form-group>
                         </b-col>
                       </b-row>
+                      <b-row
+                        v-if="userData.role == 'teacher'"
+                        class="align-items-center mb-1"
+                      >
+                        <b-col cols="12" md="4">
+                          <strong class="form-label text-primary"
+                            >Class Teacher:</strong
+                          >
+                        </b-col>
+                        <b-col cols="12" md="8">
+                          <strong class="text-dark">{{
+                            ClassTeacher.class_name
+                          }}</strong>
+                        </b-col>
+                      </b-row>
+
+                      <hr class="mt-0 mb-1" />
+
+                      <b-row
+                        v-if="userData.role == 'teacher'"
+                        class="subjects-section"
+                      >
+                        <b-col cols="12">
+                          <h5 class="text-secondary mb-1">Subjects:</h5>
+                          <b-table
+                            responsive
+                            striped
+                            bordered
+                            hover
+                            :items="SubjctClassData"
+                            :fields="['class', 'subject']"
+                            small
+                            class="shadow-sm"
+                          >
+                            <template #cell(class)="data">
+                              <span class="font-weight-bold text-info">{{
+                                data.item.class_name
+                              }}</span>
+                            </template>
+                            <template #cell(subject)="data">
+                              <span class="font-weight-bold text-success">{{
+                                data.item.subject_name
+                              }}</span>
+                            </template>
+                          </b-table>
+                        </b-col>
+                      </b-row>
+
                       <div class="text-center mb-2 py-2">
                         <b-button
                           class="btn btn_bluetype btn-secondary mr-1"
@@ -594,230 +692,417 @@
                   </div>
                 </div>
               </b-tab>
-              <b-tab title="Document"> 
-              <div class="profiletab__txt">
-                <div class="basic__frm">
-                  <b-form class="px-2">
-                    <hr class="mt-0 mb-2" />
-                    <b-row>
-                      <b-col md="6">
-                        <label class="form-label" for="Donor"
-                          >Samgra Id </label
-                        >
-                        <div class="p-1 bord__line text-center mb-2">
-                          <div  v-if="(userData.samgra_id_doc != null && userData.samgra_id_doc != '') || !Editable">
-                            <div class="upload__docpreview erasebox">
-                              <div class="d-flex justify-content-start align-items-center">
-                              <img :src="getIconPath(userData.samgra_id_doc_fileName)" class="fileiconUpload" />
-                                <p class="ml-1">
-                                  <span v-if="userData.samgra_id_doc != null && userData.samgra_id_doc != ''">
-                                    <a :href="userData.samgra_id_doc" class="filenameUpload"  target="_blank" >{{userData.samgra_id_doc_fileName}}</a>
-                                    <span class="uploadtime">{{formatDateTime(userData.samgra_id_doc_uploadTime)}}</span>
-                                    
-                                  </span>
-                                  <span v-else>No file found</span>
-                                </p>
-                              </div>
-
-                              <div v-if="Editable">
-                                 <validation-provider
-                            #default="{ errors }"
-                            title="Below Poverty Line">
-                                <img src="@/assets/images/landingbase/ICN_Delete.svg" @click="docToBeDeleted = 'samgra_id_doc'" class="deleteIconUpload"/>
-                                <small class="text-danger">{{ errors[0] }}</small>
+              <b-tab title="Document">
+                <div class="profiletab__txt">
+                  <div class="basic__frm">
+                    <b-form class="px-2">
+                      <hr class="mt-0 mb-2" />
+                      <b-row>
+                        <b-col md="6">
+                          <label class="form-label" for="Donor"
+                            >Samgra Id
+                          </label>
+                          <div class="p-1 bord__line text-center mb-2">
                             <div
-                              class="text-danger"
-                              v-if="hasErrors('samgra_id_doc')"
+                              v-if="
+                                (userData.samgra_id_doc != null &&
+                                  userData.samgra_id_doc != '') ||
+                                !Editable
+                              "
                             >
-                              {{ getErrors("samgra_id_doc") }}
-                            </div>
-                          </validation-provider>
+                              <div class="upload__docpreview erasebox">
+                                <div
+                                  class="d-flex justify-content-start align-items-center"
+                                >
+                                  <img
+                                    :src="
+                                      getIconPath(
+                                        userData.samgra_id_doc_fileName
+                                      )
+                                    "
+                                    class="fileiconUpload"
+                                  />
+                                  <p class="ml-1">
+                                    <span
+                                      v-if="
+                                        userData.samgra_id_doc != null &&
+                                        userData.samgra_id_doc != ''
+                                      "
+                                    >
+                                      <a
+                                        :href="userData.samgra_id_doc"
+                                        class="filenameUpload"
+                                        target="_blank"
+                                        >{{
+                                          userData.samgra_id_doc_fileName
+                                        }}</a
+                                      >
+                                      <span class="uploadtime">{{
+                                        formatDateTime(
+                                          userData.samgra_id_doc_uploadTime
+                                        )
+                                      }}</span>
+                                    </span>
+                                    <span v-else>No file found</span>
+                                  </p>
+                                </div>
+
+                                <div v-if="Editable">
+                                  <validation-provider
+                                    #default="{ errors }"
+                                    title="Below Poverty Line"
+                                  >
+                                    <img
+                                      src="@/assets/images/landingbase/ICN_Delete.svg"
+                                      @click="docToBeDeleted = 'samgra_id_doc'"
+                                      class="deleteIconUpload"
+                                    />
+                                    <small class="text-danger">{{
+                                      errors[0]
+                                    }}</small>
+                                    <div
+                                      class="text-danger"
+                                      v-if="hasErrors('samgra_id_doc')"
+                                    >
+                                      {{ getErrors("samgra_id_doc") }}
+                                    </div>
+                                  </validation-provider>
+                                </div>
                               </div>
                             </div>
-                          </div>
 
-
-                          <div v-else>
-                            <b-button
-                              class="btnOutlineRed mb-0"
-                              @click="$refs.refSamgraUpload.$el.click()"
-                              >                               
-                              <img class="" src="@/assets/images/landingbase/ICN_Upload.svg" alt="Full Logo" /> Upload</b-button>
+                            <div v-else>
+                              <b-button
+                                class="btnOutlineRed mb-0"
+                                @click="$refs.refSamgraUpload.$el.click()"
+                              >
+                                <img
+                                  class=""
+                                  src="@/assets/images/landingbase/ICN_Upload.svg"
+                                  alt="Full Logo"
+                                />
+                                Upload</b-button
+                              >
+                            </div>
+                            <b-form-file
+                              hidden
+                              ref="refSamgraUpload"
+                              plain
+                              @change="onUploadDocs($event, 'samgra_id_doc')"
+                            />
                           </div>
-                          <b-form-file hidden ref="refSamgraUpload" plain @change="onUploadDocs($event, 'samgra_id_doc')"/>
-                        </div>
-                      </b-col>
+                        </b-col>
 
                         <b-col md="6">
-                        <label class="form-label" for="Donor"
-                          >Aadhar Card </label
-                        >
-                        <div class="p-1 bord__line text-center mb-2">
-                          <div  v-if="(userData.aadhar_doc != null && userData.aadhar_doc != '') || !Editable">
-                            <div class="upload__docpreview erasebox">
-                              <div class="d-flex justify-content-start align-items-center">
-                              <img :src="getIconPath(userData.aadhar_doc_fileName)" class="fileiconUpload" />
-                                <p class="ml-1">
-                                  <span v-if="userData.aadhar_doc != null && userData.aadhar_doc != ''">
-                                    <a :href="userData.aadhar_doc" class="filenameUpload"  target="_blank" >{{userData.aadhar_doc_fileName}}</a>
-                                    <span class="uploadtime">{{formatDateTime(userData.aadhar_doc_uploadTime)}}</span>
-                                    
-                                  </span>
-                                  <span v-else>No file found</span>
-                                </p>
-                              </div>
-
-                              <div v-if="Editable">
-                                 <validation-provider
-                            #default="{ errors }"
-                            title="Below Poverty Line">
-                                <img src="@/assets/images/landingbase/ICN_Delete.svg" @click="docToBeDeleted = 'aadhar_doc'" class="deleteIconUpload"/>
-                                <small class="text-danger">{{ errors[0] }}</small>
+                          <label class="form-label" for="Donor"
+                            >Aadhar Card
+                          </label>
+                          <div class="p-1 bord__line text-center mb-2">
                             <div
-                              class="text-danger"
-                              v-if="hasErrors('aadhar_doc')"
+                              v-if="
+                                (userData.aadhar_doc != null &&
+                                  userData.aadhar_doc != '') ||
+                                !Editable
+                              "
                             >
-                              {{ getErrors("aadhar_doc") }}
-                            </div>
-                          </validation-provider>
+                              <div class="upload__docpreview erasebox">
+                                <div
+                                  class="d-flex justify-content-start align-items-center"
+                                >
+                                  <img
+                                    :src="
+                                      getIconPath(userData.aadhar_doc_fileName)
+                                    "
+                                    class="fileiconUpload"
+                                  />
+                                  <p class="ml-1">
+                                    <span
+                                      v-if="
+                                        userData.aadhar_doc != null &&
+                                        userData.aadhar_doc != ''
+                                      "
+                                    >
+                                      <a
+                                        :href="userData.aadhar_doc"
+                                        class="filenameUpload"
+                                        target="_blank"
+                                        >{{ userData.aadhar_doc_fileName }}</a
+                                      >
+                                      <span class="uploadtime">{{
+                                        formatDateTime(
+                                          userData.aadhar_doc_uploadTime
+                                        )
+                                      }}</span>
+                                    </span>
+                                    <span v-else>No file found</span>
+                                  </p>
+                                </div>
+
+                                <div v-if="Editable">
+                                  <validation-provider
+                                    #default="{ errors }"
+                                    title="Below Poverty Line"
+                                  >
+                                    <img
+                                      src="@/assets/images/landingbase/ICN_Delete.svg"
+                                      @click="docToBeDeleted = 'aadhar_doc'"
+                                      class="deleteIconUpload"
+                                    />
+                                    <small class="text-danger">{{
+                                      errors[0]
+                                    }}</small>
+                                    <div
+                                      class="text-danger"
+                                      v-if="hasErrors('aadhar_doc')"
+                                    >
+                                      {{ getErrors("aadhar_doc") }}
+                                    </div>
+                                  </validation-provider>
+                                </div>
                               </div>
                             </div>
+
+                            <div v-else>
+                              <b-button
+                                class="btnOutlineRed mb-0"
+                                @click="$refs.refAadharUpload.$el.click()"
+                              >
+                                <img
+                                  class=""
+                                  src="@/assets/images/landingbase/ICN_Upload.svg"
+                                  alt="Full Logo"
+                                />
+                                Upload</b-button
+                              >
+                            </div>
+                            <b-form-file
+                              hidden
+                              ref="refAadharUpload"
+                              plain
+                              @change="onUploadDocs($event, 'aadhar_doc')"
+                            />
                           </div>
+                        </b-col>
 
-
-                          <div v-else>
-                            <b-button
-                              class="btnOutlineRed mb-0"
-                              @click="$refs.refAadharUpload.$el.click()"
-                              >                               
-                              <img class="" src="@/assets/images/landingbase/ICN_Upload.svg" alt="Full Logo" /> Upload</b-button>
-                          </div>
-                          <b-form-file hidden ref="refAadharUpload" plain @change="onUploadDocs($event, 'aadhar_doc')"/>
-                        </div>
-                      </b-col>
-
-
-                        <b-col md="6">
-                        <label class="form-label" for="Donor"
-                          >Transfer Certificate </label
-                        >
-                        <div class="p-1 bord__line text-center mb-2">
-                          <div  v-if="(userData.tc_doc != null && userData.tc_doc != '') || !Editable">
-                            <div class="upload__docpreview erasebox">
-                              <div class="d-flex justify-content-start align-items-center">
-                              <img :src="getIconPath(userData.tc_doc_fileName)" class="fileiconUpload" />
-                                <p class="ml-1">
-                                  <span v-if="userData.tc_doc != null && userData.tc_doc != ''">
-                                    <a :href="userData.tc_doc" class="filenameUpload"  target="_blank" >{{userData.tc_doc_fileName}}</a>
-                                    <span class="uploadtime">{{formatDateTime(userData.tc_doc_uploadTime)}}</span>
-                                    
-                                  </span>
-                                  <span v-else>No file found</span>
-                                </p>
-                              </div>
-
-                              <div v-if="Editable">
-                                 <validation-provider
-                            #default="{ errors }"
-                            title="Below Poverty Line">
-                                <img src="@/assets/images/landingbase/ICN_Delete.svg" @click="docToBeDeleted = 'tc_doc'" class="deleteIconUpload"/>
-                                <small class="text-danger">{{ errors[0] }}</small>
+                        <b-col md="6" v-if="userData.role == 'student'">
+                          <label class="form-label" for="Donor"
+                            >Transfer Certificate
+                          </label>
+                          <div class="p-1 bord__line text-center mb-2">
                             <div
-                              class="text-danger"
-                              v-if="hasErrors('tc_doc')"
+                              v-if="
+                                (userData.tc_doc != null &&
+                                  userData.tc_doc != '') ||
+                                !Editable
+                              "
                             >
-                              {{ getErrors("tc_doc") }}
-                            </div>
-                          </validation-provider>
+                              <div class="upload__docpreview erasebox">
+                                <div
+                                  class="d-flex justify-content-start align-items-center"
+                                >
+                                  <img
+                                    :src="getIconPath(userData.tc_doc_fileName)"
+                                    class="fileiconUpload"
+                                  />
+                                  <p class="ml-1">
+                                    <span
+                                      v-if="
+                                        userData.tc_doc != null &&
+                                        userData.tc_doc != ''
+                                      "
+                                    >
+                                      <a
+                                        :href="userData.tc_doc"
+                                        class="filenameUpload"
+                                        target="_blank"
+                                        >{{ userData.tc_doc_fileName }}</a
+                                      >
+                                      <span class="uploadtime">{{
+                                        formatDateTime(
+                                          userData.tc_doc_uploadTime
+                                        )
+                                      }}</span>
+                                    </span>
+                                    <span v-else>No file found</span>
+                                  </p>
+                                </div>
+
+                                <div v-if="Editable">
+                                  <validation-provider
+                                    #default="{ errors }"
+                                    title="Below Poverty Line"
+                                  >
+                                    <img
+                                      src="@/assets/images/landingbase/ICN_Delete.svg"
+                                      @click="docToBeDeleted = 'tc_doc'"
+                                      class="deleteIconUpload"
+                                    />
+                                    <small class="text-danger">{{
+                                      errors[0]
+                                    }}</small>
+                                    <div
+                                      class="text-danger"
+                                      v-if="hasErrors('tc_doc')"
+                                    >
+                                      {{ getErrors("tc_doc") }}
+                                    </div>
+                                  </validation-provider>
+                                </div>
                               </div>
                             </div>
+
+                            <div v-else>
+                              <b-button
+                                class="btnOutlineRed mb-0"
+                                @click="$refs.refTCUpload.$el.click()"
+                              >
+                                <img
+                                  class=""
+                                  src="@/assets/images/landingbase/ICN_Upload.svg"
+                                  alt="Full Logo"
+                                />
+                                Upload</b-button
+                              >
+                            </div>
+                            <b-form-file
+                              hidden
+                              ref="refTCUpload"
+                              plain
+                              @change="onUploadDocs($event, 'tc_doc')"
+                            />
                           </div>
+                        </b-col>
 
-
-                          <div v-else>
-                            <b-button
-                              class="btnOutlineRed mb-0"
-                              @click="$refs.refTCUpload.$el.click()"
-                              >                               
-                              <img class="" src="@/assets/images/landingbase/ICN_Upload.svg" alt="Full Logo" /> Upload</b-button>
-                          </div>
-                          <b-form-file hidden ref="refTCUpload" plain @change="onUploadDocs($event, 'tc_doc')"/>
-                        </div>
-                      </b-col>
-
-                        <b-col md="6">
-                        <label class="form-label" for="Donor"
-                          >Migration </label
-                        >
-                        <div class="p-1 bord__line text-center mb-2">
-                          <div  v-if="(userData.migration_doc != null && userData.migration_doc != '') || !Editable">
-                            <div class="upload__docpreview erasebox">
-                              <div class="d-flex justify-content-start align-items-center">
-                              <img :src="getIconPath(userData.migration_doc_fileName)" class="fileiconUpload" />
-                                <p class="ml-1">
-                                  <span v-if="userData.migration_doc != null && userData.migration_doc != ''">
-                                    <a :href="userData.migration_doc" class="filenameUpload"  target="_blank" >{{userData.migration_doc_fileName}}</a>
-                                    <span class="uploadtime">{{formatDateTime(userData.migration_doc_uploadTime)}}</span>
-                                    
-                                  </span>
-                                  <span v-else>No file found</span>
-                                </p>
-                              </div>
-
-                              <div v-if="Editable">
-                                 <validation-provider
-                            #default="{ errors }"
-                            title="Below Poverty Line">
-                                <img src="@/assets/images/landingbase/ICN_Delete.svg" @click="docToBeDeleted = 'migration_doc'" class="deleteIconUpload"/>
-                                <small class="text-danger">{{ errors[0] }}</small>
+                        <b-col md="6" v-if="userData.role == 'student'">
+                          <label class="form-label" for="Donor"
+                            >Migration
+                          </label>
+                          <div class="p-1 bord__line text-center mb-2">
                             <div
-                              class="text-danger"
-                              v-if="hasErrors('migration_doc')"
+                              v-if="
+                                (userData.migration_doc != null &&
+                                  userData.migration_doc != '') ||
+                                !Editable
+                              "
                             >
-                              {{ getErrors("migration_doc") }}
-                            </div>
-                          </validation-provider>
+                              <div class="upload__docpreview erasebox">
+                                <div
+                                  class="d-flex justify-content-start align-items-center"
+                                >
+                                  <img
+                                    :src="
+                                      getIconPath(
+                                        userData.migration_doc_fileName
+                                      )
+                                    "
+                                    class="fileiconUpload"
+                                  />
+                                  <p class="ml-1">
+                                    <span
+                                      v-if="
+                                        userData.migration_doc != null &&
+                                        userData.migration_doc != ''
+                                      "
+                                    >
+                                      <a
+                                        :href="userData.migration_doc"
+                                        class="filenameUpload"
+                                        target="_blank"
+                                        >{{
+                                          userData.migration_doc_fileName
+                                        }}</a
+                                      >
+                                      <span class="uploadtime">{{
+                                        formatDateTime(
+                                          userData.migration_doc_uploadTime
+                                        )
+                                      }}</span>
+                                    </span>
+                                    <span v-else>No file found</span>
+                                  </p>
+                                </div>
+
+                                <div v-if="Editable">
+                                  <validation-provider
+                                    #default="{ errors }"
+                                    title="Below Poverty Line"
+                                  >
+                                    <img
+                                      src="@/assets/images/landingbase/ICN_Delete.svg"
+                                      @click="docToBeDeleted = 'migration_doc'"
+                                      class="deleteIconUpload"
+                                    />
+                                    <small class="text-danger">{{
+                                      errors[0]
+                                    }}</small>
+                                    <div
+                                      class="text-danger"
+                                      v-if="hasErrors('migration_doc')"
+                                    >
+                                      {{ getErrors("migration_doc") }}
+                                    </div>
+                                  </validation-provider>
+                                </div>
                               </div>
                             </div>
-                          </div>
 
-
-                          <div v-else>
-                            <b-button
-                              class="btnOutlineRed mb-0"
-                              @click="$refs.refmigrationUpload.$el.click()"
-                              >                               
-                              <img class="" src="@/assets/images/landingbase/ICN_Upload.svg" alt="Full Logo" /> Upload</b-button>
+                            <div v-else>
+                              <b-button
+                                class="btnOutlineRed mb-0"
+                                @click="$refs.refmigrationUpload.$el.click()"
+                              >
+                                <img
+                                  class=""
+                                  src="@/assets/images/landingbase/ICN_Upload.svg"
+                                  alt="Full Logo"
+                                />
+                                Upload</b-button
+                              >
+                            </div>
+                            <b-form-file
+                              hidden
+                              ref="refmigrationUpload"
+                              plain
+                              @change="onUploadDocs($event, 'migration_doc')"
+                            />
                           </div>
-                          <b-form-file hidden ref="refmigrationUpload" plain @change="onUploadDocs($event, 'migration_doc')"/>
+                        </b-col>
+                        <div
+                          v-if="docToBeDeleted != null"
+                          class="confirmation-dialog"
+                        >
+                          <p>Are you sure you want to delete?</p>
+                          <b-button @click="docToBeDeleted = null">No</b-button>
+                          <b-button
+                            variant="primary"
+                            @click="
+                              userData[docToBeDeleted] = null;
+                              docToBeDeleted = null;
+                              documentComponentKey++;
+                            "
+                            >Yes</b-button
+                          >
                         </div>
-                      </b-col>
-                    <div v-if="docToBeDeleted != null " class="confirmation-dialog">
-                      <p>Are you sure you want to delete?</p>
-                      <b-button @click="docToBeDeleted = null">No</b-button>
-                      <b-button variant="primary" @click="userData[docToBeDeleted] = null; docToBeDeleted = null;documentComponentKey++;">Yes</b-button>
-                    </div>
-                      
-                    </b-row>
-                    <div class="text-center mb-2 py-2">
-                      <b-button
-                        class="btn btn_bluetype btn-secondary mr-1"
-                        @click="resetData()"
-                        v-if="Editable"
-                        >Reset</b-button
-                      >
-                      <span>
+                      </b-row>
+                      <div class="text-center mb-2 py-2">
                         <b-button
-                          class="btn btn_redtype btn-secondary"
-                          @click="changeProfile"
+                          class="btn btn_bluetype btn-secondary mr-1"
+                          @click="resetData()"
                           v-if="Editable"
-                          >Save</b-button
-                        ></span
-                      >
-                    </div>
-                  </b-form>
+                          >Reset</b-button
+                        >
+                        <span>
+                          <b-button
+                            class="btn btn_redtype btn-secondary"
+                            @click="changeProfile"
+                            v-if="Editable"
+                            >Save</b-button
+                          ></span
+                        >
+                      </div>
+                    </b-form>
+                  </div>
                 </div>
-              </div>
               </b-tab>
             </b-tabs>
           </div>
@@ -849,6 +1134,7 @@ import {
   BTabs,
   BTab,
   BFormRadioGroup,
+  BTable,
 } from "bootstrap-vue";
 import { required } from "@validations";
 import Ripple from "vue-ripple-directive";
@@ -890,6 +1176,7 @@ export default {
     BTabs,
     BTab,
     BFormRadioGroup,
+    BTable,
   },
   directives: {
     Ripple,
@@ -939,36 +1226,42 @@ export default {
       subjectOptions: [],
       classOptions: [],
       SectionOptions: [],
+      SubjctClassData: [],
+      ClassTeacher: null,
     };
   },
   methods: {
-      getFileExtension(fileName) {
-      if(fileName!=null){
-        return fileName.split('.').pop();
-
-      }else{
-        return null
-      }    },
-      getIconPath(fileName) {
-        const ext = this.getFileExtension(fileName);
-        if (ext === 'png') {
-          return require('@/assets/images/landingbase/ICN_File.svg');
-        } else if(ext === 'jpeg' || ext === 'jpg') {
-          return require('@/assets/images/landingbase/ICN_FileJpeg.svg');
-        }else{
-          return require('@/assets/images/landingbase/ICN_FilePdf.svg');
-        }
-      },
-      formatDateTime(dateTimeString) {
+    getFileExtension(fileName) {
+      if (fileName != null) {
+        return fileName.split(".").pop();
+      } else {
+        return null;
+      }
+    },
+    getIconPath(fileName) {
+      const ext = this.getFileExtension(fileName);
+      if (ext === "png") {
+        return require("@/assets/images/landingbase/ICN_File.svg");
+      } else if (ext === "jpeg" || ext === "jpg") {
+        return require("@/assets/images/landingbase/ICN_FileJpeg.svg");
+      } else {
+        return require("@/assets/images/landingbase/ICN_FilePdf.svg");
+      }
+    },
+    formatDateTime(dateTimeString) {
       const formatRegex = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
       if (formatRegex.test(dateTimeString)) {
-          const [datePart, timePart] = dateTimeString.split(' ');
-          const [day, month, year] = datePart.split('-').map(Number);
-          let [hours, minutes] = timePart.split(':').map(Number);
-          const period = hours >= 12 ? 'pm' : 'am';
-          hours = hours % 12 || 12; // Convert to 12-hour format, ensuring '0' becomes '12'
-          const formattedDate = `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/${year} ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} ${period}`;
-          return formattedDate;
+        const [datePart, timePart] = dateTimeString.split(" ");
+        const [day, month, year] = datePart.split("-").map(Number);
+        let [hours, minutes] = timePart.split(":").map(Number);
+        const period = hours >= 12 ? "pm" : "am";
+        hours = hours % 12 || 12; // Convert to 12-hour format, ensuring '0' becomes '12'
+        const formattedDate = `${day.toString().padStart(2, "0")}/${month
+          .toString()
+          .padStart(2, "0")}/${year} ${hours
+          .toString()
+          .padStart(2, "0")}:${minutes.toString().padStart(2, "0")} ${period}`;
+        return formattedDate;
       } else {
         return dateTimeString;
       }
@@ -1028,7 +1321,7 @@ export default {
           this.userData.tc_doc_fileName = selectedFile.name;
           this.userData.tc_doc_uploadTime = new Date().toLocaleString();
         }
-        if(docName == "migration_doc") {
+        if (docName == "migration_doc") {
           this.userData.migration_doc = selectedFile;
           this.userData.migration_doc_fileName = selectedFile.name;
           this.userData.migration_doc_uploadTime = new Date().toLocaleString();
@@ -1139,19 +1432,32 @@ export default {
       this.userData.class = response.data.data.class_id;
       this.userData.section = response.data.data.section_id;
       this.userData.samgra_id_doc = response.data.image.samgra_id_doc;
-      this.userData.samgra_id_doc_fileName = response.data.image.samgra_id_doc_fileName;
-      this.userData.samgra_id_doc_uploadTime = response.data.image.samgra_id_doc_uploadTime;
+      this.userData.samgra_id_doc_fileName =
+        response.data.image.samgra_id_doc_fileName;
+      this.userData.samgra_id_doc_uploadTime =
+        response.data.image.samgra_id_doc_uploadTime;
       this.userData.aadhar_doc = response.data.image.aadhar_doc;
-      this.userData.aadhar_doc_fileName = response.data.image.aadhar_doc_fileName;
-      this.userData.aadhar_doc_uploadTime = response.data.image.aadhar_doc_uploadTime;
+      this.userData.aadhar_doc_fileName =
+        response.data.image.aadhar_doc_fileName;
+      this.userData.aadhar_doc_uploadTime =
+        response.data.image.aadhar_doc_uploadTime;
       this.userData.tc_doc = response.data.image.tc_doc;
       this.userData.tc_doc_fileName = response.data.image.tc_doc_fileName;
       this.userData.tc_doc_uploadTime = response.data.image.tc_doc_uploadTime;
       this.userData.migration_doc = response.data.image.migration_doc;
-      this.userData.migration_doc_fileName = response.data.image.migration_doc_fileName;
-      this.userData.migration_doc_uploadTime = response.data.image.migration_doc_uploadTime;
-      
-     
+      this.userData.migration_doc_fileName =
+        response.data.image.migration_doc_fileName;
+      this.userData.migration_doc_uploadTime =
+        response.data.image.migration_doc_uploadTime;
+
+      if (response.data.data.role == "teacher") {
+        axios
+          .get(`SubjctClassData/${response.data.data.id}`)
+          .then((response) => {
+            this.SubjctClassData = response.data.SubjectClass;
+            this.ClassTeacher = response.data.class_teacher;
+          });
+      }
     });
     axios.get(`getClass`).then((response) => {
       this.classOptions = response.data.class;
@@ -1194,7 +1500,7 @@ export default {
       section: null,
       subject: null,
       aadhar_doc: null,
-      samgra_id_doc:[],
+      samgra_id_doc: [],
     };
     const resetData = () => {
       axios.get("profile").then((response) => {

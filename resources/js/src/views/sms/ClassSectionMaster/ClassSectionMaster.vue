@@ -373,10 +373,8 @@
                   @input="RemoveError('subject')"
                   :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                   :options="TeacherData"
-                  :reduce="(val) => val.user_id"
+                  :reduce="(val) => val.value"
                   :clearable="true"
-                  label="user_name"
-                  value="user_id"
                   input-id="status"
                   placeholder="Select Teacher"
                 />
@@ -408,9 +406,7 @@
                 @input="RemoveError('subject')"
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                 :options="TeacherData"
-                label="user_name"
-                value="user_id"
-                :reduce="(val) => val.user_id"
+                :reduce="(val) => val.value"
                 input-id="status"
                 placeholder="Select Teacher"
               />
@@ -693,8 +689,8 @@ export default {
           this.AssignTeacherData.SubjctTeacherData = newDataArray;
         }
       });
-      axios.get("users").then((response) => {
-        this.TeacherData = response.data.table_data;
+      axios.get("getTeachers").then((response) => {
+        this.TeacherData = response.data.data;
       });
       axios.get("getSubject").then((response) => {
         this.SubjectData = response.data.data;

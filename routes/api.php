@@ -21,6 +21,7 @@ use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\SwapRequestController;
+use App\Http\Controllers\TeacherController;
 
 /*
 |--------------------------------------------------------------------------
@@ -123,6 +124,13 @@ Route::post('AssignTeacher', [ClassSectionMasterController::class ,'AssignTeache
 Route::get('getClassTeacher/{id}', [ClassSectionMasterController::class, 'getClassTeacher']);
 Route::get('getSectionBasedOnClass/{id}', [ClassSectionMasterController::class, 'getSectionBasedOnClass']);
 Route::get('getStudenId', [ClassSectionMasterController::class, 'getStudenId']);
+Route::get('getEmployeeId', [TeacherController::class, 'getEmployeeId']);
+Route::resource('teachers',TeacherController::class);
+Route::get('getTeachers', [TeacherController::class, 'getTeachers']);
+Route::get('SubjctClassData/{id}', [TeacherController::class, 'SubjctClassData']);
+
+
+
 
 Route::post('updateClassLacture', [ClassSectionMasterController::class ,'updateClassLacture']);
 Route::get('getLectureData/{id}', [ClassSectionMasterController::class, 'getLectureData']);

@@ -110,16 +110,11 @@ export default [
       name: 'class-section-master',
       component: () => import('@/views/sms/ClassSectionMaster/ClassSectionMaster.vue'),
     },  
-{
+    {
       path: '/Class-Section-Time-Scheduler/:id',
       name: 'class-section-time-scheduler',
       component: () => import('@/views/sms/ClassSectionMaster/ClassSectionTimeSeduler.vue'),
     },  
-    {
-      path: '/Teacher',
-      name: 'Teacher',
-      component: () => import('@/views/sms/Modules/Modules.vue'),
-    }, 
     {
       path: '/HomePage',
       name: 'HomePage',
@@ -146,6 +141,22 @@ export default [
         navActiveLink: 'student',
       },
     },
+    {
+      path: '/teacher',
+      name: 'teacher',
+      component: () => import('@/views/sms/Teacher/Teacher.vue'),
+      meta: {
+        navActiveLink: 'teacher',
+      },
+    }, 
+    {
+      path: '/add-teacher',
+      name: 'add-teacher',
+      component: () => import('@/views/sms/Teacher/AddTeacher.vue'),
+      meta: {
+        navActiveLink: 'teacher',
+      },
+    }, 
     
     
 ]

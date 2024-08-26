@@ -6,6 +6,7 @@ return [
     'FileViewPath'=> trim(env('APP_URL') ?? '').'/sms_uploads/Files/',
     'FileUploadPath'=> trim(base_path() ?? '').'/../sms_uploads/Files/',
     'school_student_code'=>'STD',
+    'employee_code'=>'EMP',
     'samgraId'=> trim(base_path()).'/../'.env('UPLOAD_FOLDER').'/samgraId/',
     'samgraIdPath'=> trim(env('APP_URL') ?? '').'/'.env('UPLOAD_FOLDER').'/samgraId/',
     'AadharCard'=> trim(base_path()).'/../'.env('UPLOAD_FOLDER').'/AadharCard/',

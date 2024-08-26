@@ -7,6 +7,7 @@ use App\Models\Role;
 use App\Models\Student;
 use App\Models\StudentIdCount;
 use App\Models\Subject;
+use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -175,6 +176,8 @@ class StudentController extends Controller
         ->select(
             $profile_columns,
             'users.*',
+            'roles.name as role_name',
+            'roles.slug as role'
         )->first();
         $image = ['samgra_id_doc'=>'','aadhar_doc'=>'','tc_card'=>'','migration_doc'=>'']; //phpcs:ignore
         if (!is_null($ProfileData->samgra_id_doc)) {
@@ -229,7 +232,10 @@ class StudentController extends Controller
         $user->save();
         if ($user->role->slug == 'student') {
             $this->updateStudentData($request, $user);
-        }   
+        }
+        if ($user->role->slug == 'teacher') {
+            $this->updateTeacerData($request, $user);
+        }
         return response([
             'status' => true, 'message' => "Profile Updated Successfully!",
             'responseData' => ['role' => $user->role->slug]
@@ -361,6 +367,71 @@ class StudentController extends Controller
             $Student->migration_doc=null;
         }
         $Student->save();
+        
+    }
+    public function updateTeacerData($request,$user){
+
+        $Teacher = Teacher::where('user_id',$user->id)->first();
+        $Teacher->first_name =  $request->first_name;
+        $Teacher->middle_name = $request->middle_name;
+        $Teacher->last_name = $request->last_name;
+        $Teacher->father_name =$request->father_name;
+        $Teacher->mother_name =$request->mother_name;
+        $Teacher->dob =$request->dob;
+        $Teacher->gender =$request->gender;
+        $Teacher->aadhar_number =$request->aadhar_number;
+        $Teacher->samgra_id =$request->samgra_id;
+        $Teacher->mobile_no =$request->mobile_no;
+        $Teacher->altranate_number = $request->altranate_number;
+        $Teacher->address =$request->address;
+
+        if ($request->samgra_id_doc != null && $request->hasFile('samgra_id_doc')) {
+            $Teacher->samgra_id_doc = Helper::documentUpload($request->samgra_id_doc, $user->id, 'samgraId'); //phpcs:ignore
+            DB::table('documents')->insert(
+                [
+                    [
+                        'user_id' => $user->id,
+                        'role_id' => $user->role_id,
+                        'document_name' => 'samgra_id_doc',
+                        'file_name' => $Teacher->samgra_id_doc,  
+                        'document_orignal_name' => $request->samgra_id_doc_fileName,
+                        'document_upload_time' => now(),
+                        
+                    ],
+                ]
+            );
+        } elseif ($request->samgra_id_doc == null && $Teacher->samgra_id_doc != null) {
+            DB::table('document_types')
+            ->where('user_id', $user->id)
+            ->where('role_id', $user->role_id)
+            ->where('document_name', 'samgra_id_doc')->delete();
+            Helper::documentDelete($Teacher->samgra_id_doc, $user->id, 'samgraId');//phpcs:ignore
+            $Teacher->samgra_id_doc=null;
+        }
+        if ($request->aadhar_doc != null && $request->hasFile('aadhar_doc')) {
+            $Teacher->aadhar_doc = Helper::documentUpload($request->aadhar_doc, $user->id, 'AadharCard'); //phpcs:ignore
+            DB::table('documents')->insert(
+                [
+                    [
+                        'user_id' => $user->id,
+                        'role_id' => $user->role_id,
+                        'document_name' => 'aadhar_doc',
+                        'file_name' => $Teacher->aadhar_doc,  
+                        'document_orignal_name' => $request->aadhar_doc_fileName,
+                        'document_upload_time' => now(),
+                        
+                    ],
+                ]
+            );
+        } elseif ($request->aadhar_doc == null && $Teacher->aadhar_doc != null) {
+            DB::table('document_types')
+            ->where('user_id', $user->id)
+            ->where('role_id', $user->role_id)
+            ->where('document_name', 'aadhar_doc')->delete();
+            Helper::documentDelete($Teacher->aadhar_doc, $user->id, 'AadharCard');//phpcs:ignore
+            $Teacher->aadhar_doc=null;
+        }
+        $Teacher->save();
         
     }
 }
