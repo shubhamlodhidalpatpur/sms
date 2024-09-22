@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Department;
 use Illuminate\Http\Request;
-use App\Models\OrgStructure;
 use App\Models\OrganizationEntity;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Auth;
+use Illuminate\Support\Str;
 class DepartmentController extends Controller
 {
     /**
@@ -17,36 +18,28 @@ class DepartmentController extends Controller
      */
     public function index(Request $request)
     {
-        $Department = OrganizationEntity::leftJoin('org_structures', 'org_structures.id', 'org_entities.org_entity_type_id')//phpcs:ignore
-                ->where(function ($query) use ($request) {
-                    if (!empty($request->name)) {
-                        $query->where('org_entities.name', 'like', '%' . $request->name . '%');
-                    }
-                    if (!empty($request->branch)) {
-                        $query->where('org_entities.parent_id', 'like', '%' . $request->branch . '%');
-                    }
-                })
-                ->leftjoin('org_entities as parent', 'parent.id', 'org_entities.parent_id')
-                ->select('org_entities.id', 'org_entities.name as title', 'parent.name as branch_name', DB::raw('count(*) OVER() AS total_row_count'))//phpcs:ignore
-                ->where('org_structures.slug', 'department')
-                ->forPage($request->page, $request->perPage);
-                if(strtolower($request->sortBy) == 'name'){
-                    $Department = $Department->orderBy('org_entities.name', $request->sortDesc == 'true'?'DESC':'ASC');
-                }
-                if(strtolower($request->sortBy) == 'branch'){
-                    $Department = $Department->orderBy('branch.name', $request->sortDesc == 'true'?'DESC':'ASC');
-                }
-                else{
-                    $Department = $Department->orderBy('org_entities.id', 'desc');
-                }
+        $query = Department::query();
 
+        if (!empty($request->name)) {
+              $query->where('departments.title', 'like', '%' . $request->name . '%');
+        }
 
-        $Department = $Department->get();
-
-        if (count($Department) > 0) {
-            return response(['data' => $Department, 'status' => 'success'], 200);
+        $department = $query->select(
+            'departments.id',
+            'departments.title as title',
+            'departments.status as status',
+            DB::raw('count(*) OVER() AS total_row_count')
+        )
+        ->orderBy($request->sortBy ?? 'departments.id', $request->sortDesc == 'true' ? 'DESC' : 'ASC')
+        ->forPage($request->page, $request->perPage)
+        ->get();
+        if (count($department) > 0) {
+              return response(['data' => $department, 'status' => 'success'], 200);
         } else {
-            return response(['status' => 'success','data'=>$Department,'message'=> 'no data found','code' => 200], 200);
+             return response([
+            'status' => 'success', 'data' => $department,
+            'message' => 'no data found', 'code' => 200
+            ], 200);
         }
     }
 
@@ -70,8 +63,7 @@ class DepartmentController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'department_name'=>'required',
-            'branch'=> 'required ',
+            'department_name' => 'required',
         ]);
         if ($validator->fails()) {
             return response(['errors' => $validator->errors()->messages(), 'code' => 422], 422);
@@ -80,23 +72,18 @@ class DepartmentController extends Controller
         try {
             DB::beginTransaction();
 
-            $entity_type = OrgStructure::where('slug', 'department')->first();
-
-            $OrganizationEntity = new OrganizationEntity();
-            $OrganizationEntity->name =  $request->department_name;
-            $OrganizationEntity->parent_id =$request->branch;
-            $OrganizationEntity->reporting_head = 0;
-            $OrganizationEntity->org_entity_type_id =!is_null($entity_type)? $entity_type->id : 0;
-            $OrganizationEntity->status = 'A';
-            $OrganizationEntity->save();
-            DB::commit();
-            return response(['data'=>' Department create successfully!','status'=>'success'], 200);
+            $department = new Department();
+            $department->title = $request->department_name;
+            $department->slug = Str::slug($request->department_name, '-');
+            $department->save();
         } catch (\Exception $e) {
-            report($e);
             dd($e);
+            report($e);
             DB::rollback();
-            return response(['data'=>'Something Went Wrong','status'=>'success'], 500);
+            return response(['message' => 'Something Went Wrong', 'status' => 'failure'], 500);
         }
+        DB::commit();
+        return response(['message' => 'Department Added Successfully!', 'status' => 'success'], 200);
     }
     /**
      * Display the specified resource.
@@ -117,16 +104,15 @@ class DepartmentController extends Controller
      */
     public function edit($id)
     {
-        $team = OrganizationEntity::where('id', $id)
-                ->select('id', 'name as title','parent_id as branch_id')->first();//phpcs:ignore
-        return response(['data' => $team, 'status' => 'success'], 200);
+        $data = Department::where('id', $id)->first();
+
+        return response(['data' => $data], 200);
     }
 
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
             'department_name'=> 'required',
-            'branch'=> 'required ',
         ]);
 
         if ($validator->fails()) {
@@ -134,13 +120,10 @@ class DepartmentController extends Controller
         }
         try {
             DB::beginTransaction();
-            $OrganizationEntity = OrganizationEntity::find($id);
-            $OrganizationEntity->name = $request->department_name;
-            $OrganizationEntity->reporting_head = 0;
-            $OrganizationEntity->parent_id = !is_null($request->branch)? $request->branch : 0;
-            $OrganizationEntity->status = 'A';
-            $OrganizationEntity->updated_at = now();
-            $OrganizationEntity->save();
+            $department = Department::find($id);
+            $department->title = $request->department_name;
+            $department->slug = Str::slug($request->department_name, '-');
+            $department->save();
             DB::commit();
             return response(['status' => 'success'], 200);
         } catch (\Exception $e) {
@@ -165,7 +148,7 @@ class DepartmentController extends Controller
      */
     public function destroy($id)
     {
-        $Team=OrganizationEntity::where('id', $id)->delete();
+        $Team=Department::where('id', $id)->delete();
         return response(['status'=>'success', 'message'=>'Team Deleted successfully'], 200);
     }
     public function getBranch()

@@ -4,68 +4,50 @@ export default [
         title: 'Home',
         route: 'Home',
         icon: 'MenuIcon',
-        meta: {
+        
             resource: 'Auth',
             action: "do",
-        },
+        
+    },
+    {
+        title: "Permission",
+        icon: "TargetIcon",
+        route: "Permission",
+        action: "do",
+        resource: "Auth",
     },
     {
         title: 'Org Structure',
         icon: 'HomeIcon',
         children: [
             {
-                title: 'BU',
-                route: 'BU',
-                icon: 'MenuIcon',
-                meta: {
-                    resource: 'Auth',
-                    action: "do",
-                },
+                title: "Department",
+                icon: "TrelloIcon",
+                route: "department",
+                resource: 'Auth',
+                action: "do",
             },
             {
-                title: 'Branch',
-                route: 'branch',
-                icon: 'MenuIcon',
-                meta: {
-                    resource: 'Auth',
-                    action: "do",
-                },
+                title: "Role",
+                icon: "TargetIcon",
+                route: "role",
+                resource: 'Auth',
+                action: "do",
             },
             {
-                title: 'Department',
-                route: 'department',
-                icon: 'MenuIcon',
-                meta: {
-                    resource: 'Auth',
-                    action: "do",
-                },
+                title: "Team",
+                icon: "UsersIcon",
+                route: "team",
+                resource: 'Auth',
+                action: "do",
             },
-            {
-                title: 'Team',
-                route: 'team',
-                icon: 'MenuIcon',
-                meta: {
-                    resource: 'Auth',
-                    action: "do",
-                },
-            },
-            {
-                title: 'Role',
-                route: 'role',
-                icon: 'MenuIcon',
-                meta: {
-                    resource: 'Auth',
-                    action: "do",
-                },
-            },
+
             {
                 title: 'Employee',
                 route: 'employee',
-                icon: 'MenuIcon',
-                meta: {
-                    resource: 'Auth',
-                    action: "do",
-                },
+                icon: 'UserIcon',
+                resource: 'Auth',
+                action: "do",
             },
         
         ]
@@ -74,111 +56,108 @@ export default [
         title: 'Attendance',
         route: 'Attendance',
         icon: 'MenuIcon',
-        meta: {
+        
             resource: 'Auth',
             action: "do",
-        },
+        
     },
     {
         title: 'Check Attendance',
         route: 'Check-Attendance',
         icon: 'MenuIcon',
-        meta: {
+        
             resource: 'Auth',
             action: "do",
-        },
+        
     },
     {
         title: 'Swap',
         route: 'swap',
         icon: 'MenuIcon',
-        meta: {
+        
             resource: 'Auth',
             action: "do",
-        },
+        
     },
     {
         title: 'Check Swap',
         route: 'check-swap',
         icon: 'MenuIcon',
-        meta: {
+        
             resource: 'Auth',
             action: "do",
-        },
+        
     },
-    {
-    title: 'Employee',
-    route: 'employee',
-    icon: 'MenuIcon',
-    meta: {
-        resource: 'Auth',
-        action: "do",
-    },
-},
     {
         title: 'Holiday',
         route: 'holiday',
         icon: 'MenuIcon',
-        meta: {
+        
             resource: 'Auth',
             action: "do",
-        },
+        
     },
 
     {
         title: 'Leave Type',
         route: 'leave-type',
         icon: 'MenuIcon',
-        meta: {
+        
             resource: 'Auth',
             action: "do",
-        },
+        
     },
     {
         title: 'Register Step',
         route: 'register-step',
         icon: 'MenuIcon',
-        meta: {
+        
             resource: 'Auth',
             action: "do",
-        },
+        
     },
     {
         title: 'Class Section Master',
         route: 'class-section-master',
         icon: 'MenuIcon',
-        meta: {
+        
             resource: 'Auth',
             action: "do",
-        },
+        
     },
     {
         title: 'Subject',
         route: 'subject',
         icon: 'MenuIcon',
-        meta: {
+        
             resource: 'Auth',
             action: "do",
-        },
+        
     },
     {
         title: 'Student',
         route: 'student',
         icon: 'MenuIcon',
-        meta: {
-            resource: 'Auth',
-            action: "do",
-        },
+        action: "do",
+        resource: "student_access"
     },
     {
         title: 'Teacher',
         route: 'teacher',
         icon: 'MenuIcon',
-        meta: {
+        action: "do",
+        resource: "teacher_access",
+    },
+    {
+        title: 'Fees',
+        route: 'fees',
+        icon: 'MenuIcon',
+        
             resource: 'Auth',
             action: "do",
-        },
+        
     },
+    
     
     
     

@@ -10,6 +10,8 @@ use App\Http\Controllers\TeamController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ClassSectionMasterController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\FeesController;
 use App\Http\Controllers\UserController;
 
 
@@ -18,6 +20,7 @@ use App\Http\Controllers\LeaveTypeController;
 use App\Http\Controllers\MasterController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\SwapRequestController;
@@ -71,7 +74,7 @@ Route::post('/teamUpdate/{id}', [TeamController::class, 'update']);
 Route::delete('/team/{id}', [TeamController::class, 'destroy']);
 Route::get('/fetchteamData/{id}', [TeamController::class,'fetchTeamData']);
 Route::get('/getDepartment', [TeamController::class, 'getDepartment']);
-
+Route::get('/getTeamFromdepartmentId/{id}', [TeamController::class,'getTeamFromdepartmentId']);
 Route::get('/teamoption/{id}', [RoleController::class, 'teamoption']);
 Route::get('/fetchRole', [RoleController::class, 'index']);
 Route::post('/roleadd', [RoleController::class, 'store']);
@@ -80,15 +83,15 @@ Route::post('/RoleUpdate/{id}', [RoleController::class, 'update']);
 Route::delete('/role/{id}', [RoleController::class, 'destroy']);
 Route::get('/SuparAdmin', [RoleController::class, 'suparAdmin']);
 Route::get('/getRoleFromdepartmentId/{id}', [RoleController::class, 'getRoleFromdepartmentId']);
-
+Route::get('/getReportingtoFromemployeeId/{id}', [RoleController::class, 'getReportingtoFromemployeeId']);
 Route::post('/login', [LoginController::class, 'store']);  
+Route::get('/getReportingToFromRoleId/{id}', [EmployeeController::class,'getReportingToFromRoleId']);
 Route::resource('Attendances', AttendanceController::class);
 Route::post('/CheckinAttendance', [AttendanceController::class, 'checkinAttendance']);
 Route::post('/CheckOutAttendance', [AttendanceController::class, 'checkOutAttendance']);
 Route::get('/CHeckTodayAttendance', [AttendanceController::class, 'checkTodayAttendance']);
 Route::get('/CheckAttendances', [AttendanceController::class, 'CheckAttendances']);
 Route::post('changeStatus/{status}/{id}', [AttendanceController::class,'changeStatus']);
-Route::get('getFieldsByRole/{role_id?}', [RoleController::class,'getFieldsByRole']);
 Route::get('getMasterFieldsBydefault/{role_id?}', [MasterController::class,'getFieldsByMasterId']);
 Route::get('getFieldTypes', [RoleController::class, 'getFieldTypes']);
 Route::post('submitUserForm', [UserController::class, 'submitUserForm']);
@@ -98,6 +101,7 @@ Route::get('/CheckswapRequest', [SwapRequestController::class, 'CheckswapRequest
 Route::post('changeSwapRequestStatus/{status}/{id}', [SwapRequestController::class,'changeSwapRequestStatus']);
 Route::resource('holidays', HolidayController::class);
 Route::resource('LeaveTypes',LeaveTypeController::class);
+Route::resource('employees',EmployeeController::class);
 
 Route::post('submitRegistrationForm', [OrganizationController::class ,'submitRegistrationForm']);
 Route::get('country', [OrganizationController::class, 'getCountry']);
@@ -148,3 +152,14 @@ Route::get('getFieldsData/{modulename}/{id}', [ModuleController::class, 'getFiel
 Route::post('UpdateModule/{modulename}/{id}', [ModuleController::class, 'update']);
 Route::delete('deleteModule/{modulename}/{id}', [ModuleController::class, 'destroy']);
 Route::get('getFieldsData/{id}', [MasterController::class, 'getFieldsByMasterId']);
+
+
+// Permissiom
+Route::get('getRoleFromDepartmentId/{id}', [PermissionController::class, 'getRoleFromDepartmentId']);
+Route::get('/permissions', [PermissionController::class, 'index']);
+Route::get('/getPermissionFromRoleId/{id}', [PermissionController::class, 'getPermissionFromRoleId']);
+Route::post('/profilepermissions', [PermissionController::class, 'profilepermissions']);
+
+//Fees 
+Route::get('/AdmissionFees', [FeesController::class, 'AdmissionFees']);
+Route::resource('/fees', FeesController::class);

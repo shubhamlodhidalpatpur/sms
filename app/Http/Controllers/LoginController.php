@@ -50,8 +50,15 @@ class LoginController extends Controller
             if (Hash::check($request->password, $user->password)) {
                 $accessToken = $user->createToken('authToken')->plainTextToken;
                 $user->accessToken = $accessToken;
-                $user->role = 'admin';
-                $user->ability = [['action'=>'manage','subject'=>'all']];
+                if (count($user->roles) > 0) {
+                    $user->role = $user->roles[0]->name;
+                    $user->role_slug = $user->roles[0]->slug;
+                    $user->role_id = $user->roles[0]->id;
+                } else {
+                    $user->role = 'super-admin';
+                    $user->role_id = 1;
+                }
+                $user->ability = $user->ability();
                 $response = ['status' => true,  'is_login' => true, 'userData' => $user, 'accessToken' => $accessToken, 'expiration' => config('sanctum.expiration'), 'token_type' => 'Bearer', 'message' => 'Logged in successfully !']; //phpcs:ignore
                 return response($response, 200);
             } else {

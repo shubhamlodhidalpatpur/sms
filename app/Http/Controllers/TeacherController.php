@@ -8,6 +8,7 @@ use App\Models\EmployeeCount;
 use App\Models\Teacher;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\UserRole;
 use Illuminate\Http\Request;
 use DB;
 use Illuminate\Support\Facades\Validator;
@@ -94,6 +95,11 @@ class TeacherController extends Controller
             $Student->employee_id  =$NewEployeeId;
             $Student->user_id  =$user->id;
             $Student->save();
+
+            $userrole = new UserRole();
+            $userrole->user_id = $user->id;
+            $userrole->role_id = $user->role_id;
+            $userrole->save();
 
             if($EmployeeId==null){
                 $EmployeeId = new EmployeeCount();

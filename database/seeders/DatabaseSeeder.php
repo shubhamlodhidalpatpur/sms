@@ -14,16 +14,15 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            OrgStructureSeeder::class,
-            AdminSeeder::class,
-            FieldTypeSeeder::class,
-            FieldSeeder::class,
             CountrySeeder::class,
             StateSeeder::class,
             CitySeeder::class,
             IndustryTypeSeeder::class,
             WorkingSeeder::class,
             ClassSectionTypeSeeder::class,
+            MenuSeeder::class,
+            PermissionSeeder::class,
+            AdminSeeder::class,
       ]); 
     }
 }

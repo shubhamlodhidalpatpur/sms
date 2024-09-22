@@ -86,12 +86,12 @@
             :sort-desc.sync="isSortDirDesc">
             <template #cell(Name)="data">
               <span class="text-nowrap">
-                {{ data.item.title }}
+                {{ data.item.team_name }}
               </span>
             </template>
             <template #cell(department)="data">
               <span class="text-nowrap">
-                {{ data.item.department_name }}
+                {{ data.item.department }}
               </span>
             </template>
 

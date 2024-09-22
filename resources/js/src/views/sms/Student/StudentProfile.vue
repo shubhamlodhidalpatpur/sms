@@ -519,7 +519,7 @@
                   </div>
                 </div>
               </b-tab>
-              <b-tab title="Acedmic">
+              <b-tab v-if="userData.role == 'student' || userData.role == 'teacher' " title="Acedmic">
                 <div class="profiletab__txt">
                   <div class="basic__frm">
                     <b-form class="px-2">
@@ -692,7 +692,7 @@
                   </div>
                 </div>
               </b-tab>
-              <b-tab title="Document">
+              <b-tab v-if="userData.role == 'student' || userData.role == 'teacher' " title="Document">
                 <div class="profiletab__txt">
                   <div class="basic__frm">
                     <b-form class="px-2">

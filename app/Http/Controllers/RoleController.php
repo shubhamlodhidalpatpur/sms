@@ -23,42 +23,31 @@ class RoleController extends Controller
      */
     public function index(Request $request)
     {
-        $role=Role::leftjoin('org_entities as org_en', 'org_en.id', 'roles.department_id')
-        ->leftjoin('org_entities as or_en', 'or_en.id', 'roles.department_id')
-        ->leftjoin('roles as rol', 'rol.id', 'roles.parent_id')
-        ->where(function ($query) use ($request) {
-            if (!empty($request->role)) {
-                $query->where('roles.name', 'like', '%' . $request->role . '%');
-            }
-            if (!empty($request->department_id)) {
-                $query->where('roles.department_id', 'like', '%' . $request->department_id . '%');
-            } if (!empty($request->team_id)) {
-                $query->where('roles.department_id', 'like', '%' . $request->team_id . '%');
-            }
-        })
-        ->select('rol.name as rol', 'roles.*', 'org_en.name as title', 'or_en.name as team_name', DB::raw('count(*) OVER() AS total_row_count'))//phpcs:ignore
-        ->where('roles.slug', '<>', 'super-admin');
-
-        if(!is_null($request->page) && !is_null($request->perPage)){
-            $role = $role->forPage($request->page, $request->perPage);
+        $team = Role::join('departments', 'roles.department_id', 'departments.id')
+            ->join('roles as role_r', 'role_r.id', 'roles.parent_id')
+            ->where(function ($query) use ($request) {
+                if (!empty($request->name)) {
+                    $query->where('roles.name', 'like', '%' . $request->name . '%');
+                }
+                if (!empty($request->department)) {
+                    $query->where('roles.department_id', 'like', '%' . $request->department . '%');
+                }
+            })->select(
+                'roles.id',
+                'roles.name as role',
+                'roles.department_id as department_id',
+                'departments.title as department',
+                'role_r.name as reporting_role',
+                DB::raw('count(*) OVER() AS total_row_count')
+            )
+            ->orderBy($request->sortBy ?? 'roles.id', $request->sortDesc == 'true' ? 'DESC' : 'ASC')
+            ->forPage($request->page, $request->perPage)
+            ->get();
+        if (count($team) > 0) {
+            return response(['data' => $team, 'status' => 'success'], 200);
+        } else {
+            return response(['status' => 'success', 'data' => $team, 'message' => 'no data found', 'code' => 200], 200);
         }
-        if(strtolower($request->sortBy) == 'role'){
-            $role = $role->orderBy('roles.name', $request->sortDesc == 'true'?'DESC':'ASC');
-        }
-        if(strtolower($request->sortBy) == 'reporting_role'){
-            $role = $role->orderBy('rol.name', $request->sortDesc == 'true'?'DESC':'ASC');
-        }
-        if(strtolower($request->sortBy) == 'department'){
-            $role = $role->orderBy('org_en.name', $request->sortDesc == 'true'?'DESC':'ASC');
-        }
-        else{
-            $role = $role->orderBy('roles.id', 'desc');
-        }
-
-        $role = $role->get();
-
-
-        return response($role, 200);
     }
 
     /**
@@ -112,67 +101,6 @@ class RoleController extends Controller
             $role->department_id=$request->department;
             $role->parent_id=$request->reporting_role;
             $role->save();
-            $FieldData = [];
-            foreach($request->roleFields as $field){
-                if($field['role_id'] == '0'){
-                    $field['role_id'] = $role->id;
-                    $FieldData[] = [
-                        'title' => $field['title'],
-                        'field_type_id' => $field['field_type_id'],
-                        'validation_rule' => $field['validation_rule'],
-                        'role_id' => $role->id,
-                        'created_at' => now(),
-                        'field_value' => isset($field['field_value'])? $field['field_value'] : null,
-                        'required' => $field['required'],
-                        'is_default_field' => $field['is_default_field'],
-                    ];
-                }
-                else{
-                    try{
-                    $validation = [];
-                    $ft = FieldType::find($field['field_type_id']);
-                    // dd($ft);    
-                    if(isset($field['required']) && $field['required'] == 1){
-                        $validation[] = "required";
-                    }
-                    if($ft->slug == 'string'){
-                        $validation[] = "string";
-                    }
-                    if($ft->slug == 'number'){
-                        $validation[] = "number";
-                    }
-                    if($ft->slug == 'float'){
-                        $validation[] = "float";
-                    }
-                    if($ft->slug == 'date'){
-                        $validation[] = "date";
-                    }
-                    if($ft->slug == 'file'){
-                        $validation[] = "file";
-                    }
-                    // if($ft->slug == 'enum'){
-                    //     $field['field_value'] = "file";
-                    // }
-                    $FieldData[] = [
-                        'title' => $field['title'],
-                        'field_type_id' => $field['field_type_id'],
-                        'validation_rule' => implode('|', $validation),
-                        'role_id' => $role->id,
-                        'created_at' => now(),
-                        'field_value' => isset($field['field_value'])? $field['field_value'] : null,
-                        'required' => $field['required'],
-                        'is_default_field' => 0,
-                    ];
-                }
-                catch(\Exception $e){
-                    dd($e,$field, $ft, implode('|', $validation));
-                }
-                    
-
-                }
-            }
-            Field::insert($FieldData);
-            // dd("FieldData",$FieldData);
         } catch (\Exception $e) {
             dd($e);
             report($e);
@@ -248,71 +176,6 @@ class RoleController extends Controller
             $role->parent_id=$request->reporting_role;
            // $role->team_id=$request->team;
             $role->save();
-
-
-
-
-            $FieldData = [];
-            Field::where('role_id', $role->id)->delete();
-            foreach($request->roleFields as $field){
-                if($field['role_id'] == '0'){
-                    $field['role_id'] = $role->id;
-                    $FieldData[] = [
-                        'title' => $field['title'],
-                        'field_type_id' => $field['field_type_id'],
-                        'validation_rule' => $field['validation_rule'],
-                        'role_id' => $role->id,
-                        'created_at' => now(),
-                        'field_value' => isset($field['field_value'])? $field['field_value'] : null,
-                        'required' => $field['required'],
-                        'is_default_field' => $field['is_default_field'],
-                    ];
-                }
-                else{
-                    try{
-                    $validation = [];
-                    $ft = FieldType::find($field['field_type_id']);
-                    // dd($ft);    
-                    if(isset($field['required']) && $field['required'] == 1){
-                        $validation[] = "required";
-                    }
-                    if($ft->slug == 'string'){
-                        $validation[] = "string";
-                    }
-                    if($ft->slug == 'number'){
-                        $validation[] = "number";
-                    }
-                    if($ft->slug == 'float'){
-                        $validation[] = "float";
-                    }
-                    if($ft->slug == 'date'){
-                        $validation[] = "date";
-                    }
-                    if($ft->slug == 'file'){
-                        $validation[] = "file";
-                    }
-                    // if($ft->slug == 'enum'){
-                    //     $field['field_value'] = "file";
-                    // }
-                    $FieldData[] = [
-                        'title' => $field['title'],
-                        'field_type_id' => $field['field_type_id'],
-                        'validation_rule' => implode('|', $validation),
-                        'role_id' => $role->id,
-                        'created_at' => now(),
-                        'field_value' => isset($field['field_value'])? $field['field_value'] : null,
-                        'required' => $field['required'],
-                        'is_default_field' => 0,
-                    ];
-                }
-                catch(\Exception $e){
-                    dd($e,$field, $ft, implode('|', $validation));
-                }
-                    
-
-                }
-            }
-            Field::insert($FieldData);
             
         } catch (\Exception $e) {
             dd($e);
@@ -357,6 +220,29 @@ class RoleController extends Controller
             $role=[["value"=>1,"label"=>'Super Admin']];
         }
         return response(['data' => $role, 'status' => 'success'], 200);
+    }
+
+    public function getReportingtoFromemployeeId($id){
+        $RoleData=array();
+        $RepRole = Role::find($id);
+        do {
+            $RepRole = Role::find($RepRole->parent_id);
+            array_push($RoleData, array('value'=>$RepRole->id,'label'=>$RepRole->name));
+        } while ($RepRole->parent_id != 0);
+        return response(['data' =>$RoleData, 'status' => 'success'], 200);
+
+        
+    }
+    public function getReportingToFromRoleId($id){
+        $RoleData=array();
+        $RepRole = Role::find($id);
+        do {
+            $RepRole = Role::find($RepRole->parent_id);
+            array_push($RoleData, array('value'=>$RepRole->id,'label'=>$RepRole->name));
+        } while ($RepRole->parent_id != 0);
+        return response(['data' =>$RoleData, 'status' => 'success'], 200);
+
+        
     }
 
     public function getFieldsByRole($role_id = 0)

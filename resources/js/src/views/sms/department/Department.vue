@@ -38,15 +38,6 @@
                       <b-form-input v-model="departmentFilterData.name" id="basicInput" placeholder="Enter department Name" />
                     </b-form-group>
                   </b-col>
-                  <b-col md="6" xl="4" class="">
-
-                    <!-- basic -->
-                    <b-form-group label="Branch" label-for="Branch" class="BranchFilterDepartment">
-                      <v-select v-model="departmentFilterData.branch" :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                        :options="BranchData" :reduce="(val) => val.value" :clearable="true" input-id="status"
-                        placeholder="Select Branch" />
-                    </b-form-group>
-                  </b-col>
 
 
                 </b-row>
@@ -87,11 +78,6 @@
             <template #cell(Name)="data">
               <span class="text-nowrap">
                 {{ data.item.title }}
-              </span>
-            </template>
-            <template #cell(branch)="data">
-              <span class="text-nowrap">
-                {{ data.item.branch_name }}
               </span>
             </template>
 
@@ -165,16 +151,6 @@
     <b-modal :visible="showdepartmentModel" :title="EditdepartmentId ? 'Update department' : 'Add department'" :ok-title="EditdepartmentId ? 'Update' : 'Add'"
       @ok="handleOk" @show="Onshown" @hidden="resetModal" centered cancel-variant="outline-secondary">
 
-      <b-form-group class="myform" label-for="branch">
-        <label class="form-label required">Branch</label>
-        <v-select v-model="departmentData.branch" @input="RemoveError('branch')"
-          :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'" :options="BranchData" :reduce="(val) => val.value"
-          :clearable="true" input-id="status" placeholder="Select branch" />
-        <small class="text-danger">{{ errors[0] }}</small>
-        <div class="text-danger" v-if="hasErrors('branch')">
-          {{ getErrors("branch") }}
-        </div>
-      </b-form-group>
 
       <b-form @submit.stop.prevent="submitdepartment">
         <b-form-group class="myform" label-for="department Name">
@@ -231,7 +207,6 @@ export default {
       option: ['USA', 'Canada', 'Maxico'],
       fields: [
         {key: 'Name', sortable: true},
-        {key: 'branch', sortable: true},
         'Action',
       ],
       EmployeesData: [],
@@ -422,7 +397,6 @@ export default {
     const blankdepartmentData = {
       id: null,
       department_name: null,
-      branch: null,
     };
     const errors = ref([]);
     const showdepartmentModel = ref(false);
@@ -456,7 +430,6 @@ export default {
     const FilterData = ref(JSON.parse(JSON.stringify({
       id: null,
       name: "",
-      branch: "",
     })))
     const departmentFilterData = ref(JSON.parse(JSON.stringify({ FilterData })));
     const ResetFilter = () => {

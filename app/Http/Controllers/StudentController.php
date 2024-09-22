@@ -9,6 +9,7 @@ use App\Models\StudentIdCount;
 use App\Models\Subject;
 use App\Models\Teacher;
 use App\Models\User;
+use App\Models\UserRole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -82,7 +83,7 @@ class StudentController extends Controller
                 
             }
             $user = new User();
-            $user->name = $request->first_name;
+            $user->name = $request->first_name.' '.$request->middle_name.' '.$request->last_name;
             $user->email = $request->email;
             $user->password = Hash::make('password');
             $user->role_id = Role::where('slug','student')->first()->id;
@@ -100,6 +101,10 @@ class StudentController extends Controller
             $Student->user_id  =$user->id;
             $Student->remark  = $request->remark;
             $Student->save();
+            $userrole = new UserRole();
+            $userrole->user_id = $user->id;
+            $userrole->role_id = $user->role_id;
+            $userrole->save();
 
             if($studentId==null){
                 $studentId = new StudentIdCount();
@@ -166,7 +171,7 @@ class StudentController extends Controller
         $user = User::find($id);
         $profile_columns = ($profile_table)?$profile_table.'.*':'';
         $ProfileData=User::leftJoin('roles', 'roles.id', 'users.role_id')
-        ->when($user->role->slug != 'admin', function ($q) use ($id, $profile_table) {
+        ->when($user->roles[0]->name != 'admin', function ($q) use ($id, $profile_table) {
             $q->leftJoin($profile_table, function ($join) use ($id, $profile_table) {
                     $join
                     ->on($profile_table.'.user_id', '=', 'users.id');
@@ -248,10 +253,12 @@ class StudentController extends Controller
         $user = User::find($user_id);
         $output = '';
         //Update user Profile Wise data
-        if ($user->role->slug == 'student') {
+        if ($user->roles[0]->name == 'student') {
             $output = 'students';
-        } elseif ($user->role->slug == 'teacher') {
+        } elseif ($user->roles[0]->name == 'teacher') {
             $output = 'teachers';
+        }else{
+            $output = 'employees';
         }
         return $output;
     }

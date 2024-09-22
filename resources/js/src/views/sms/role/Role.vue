@@ -89,17 +89,17 @@
             class="mb-2 staticTable">
             <template #cell(role)="data">
               <span class="text-nowrap">
-                {{ data.item.name }}
+                {{ data.item.role }}
               </span>
             </template>
             <template #cell(Reporting_Role)="data">
               <span class="text-nowrap">
-                {{ data.item.rol }}
+                {{ data.item.reporting_role }}
               </span>
             </template>
             <template #cell(department)="data">
               <span class="text-nowrap">
-                {{ data.item.title }}
+                {{ data.item.department }}
               </span>
             </template>
 
@@ -175,7 +175,7 @@
       Are you sure you want to delete this role?
     </b-modal>
 
-    <b-modal size="lg" :visible="showRoleModel" :title="RoleEdit ? 'Update Role' : 'Add Role'"
+    <b-modal  :visible="showRoleModel" :title="RoleEdit ? 'Update Role' : 'Add Role'"
       :ok-title="RoleEdit ? 'Update' : 'Add'" @ok="handleOk" @hidden="resetModal" @show="Onshown" centered
       cancel-variant="outline-secondary">
 
@@ -225,88 +225,6 @@
             {{ getErrors("name") }}
           </div>
         </b-form-group>
-
-       <b-form-group  label-for="basicInput">
-          <b-form-checkbox :value="Roledata.master_page" checked="1">Make Master Page</b-form-checkbox>
-          <small class="text-danger">{{ errors[0] }}</small>
-          <div class="text-danger" v-if="hasErrors('name')">
-            {{ getErrors("name") }}
-          </div>
-        </b-form-group>
-
-        <div>
-          <b-table :items="Roledata.roleFields" :fields="['title', 'type', 'required', 'action']">
-            
-            <template #cell(title)="data">
-              <b-card-text class="font-weight-bold mb-25">
-                <b-form-input id="basicInput" v-model="data.item.title" :disabled="data.item.is_default_field == 1" placeholder="Enter Field Name" />
-              </b-card-text>
-            </template>
-            <template #cell(type)="data">
-              <b-card-text class="text-nowrap">
-                <v-select id="select-field-type-option" :disabled="data.item.is_default_field == 1" :options="RoleTypes" label="title" value="id" :reduce="val => val.id" v-model.number="data.item.field_type_id" />
-                  <b-form-input id="basicInput" :disabled="data.item.is_default_field == 1" v-if="data.item.field_type_id == RoleTypes.filter(rt => rt.slug == 'enum')[0].id" v-model="data.item.field_value" placeholder="Enter Enum Values in Coma Saperated" />
-              </b-card-text>
-            </template>
-            <template #cell(required)="data">
-              <b-form-checkbox :value="1" unchecked-value="0" v-model="data.item.required" :disabled="data.item.is_default_field == 1" />
-            </template>
-            <template #cell(action)="data">
-              <b-button v-ripple.400="'rgba(255, 255, 255, 0.15)'" variant="success" pill @click="addField(data.index)">
-                <feather-icon icon="PlusIcon" size="18" />
-              </b-button>
-              <b-button v-ripple.400="'rgba(255, 255, 255, 0.15)'" v-if="data.item.role_id != 0" variant="danger" pill @click="removeField(data.index)">
-                <feather-icon icon="MinusIcon" size="18" />
-              </b-button>
-              <!-- <b-button v-ripple.400="'rgba(255, 255, 255, 0.15)'" variant="primary" pill>
-                <feather-icon icon="EditIcon" size="18" />
-              </b-button> -->
-
-                <!-- <b-avatar
-        size="16"
-        :src="userData.avatar"
-        variant="light-primary"
-        badge
-        class="badge-minimal"
-        badge-variant="success"
-      >
-        <feather-icon
-          icon="PlusIcon"
-          size="16"
-        />
-      </b-avatar> -->
-            </template>
-          </b-table>
-
-          <!-- <b-row v-for="field in Roledata.roleFields" :key="field.id" class="pt-1">
-             {{field.validation_rule}}
-          </b-row> -->
-          <!-- <b-form-group label="Using sub-components:" v-slot="{ ariaDescribedby }">
-            <b-form-checkbox-group
-              id="checkbox-group-2"
-              v-model="Roledata.roleFields"
-              :aria-describedby="ariaDescribedby"
-              name="flavour-2"
-            >
-              <b-form-checkbox v-for="field in Roledata.roleFields" :key="field.id" :value="field.id" checked="1">{{field.title}} - rules : {{field.validation_rule}}</b-form-checkbox>
-            </b-form-checkbox-group>
-          </b-form-group> -->
-        </div>
-        
-
-        <!-- <b-form-group label="Team " label-for="basicInput">
-          <v-select v-model="Roledata.team"
-            :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-            :options="teamOptions"
-            label="name"
-            :reduce="(val) => val.id"
-            :clearable="true" input-id="status" />
-          <small class="text-danger">{{ errors[0] }}</small>
-          <div class="text-danger" v-if="hasErrors('team')">
-            {{ getErrors("team") }}
-          </div>
-        </b-form-group> -->
-
       </b-form>
     </b-modal>
     <!-- Modal Ends -->
@@ -395,24 +313,6 @@ export default {
         });
       }
     },
-    addField(index){
-      let data = {
-        created_at: null,
-        field_type_id: null,
-        required: 0,
-        role_id: null,
-        title:  null,
-        updated_at: null,
-        validation_rule: ""
-      }
-      this.Roledata.roleFields.splice(index+1, 0, data);
-
-    },
-    removeField(index){
-
-      this.Roledata.roleFields.splice(index, 1);
-
-    },
     handleOk(bvModalEvent) {
       // Prevent modal from closing
       bvModalEvent.preventDefault()
@@ -461,7 +361,6 @@ export default {
           this.Roledata.reporting_role = response.data.data.parent_id
           this.Roledata.team = response.data.data.team
           this.Roledata.id = response.data.data.id
-          this.Roledata.roleFields = response.data.data.roleFields
           axios.get(`/getRoleFromdepartmentId/${ this.Roledata.reporting_role,this.Roledata.department}`).then((response) => {
          this.ReportigRoleOptions = response.data.data;
 
@@ -545,7 +444,7 @@ export default {
         }
       }
       ).then(response => {
-        const projects = response.data
+        const projects = response.data.data
 
         callback(projects)
         totalProject.value = (projects[0] != null) ? projects[0].total_row_count : 0;
@@ -579,9 +478,6 @@ export default {
       name: null,
       department: null,
       reporting_role: null,
-      team: null,
-      roleFields: [],
-      master_page: 0
     };
 
     
@@ -603,11 +499,6 @@ export default {
     axios.get('getFieldTypes').then(response => {
       RoleTypes.value = response.data.data;
     })
-    
-    axios.get('getFieldsByRole').then(response =>  {
-      BlankProjectData.roleFields = response.data.data;
-      Roledata.value.roleFields = response.data.data;
-    });
 
     const resetRoledata = () => { Roledata.value = JSON.parse(JSON.stringify(BlankProjectData))};
 

@@ -2,6 +2,11 @@ export default [
 
     // add routes here (below is given for help)
     {
+      path: "/permission",
+      name: "Permission",
+      component: () => import("@/views/sms/Permission/Permission.vue"),
+    },
+    {
       path: '/home',
       name: 'Home',
       component: () => import('@/views/sms/home/Home.vue'),
@@ -155,6 +160,27 @@ export default [
       component: () => import('@/views/sms/Teacher/AddTeacher.vue'),
       meta: {
         navActiveLink: 'teacher',
+      },
+    },
+    {
+      path: '/fees',
+      name: 'fees',
+      component: () => import('@/views/sms/Fees/ListFee.vue'),
+    },
+    {
+      path: '/add-fees',
+      name: 'add-fees',
+      component: () => import('@/views/sms/Fees/AddFee.vue'),
+      meta: {
+        navActiveLink: 'fees',
+      },
+    }, 
+    {
+      path: '/edit-fees/:id',
+      name: 'edit-fees',
+      component: () => import('@/views/sms/Fees/AddFee.vue'),
+      meta: {
+        navActiveLink: 'fees',
       },
     }, 
     

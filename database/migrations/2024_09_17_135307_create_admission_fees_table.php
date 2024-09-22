@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMastersTable extends Migration
+class CreateAdmissionFeesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class CreateMastersTable extends Migration
      */
     public function up()
     {
-        Schema::create('masters', function (Blueprint $table) {
+        Schema::create('admission_fees', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->bigInteger('fees_type')->nullable(true);
+            $table->bigInteger('amount')->nullable(true);
+            $table->bigInteger('class_id')->nullable(true);
             $table->timestamps();
         });
     }
@@ -27,6 +29,6 @@ class CreateMastersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('masters');
+        Schema::dropIfExists('admission_fees');
     }
 }
