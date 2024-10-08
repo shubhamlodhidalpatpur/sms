@@ -183,6 +183,23 @@ export default [
         navActiveLink: 'fees',
       },
     }, 
+
+    // attendance
+    {
+      path: '/StudentAttendance',
+      name: 'StudentAttendance',
+      component: () => import('@/views/sms/StudentAttendance/StudentAttendance.vue'),
+    },
+    {
+      path: '/take-attendance/:class/:date',
+      name: 'take-attendance',
+      component: () => import('@/views/sms/StudentAttendance/TakeAttendance.vue'),
+      meta: {
+        navActiveLink: 'StudentAttendance',
+      },
+    },
+    
+    
     
     
 ]

@@ -157,6 +157,14 @@ export default [
             action: "do",
         
     },
+    {
+        title: 'StudentAttendance',
+        route: 'StudentAttendance',
+        icon: 'MenuIcon',
+        resource: 'Auth',
+        action: "do",
+        
+    },
     
     
     

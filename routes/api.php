@@ -21,7 +21,9 @@ use App\Http\Controllers\MasterController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\StudentAttendanceController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\StudentMasterAttendance;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\SwapRequestController;
 use App\Http\Controllers\TeacherController;
@@ -163,3 +165,10 @@ Route::post('/profilepermissions', [PermissionController::class, 'profilepermiss
 //Fees 
 Route::get('/AdmissionFees', [FeesController::class, 'AdmissionFees']);
 Route::resource('/fees', FeesController::class);
+
+
+// Attendance 
+
+Route::get('/stuentAttendanceData', [StudentAttendanceController::class, 'stuentAttendanceData']);
+Route::resource('/masterAttendances', StudentMasterAttendance::class);
+Route::get('/checkClassSection/{id}', [StudentMasterAttendance::class, 'checkClassSection']);
